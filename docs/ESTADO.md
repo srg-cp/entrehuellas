@@ -383,6 +383,20 @@ Las pruebas de sesión usan un repositorio sustituido; no equivalen a acceso con
 - Indicadores reducidos de 16 a 12 (margen 5); radio explícito 26 en Continuar/Comenzar para reducir forma de píldora. Conservados ancho completo, alto, flecha y flujo.
 - Formato/análisis correctos y 65 pruebas aprobadas, incluido viewport pequeño/texto ampliado. Render QA aprobado e inspeccionadas primera/tercera etapa. Actualizado DISENO_UI; sin backend ni actualización del emulador, revisar tras recarga.
 
+## Actualización integral del README principal, 9 de octubre de 2026
+
+- Se realizó un análisis exhaustivo del proyecto: arquitectura limpia por funcionalidad (`features/auth`, `features/onboarding`, `features/home`), estado de la suite de pruebas (65 pruebas unitarias/widgets), estructura del esquema SQL modular (001–009) en `database`, migraciones en `supabase/migrations`, y decisiones arquitectónicas (ADR-001 al ADR-005).
+- Se actualizó el `README.md` raíz para reflejar fielmente la realidad del proyecto:
+  - Visión general del MVP de recuperación colaborativa y flujos de publicación, QR y avistamiento ciudadano sin app.
+  - Base técnica y principios arquitectónicos: Clean Architecture, MVVM, Riverpod, desacoplamiento del dominio y regla de oro de feedback sin SnackBar (ADR-005).
+  - Estructura detallada de carpetas del repositorio.
+  - Detalle de funcionalidades implementadas: Login con correo y Google OAuth PKCE, Crear cuenta (`/register`) con `OriginPageTransition`, validación contextual y pantalla de confirmación por correo con temporizador, Onboarding sin "Omitir" (ADR-004) con ilustraciones dedicadas, cascada desenfocada y persistencia mediante RPC `complete_onboarding`.
+  - Organización de base de datos (`database/`), estándar de nombres (`snake_case`), `run_all.sql` idempotente y suite de pruebas PGlite.
+  - Guía completa de puesta en marcha: clonación, configuración local de Supabase (`supabase.local.json`), perfiles de VS Code F5 y comandos de terminal.
+  - Resumen de comandos de verificación (`dart format`, `flutter analyze`, `flutter test`, `npm test`).
+  - Índice exhaustivo de documentación interna y decisiones arquitectónicas (ADR-001 a ADR-005).
+- Validación: enlaces relativos verificados, `git diff --check` sin incidencias. Sin cambios en lógica ni código de la app Flutter; árbol de trabajo conservado.
+
 ## Pendiente
 
 - Ejecución inicial Android observada en capturas y emulador detectado. Revisar herramientas/licencias si afectan nuevas compilaciones; build APK desde esta sesión, icono instalado y retorno de Auth aún no verificados. iOS no compilado en Windows.
