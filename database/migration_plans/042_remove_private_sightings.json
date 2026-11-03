@@ -1,0 +1,8 @@
+{
+  "version": "20261029004200",
+  "name": "remove_private_sightings",
+  "traceability": "ADR-168: remove private sightings and reviews, retain public contributions",
+  "sources": [
+    "functions/136_remove_private_sightings.sql"
+  ]
+}

@@ -8,7 +8,7 @@ Entre Huellas combina registro de mascotas, casos perdidos y encontrados, avista
 
 El sistema debe distinguir información pública y privada, conservar borradores sin conexión y tolerar reintentos sin duplicar publicaciones. Estas necesidades afectan las reglas del producto, el acceso a datos y el estado que muestra la aplicación. Su implementación se incorpora por sprints; el diseño debe permitir añadirlas manteniendo una separación clara entre esas responsabilidades.
 
-La aplicación Flutter ya existe en `flutter_application_entrehuellas`. El backend acordado es Supabase. La estructura debe conservar ese proyecto y permitir probar el cliente sin depender de una cuenta o de la disponibilidad del servidor.
+La aplicación Flutter ya existe en `apps/mobile`. El backend acordado es Supabase. La estructura debe conservar ese proyecto y permitir probar el cliente sin depender de una cuenta o de la disponibilidad del servidor.
 
 ## Decisión
 

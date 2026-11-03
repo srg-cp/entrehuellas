@@ -21,3 +21,11 @@ El ViewModel decide el campo/tipo de fallo. Los widgets representan ese estado; 
 ## Validación y límites
 
 La prueba de reglas escanea los archivos Dart de `lib` y rechaza referencias al componente y sus APIs de presentación. La revisión de dependencias complementa esa comprobación para wrappers externos. Las pruebas del formulario verifican grosor de borde, fondo conservado, campo correcto y preferencias de movimiento. Resultados en [ESTADO.md](../ESTADO.md).
+
+## Evolución posterior — 8 de octubre de 2026
+
+Por nueva instrucción explícita del usuario, [ADR-007](007-confirmacion-toast-superior.md) sustituye la prohibición general de toast únicamente para confirmaciones de éxito mediante aviso superior propio. En Perfil reemplaza «Perfil actualizado.» permanente. SnackBar y equivalentes inferiores continúan prohibidos; errores y validación conservan esta decisión. La autorización está delimitada y documentada, no es una excepción implícita.
+
+ADR-009 amplía por solicitud explícita del usuario el toast superior propio a errores de foto de perfil; las demás validaciones/errores conservan esta regla. No permite SnackBar ni equivalentes inferiores.
+
+ADR-013 amplía por nueva instrucción explícita del usuario los errores autorizados en toast superior a eliminación de mascotas. Los fallos de esta operación dejan de aparecer debajo de tarjetas; los demás errores mantienen este documento.

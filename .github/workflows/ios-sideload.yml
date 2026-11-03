@@ -1,0 +1,60 @@
+name: iOS personal testing
+
+on:
+  workflow_call:
+    secrets:
+      MOBILE_CONFIG_JSON:
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: macos-15
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: apps/mobile
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.35.3'
+          channel: stable
+          cache: true
+      - run: flutter pub get --enforce-lockfile
+      - name: Prepare public client configuration
+        env:
+          MOBILE_CONFIG_JSON: ${{ secrets.MOBILE_CONFIG_JSON }}
+        run: python3 scripts/mobile_release_config.py
+      - name: Compile Release for physical iPhone without Apple signing
+        run: >-
+          flutter build ios --release --no-codesign
+          --dart-define-from-file=config/release.local.json
+          --build-number=$((10000 + GITHUB_RUN_NUMBER))
+      - name: Package for personal signing on Windows
+        shell: bash
+        run: |
+          set -euo pipefail
+          app=build/ios/iphoneos/Runner.app
+          test -f "$app/Runner"
+          lipo "$app/Runner" -verify_arch arm64
+          plutil -lint "$app/Info.plist"
+          mkdir -p build/sideload/Payload build/distribution
+          ditto "$app" build/sideload/Payload/Runner.app
+          (cd build/sideload && /usr/bin/zip -qry ../distribution/entre-huellas-ios-unsigned.ipa Payload)
+          cp ios/Podfile.lock build/distribution/Podfile.lock
+          python3 scripts/verify_ios_package.py build/distribution/entre-huellas-ios-unsigned.ipa
+          printf 'source_commit=%s\nflutter=3.35.3\nmode=release\nsigning=unsigned; sign locally with your Apple account\n' "$GITHUB_SHA" > build/distribution/BUILD.txt
+          xcodebuild -version >> build/distribution/BUILD.txt
+          (cd build/distribution && shasum -a 256 entre-huellas-ios-unsigned.ipa > SHA256SUMS.txt)
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ios-${{ github.run_number }}-${{ github.run_attempt }}
+          path: apps/mobile/build/distribution/
+          if-no-files-found: error
+          retention-days: 14
+      - name: Remove temporary configuration
+        if: always()
+        run: rm -f config/release.local.json

@@ -22,10 +22,15 @@ local.properties
 # Desarrollo web
 node_modules/
 dist/
+.nuxt/
+.nuxt-*/
+.output/
+.cache/
 
 # Estado local de Supabase
 supabase/.temp/
 supabase/.branches/
+supabase/functions/pet-photo-process/assets/
 
 # Archivos temporales
 work/

@@ -1,0 +1,6 @@
+{
+  "version": "20261029004100",
+  "name": "public_case_contributions",
+  "traceability": "HU-06/HU-10/HU-12: authenticated public contributions from QR",
+  "sources": ["functions/135_read_qr_recovery_target.sql"]
+}

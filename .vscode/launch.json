@@ -3,10 +3,10 @@
   "configurations": [
     {
       "name": "Entre Huellas - desarrollo local",
-      "templateFor": "flutter_application_entrehuellas/lib",
+      "templateFor": "apps/mobile/lib",
       "type": "dart",
       "request": "launch",
-      "cwd": "${workspaceFolder}/flutter_application_entrehuellas",
+      "cwd": "${workspaceFolder}/apps/mobile",
       "program": "lib/main.dart",
       "toolArgs": ["--dart-define-from-file=config/supabase.local.json"]
     },
@@ -14,7 +14,7 @@
       "name": "Entre Huellas - sin Supabase",
       "type": "dart",
       "request": "launch",
-      "cwd": "${workspaceFolder}/flutter_application_entrehuellas",
+      "cwd": "${workspaceFolder}/apps/mobile",
       "program": "lib/main.dart"
     }
   ]

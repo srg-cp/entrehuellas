@@ -1,5 +1,194 @@
 # Entre Huellas: reglas de oro de arquitectura
 
+30/10, [ADR-171](decisiones/171-perfil-agrupado-y-navegacion-horizontal-mobile.md):
+horizontalPage compone HorizontalPageTransition y PageEntranceScope en presentación.
+El scope evita duplicar la entrada inicial del contenido; AuthStageTransition
+permite stagger ante etapas posteriores reales. Perfil reutiliza editor/avatar/
+ViewModels y comparte shell/filas/grupos, sin imports entre presentaciones de
+funcionalidades ni cambios de dominio/data. Router conserva acceso de cuenta.
+
+30/10, [ADR-169](decisiones/169-retencion-acotada-y-revalidacion-mobile.md):
+retención de presentación móvil siempre acotada y ligada a identidad/ProviderScope;
+mantener autoDispose y liberar timers/lifecycle/suscripciones. No cachear permisos
+ni usar resultados de otra cuenta. Revalidación automática conserva contenido;
+actualización explícita conserva shimmer. Primer alcance Explorar/listas de mascotas.
+
+29/10, [ADR-165](decisiones/165-pines-con-logo-compartidos-mobile-web.md):
+BrandMapPin centraliza silueta/logo en core/presentation, reutilizado por
+selector/Explorar/Recorrido. LocationMap usa SVG generado desde la marca oficial,
+con comprobación de paths/dimensiones/anclaje. Excepción azul de ficha conservada;
+solo presentación, sin imports entre funcionalidades ni cambios de dominio/data.
+
+29/10, [ADR-160](decisiones/160-origen-completo-y-fases-al-55.md): fases55/55
+centralizadas en presentación compartida. Controles reutilizan su contenido;
+OriginPageSource captura temas/MediaQuery, sin acceso a dominio/data. Web copia
+solo identidad visual del control, temporal/inerta; sin snapshots de páginas,
+persistencia o cambios en autorización. Sader conserva su contrato específico.
+
+29/10, [ADR-156](decisiones/156-entrada-mobile-unica-sin-cortinas.md):
+AuthStageTransition conserva identidad por etapa sin cortina/fondo/temporizador
+previos al stagger. Loading→resultado preserva su subárbol/ContentReveal;
+solo presentación compartida, sin cambios de datos, autorización o dominio.
+
+25/10, [ADR-139](decisiones/139-shimmer-en-superficie-completa-del-boton.md):
+el indicador de botón es presentación compartida y envuelve toda su superficie,
+nunca solo la etiqueta. No modifica operación/estado/permisos de dominio.
+
+25/10, [ADR-138](decisiones/138-motor-visual-local-y-hallazgos-independientes.md):
+matching conserva dominio/casos de uso, repositorios/fuentes y ViewModels por
+funcionalidad. CPU en Nuxt existente con pesos locales fijados; sin nuevo worker
+ni inferencia externa. Actor verificado en servidor, índices/RPC privados y
+revisión humana sin asignación de propietario ni recuperación automática.
+
+25/10, excepción explícita de alcance [ADR-137](decisiones/137-coincidencias-visuales-en-el-mvp.md):
+coincidencias visuales HU-25/HU-26 incluidas en MVP. Esto no autoriza introducir
+workers de IA ni servicios nuevos sin decisión técnica; conservar Clean Architecture,
+permisos en servidor y separación de originales/derivados privados y datos públicos.
+
+Contrato vigente21/10, ADR-128: combinar fullscreen/GSAP Sader con identidad
+móvil al abrir y cerrar. La superficie negra y su radio se transforman; icono
+y nueve puntos mantienen tamaño, centrados dentro del contorno, con fase fuente
+hasta45% invertida al regresar. Fade/blur de Sader solo al cuerpo de destino.
+Control original oculto temporalmente para evitar duplicado y restaurado junto
+a la limpieza de identidad, estilos y referencias. Se mantienen0.7s/CustomEase,
+ruta anterior detrás, marca/barra, acceso/guards y reducido. Perfil/Alertas y
+Flutter intactos. [ADR-128](decisiones/128-identidad-mobile-en-origen-web-fullscreen.md).
+Los apuntes anteriores que contradigan esa fase se conservan como historial.
+
+Origen web21/10, instrucción posterior ADR-125: reemplazar el motor de navegación
+por GSAP Flip de Sader sobre el componente vivo, sin snapshots/clones de páginas.
+Contenido visible solo al terminar apertura0.7s; cierre antes de desmontar.
+Excepción explícita a tiempos/fases de ADR-124 en este motor web; Perfil/Alertas
+y Flutter conservados. [Alcance y validación](decisiones/125-origen-web-reemplazado-por-sader-gsap-flip.md).
+
+Animaciones21/10, ADR-124: contratos de movimiento equivalentes deben coincidir
+en móvil/web y verificarse con fotogramas de apertura/cierre normales y modo
+reducido. Parámetros/controladores son presentación compartida, sin negocio,
+repositorios ni imports entre presentaciones de funcionalidades. Origen real,
+retorno, duración/curvas/fases y lifecycle obligatorios. [Regla](decisiones/124-paridad-animaciones-mobile-web.md).
+
+Reportar web21/10, ADR-123: estado/carga/fallo por recurso en ViewModel mediante
+los casos de uso existentes. La UI muestra campos estáticos tras acceso y
+skeleton solo en dependencias pendientes, sin confundir fallo con vacío ni
+descartar borradores por lecturas tardías. Operaciones autorizadas en servidor,
+sin caché adicional. [Decisión](decisiones/123-carga-progresiva-reportar-web.md).
+
+Controles web21/10, ADR-122: componentes compartidos de presentación adaptan
+Sader sin importar React ni reglas del otro producto. MorphPanel concentra
+geometría/animación/lifecycle; formularios conservan sus modelos y permisos.
+Por petición expresa, línea superior solo durante navegación web, excepción
+local a ADR-027. [Decisión](decisiones/122-controles-web-reutilizables-desde-sader.md).
+
+Navegación web20/10, ADR-121: reutilizar únicamente la preparación vigente de
+data, inyectada por bootstrap en navegación cliente después de hidratar; conservar
+política global y revalidación por operación. No invalidar identidad por montar
+una sección ni cachear permisos. [Decisión](decisiones/121-navegacion-web-sin-esperas-repetidas.md).
+
+Hero landing20/10: ADR-120 registra la excepción explícita a ADR-111 para
+#hero-title, con tipografía/composición originales. Solo presentación; SEO,
+dominio, datos y permisos conservados. [Decisión](decisiones/120-restaurar-hero-original-landing.md).
+
+**Cartografía global20/10, ADR-104:** mapas mediante adaptadores compartidos:
+ZoneMapPicker/MapStyle en core/presentation móvil y LocationMap en app/components
+web. Sin matrices/SDK/mapas independientes por funcionalidad. Filtrar solo
+teselas, sin alterar dominio, coordenadas, permisos, pines o créditos. Regla
+intermedia Reportar/Explorar común a ambas plataformas, con comprobación de
+paridad de matrices. [ADR-104](decisiones/104-cartografia-global-mobile-web.md).
+
+**Registro/recuperación web —19/10/2026:** CredentialViewModel consume casos
+de uso de dominio; HTTP/Auth detrás de repositorios/fuentes y composición por
+petición. Política global incorpora recovery para la capacidad temporal de
+cambio de contraseña. Cookie eh_credentials cifrada con propósito/AAD distintos;
+verificar recovery no establece sesión general ni permisos. Sin tokens en JSON,
+SSR o cliente. Registro confirmado conserva onboarding. [ADR-087](decisiones/087-registro-y-recuperacion-web.md).
+
+**Cierre web sin bloquear por Supabase —19/10/2026:** endpoints confirman primero
+el borrado de cookies y vinculan el intento remoto al ciclo Nitro event.waitUntil.
+Conservar casos de uso/fuentes y controles de origen; no afirmar revocación
+remota ni entrega duradera por una confirmación local.
+[ADR-082](decisiones/082-cierre-web-sin-esperar-supabase.md).
+
+**Acceso preparado desde landing —19/10/2026:** preparación mediante ViewModel
+y caso de uso; reutilización breve y deduplicación en data, por aplicación del
+navegador, sin singleton de servidor ni payload SSR privado. Invalidar por
+cambios de sesión/foco y vencimiento; permisos y operaciones no se cachean.
+[ADR-080](decisiones/080-preparar-acceso-desde-landing.md).
+
+**Acceso global a todas las rutas web —19/10/2026:** política compartida única
+para servidor y middleware cliente global; sin guards elegidos por pantalla.
+Clasificar cada página/alias como pública, acceso, cuenta, onboarding o permiso
+implementado. Build y comprobación arquitectónica rechazan páginas sin política.
+Validar antes del HTML/montaje para evitar pantallas/skeletons de rutas que no
+corresponden. Públicas/QR/legales conservan anonimato y APIs autorizan cada
+operación. [ADR-079](decisiones/079-politica-global-de-acceso-web.md) sustituye
+los guards particulares descritos en las notas anteriores de ADR-078.
+
+**Entrada web con sesión activa —19/10/2026:** /iniciar-sesion valida en servidor
+antes de renderizar y redirige al destino de cuenta/onboarding. Cookie HttpOnly
+cifrada con path /, transición de cookies anteriores sin exponer credenciales
+ni perfiles en SSR; navegación cliente espera al caso de uso/ViewModel.
+Sin login ni skeleton de acceso intermedio; los datos del destino conservan su
+carga. Autorización por operación intacta. [ADR-078](decisiones/078-acceso-web-redireccion-servidor-sin-login-intermedio.md).
+La misma comprobación previa aplica a /inicio y /bienvenida: sin sesión no
+renderizar ni montar shell/skeleton de cuenta antes de ir al login. Distinguir
+fallo de backend de sesión ausente y conservar el reintento existente.
+
+**Reveal web compartido —19/10/2026:** retirar la utilidad .reveal y su capa
+opaca. StaggerReveal reutiliza useStaggerReveal para entradas generales, conserva
+HTML/eventos y no repite entrada por edición/refresh. Respetar movimiento
+reducido y QR SSR sin JS/CSP. Flutter y clip-path de landing conservados.
+[ADR-075](decisiones/075-reveal-web-compartido-sin-cobertura-opaca.md).
+
+**Onboarding web —19/10/2026:** por instrucción del usuario, presentación de
+/bienvenida adapta sader-panel con contenido/PNG originales de móvil.
+OnboardingFlow compone estado y acciones del ViewModel; transiciones y timers
+son presentación, sin alterar RPC, sesión o permisos. Excepción visual local
+a cover/cápsula/Arial, con movimiento reducido y limpieza obligatorios.
+[ADR-074](decisiones/074-onboarding-web-referencia-sader-y-mobile.md).
+
+**Acceso general web —19/10/2026:** una cuenta válida puede entrar sin permiso
+de moderación; onboarding por cuenta y datos compartidos con móvil. Separar
+autenticación de autorización por operación y conservar espacios de gestión
+web con permisos diferenciados, sin herencia implícita administrador/moderador.
+access y moderation colaboran mediante sesión de servidor/contratos de dominio,
+sin imports de data/presentation entre funcionalidades. No crear páginas vacías
+ni afirmar paridad web/móvil completa. Véase
+[ADR-073](decisiones/073-acceso-general-web-y-gestion-por-permisos.md).
+
+**Rutas web en español —19/10/2026:** la navegación visible de apps/platform
+usa español, minúsculas y guiones, sin tildes ni ñ. Al migrar rutas existentes,
+conservar redirecciones y parámetros necesarios; /login, /terms y /privacy
+tienen como objetivos /iniciar-sesion, /terminos y /privacidad. Mantener raíz /
+y QR /c/:token. Código/SQL/endpoints internos pueden seguir en inglés;
+callbacks OAuth y deep links no cambian por esta convención. No crear rutas
+vacías ni relajar autorización. Login y legales migrados; otros recorridos al implementarse:
+[ADR-072](decisiones/072-rutas-web-en-espanol.md).
+
+**Administración solo web —18/10/2026:** por instrucción expresa del usuario,
+administración/moderación viven exclusivamente en `apps/platform`. Flutter
+conserva operaciones de usuario como denunciar; no incorpora pantallas, menús,
+guards ni acciones administrativas. Roles y decisiones se validan en servidor
+en cada operación. Véase [ADR-071](decisiones/071-moderacion-exclusiva-platform.md).
+
+**Referencia de presentación web — 18/10/2026:** leer también
+[REGLAS_UI_UX_WEB](REGLAS_UI_UX_WEB.md). Por instrucción del usuario, la landing
+aprobada guía toda apps/platform; Flutter conserva su referencia de acceso.
+[ADR-063](decisiones/063-landing-como-referencia-ui-ux-web.md) extiende la referencia
+visual de ADR-060, sin alterar capas, autorización o privacidad. Componentes
+compartidos se extraen con reutilización real, sin dependencias de presentation
+entre funcionalidades.
+
+**Web,17/10/2026:** por decisión del usuario se adopta Vue/Nuxt/TypeScript
+para una única aplicación web con módulos públicos, usuarios y administración.
+Los roles no se resuelven solo en navegación: cada operación debe autorizarlos
+en backend. La separación dominio/data/presentation también aplica a TypeScript;
+dominio sin Vue/Nuxt/SDK, composición por petición y estado SSR sin singleton de
+usuario. SSR público solo serializa proyecciones permitidas. Flutter permanece
+en móvil. Sin rutas vacías de administración ni separación de proyectos por rol.
+[ADR-058](decisiones/058-web-unica-vue-nuxt-y-roles.md).
+
+**Regla vigente — 11 de octubre de 2026:** feedback de errores, validación y resultados en el toast superior compartido en todas las funcionalidades. Sin texto bajo inputs, errorText/helperText ni indicadores circulares/lineales. Skeleton y LoadingShimmer para carga inicial/acciones; ContentRefresh con shimmer conserva contenido durante refresh. Se mantienen invalid/ShakeField, semántica, reintentos, etiquetas/datos e instrucciones de privacidad. [ADR-027](decisiones/027-feedback-global-toast-shimmer.md) sustituye las restricciones anteriores de feedback; las notas fechadas anteriores son historia de las decisiones.
+
 Estado: norma del proyecto. Fecha: 7 de octubre de 2026, America/Lima.
 
 La decisión que sustenta estas reglas está registrada en [ADR-001: arquitectura de la aplicación](decisiones/001-arquitectura-aplicacion.md). La separación de capas permite mantener y probar las reglas de recuperación mientras evolucionan la interfaz, el acceso remoto y el almacenamiento local.
@@ -23,7 +212,7 @@ Las instrucciones explícitas del usuario prevalecen. Ante discrepancias documen
 | Estado inmutable y flujo en una dirección | La UI envía acciones al ViewModel y recibe nuevos estados; no modifica entidades o datos compartidos. |
 | SOLID | Las responsabilidades, contratos y sustituciones deben poder explicarse y probarse. |
 
-Stack acordado: Flutter, Riverpod, go_router y Supabase. Android primero; la app existente permanece en `flutter_application_entrehuellas`. La web pública QR forma parte del sistema y conserva sus propios límites de acceso. No se añaden ASP.NET Core, SignalR, Redis o workers de IA sin una nueva decisión arquitectónica registrada.
+Stack acordado: Flutter, Riverpod, go_router y Supabase. Android primero; la app existente permanece en `apps/mobile`. La web pública QR forma parte del sistema y conserva sus propios límites de acceso. No se añaden ASP.NET Core, SignalR, Redis o workers de IA sin una nueva decisión arquitectónica registrada.
 
 ## 2. Organización por funcionalidad
 
@@ -82,6 +271,8 @@ Este recorrido describe llamadas y resultados. En los imports, la implementació
 No introducir ciclos entre módulos. Una funcionalidad no importa la presentación o data de otra; la colaboración se expresa mediante contratos/casos de uso de dominio inyectados. Los exports y archivos compartidos tampoco deben servir para eludir estas reglas.
 
 ## 4. Reglas de presentation
+
+La UI y UX cumplen [REGLAS_UI_UX.md](REGLAS_UI_UX.md). La referencia visual es el flujo de acceso aprobado; los componentes comunes se extraen a core respetando estas fronteras.
 
 1. La pantalla obtiene los datos y acciones de su ViewModel. Un estado de pantalla reúne lo necesario para renderizarla; no combina directamente providers de infraestructura o sesión.
 2. Los widgets contienen layout, estilos, animaciones, visibilidad y navegación simple. Validación de negocio, persistencia y procesamiento de respuestas se ejecutan fuera de ellos.
@@ -142,9 +333,11 @@ Estas reglas describen requisitos de cada incremento; no afirman que todas las f
 
 ## Regla de feedback visual
 
-**No utilizar SnackBar en ninguna funcionalidad de la app**, ni directamente ni mediante wrappers/paquetes. No eludir la regla con una notificación inferior equivalente. Usar feedback junto al campo o acción, accesible y breve. En el login, el error modifica el borde y el icono; conserva el fondo. La decisión y las comprobaciones se registran en [ADR-005](decisiones/005-feedback-sin-snackbar.md).
+**No utilizar SnackBar en ninguna funcionalidad de la app**, ni directamente ni mediante wrappers/paquetes. No eludir la regla con una notificación inferior equivalente. Usar el toast superior compartido, accesible y breve, para errores, validación y resultados. En el login, el error modifica el borde y el icono; conserva el fondo. La decisión y las comprobaciones se registran en [ADR-005](decisiones/005-feedback-sin-snackbar.md).
 
 ## 9. Verificación obligatoria de cambios
+
+La UX reutiliza cover reveal seguido de stagger reveal en entradas de pantalla y cambios discretos de etapa, con cabeceras estables; no repite efectos por edición/contadores/reenvío ni por cada frame de gestos. La carga de botones conserva su etiqueta y usa LoadingShimmer: no etiquetas de progreso con puntos suspensivos ASCII/Unicode ni spinners de botón. Solo durante trabajo real, con bloqueo de duplicados, semántica accesible y movimiento reducido. La regla, alcance y comprobación se registran en [ADR-006](decisiones/006-transiciones-y-carga-con-shimmer.md). Todo pertenece a presentación; los ViewModels/casos de uso siguen gobernando operaciones y resultados.
 
 Antes de considerar completo un cambio de código, comprobar los puntos que le correspondan:
 
@@ -155,7 +348,7 @@ Antes de considerar completo un cambio de código, comprobar los puntos que le c
 - La configuración pública está separada de secretos y las migraciones/políticas necesarias están versionadas.
 - La documentación de estado registra resultados, limitaciones y siguiente paso. No se acepta una excepción arquitectónica silenciosa.
 
-Comandos desde `flutter_application_entrehuellas`:
+Comandos desde `apps/mobile`:
 
 ```powershell
 dart format --output=none --set-exit-if-changed lib test
@@ -170,3 +363,18 @@ Resolver dependencias primero si cambiaron. `test/architecture_test.dart` compru
 Para cambiar una regla, registrar una decisión arquitectónica versionada en `docs` con el problema, alternativas, decisión, impacto, plan de transición y validación. Actualizar esta norma, [ARQUITECTURA.md](ARQUITECTURA.md), [AGENTS.md](../AGENTS.md) y las comprobaciones afectadas en el mismo incremento. Mantener compatible el comportamiento existente o documentar expresamente su migración.
 
 Ningún documento garantiza por sí solo que la arquitectura nunca se rompa. Su cumplimiento se sostiene leyendo estas reglas, revisando cada cambio y manteniendo pruebas y CI que detecten las desviaciones comprobables.
+
+## Evolución explícita del feedback de éxito
+
+[ADR-007](decisiones/007-confirmacion-toast-superior.md) permite un toast superior propio para éxitos confirmados, por nueva instrucción del usuario. Es presentación: widget de core con overlay/timer ligados al ciclo de vida de la pantalla, disparado por nueva confirmación de estado. No introduce SDK, persistencia ni decisiones de negocio en UI. ADR-027 extiende ahora el toast a errores y validación; el componente inferior prohibido no se incorpora. Mantener pruebas de limpieza, no duplicación y accesibilidad, además del escaneo existente.
+
+ADR-009 permite errores de foto en el componente toast superior existente por instrucción expresa. Sigue siendo feedback de presentación con ciclo de vida local; ADR-027 extiende ahora el mismo feedback a todas las funcionalidades y no se incorpora el componente inferior prohibido.
+
+## Validación y feedback del editor de mascotas — ADR-016
+
+Por instrucción explícita del usuario, Registrar/Editar valida nombre, especie, tamaño, edad y rasgos obligatorios (máximo200); sexo opcional. Dominio expresa validación, ViewModel reúne errores y bloquea escritura inválida, UI aplica shake/borde danger y toast superior sin errorText bajo campos. Incluye fallos de guardado/fotos del editor; ADR-027 generaliza ahora la ubicación del feedback a las demás pantallas. Fuente SQL034/trigger035 valida metadatos en servidor sin modificar datos antiguos ni impedir archivo/restauración/eliminación. Véase [ADR-016](decisiones/016-validacion-formulario-mascotas.md).
+
+
+## Feedback de reportes: corrección del 10 de octubre de 2026
+
+Por instrucción explícita del usuario, los mensajes de error, validación y resultado se muestran en el toast superior compartido, sin texto contextual dentro de la pantalla ni debajo de campos/acciones. Esta instrucción sustituye las restricciones anteriores que reservaban el toast a excepciones y exigían feedback contextual. Etiquetas, datos, estados e instrucciones de privacidad se mantienen. El incremento adapta los flujos de reportes perdidos/encontrados; conserva invalid/ShakeField, acciones de reintento y ciclo de vida del aviso. Las demás funcionalidades existentes se adaptarán al intervenir sus flujos; no se afirma una migración global completada. Véase [ADR-023](decisiones/023-feedback-reportes-toast-superior.md).
