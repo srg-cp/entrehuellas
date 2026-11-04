@@ -78,4 +78,5 @@ Antes de considerar terminado un incremento, registrar:
 - limitaciones o validaciones pendientes;
 - siguiente paso verificable.
 
-
+Una compilación correcta no demuestra por sí sola permisos, comportamiento
+remoto, calidad visual ni aceptación de una historia de usuario.
