@@ -1,0 +1,56 @@
+{
+  "date": "2026-11-05",
+  "origin": "https://entrehuellas.app",
+  "passed": true,
+  "checks": [
+    {
+      "name": "two-real-distinct-authenticated-accounts",
+      "passed": true
+    },
+    {
+      "name": "qa-publication-zone-has-no-nearby-interest-zones",
+      "passed": true
+    },
+    {
+      "name": "qa-A-publication-through-real-domain-repository-photo-processor",
+      "passed": true
+    },
+    {
+      "name": "qa-B-publication-through-real-domain-repository-photo-processor",
+      "passed": true
+    },
+    {
+      "name": "search-list-isolation-and-cross-account-anchor-rejection",
+      "passed": true
+    },
+    {
+      "name": "hosted-real-clip-indexes-two-processed-images-and-reuses-durable-vectors",
+      "passed": true
+    },
+    {
+      "name": "human-reviews-persist-authorize-conflict-retry-and-do-not-close-or-assign",
+      "passed": true
+    },
+    {
+      "name": "server-only-matching-context-unavailable-to-client-token",
+      "passed": true
+    },
+    {
+      "name": "retired-candidate-and-closed-anchor-cannot-resurrect",
+      "passed": true
+    },
+    {
+      "name": "private-notification-table-grants-preserved",
+      "passed": true
+    },
+    {
+      "name": "qa-B-retired-and-own-storage-removed",
+      "passed": true
+    },
+    {
+      "name": "qa-A-retired-and-own-storage-removed",
+      "passed": true
+    }
+  ],
+  "scope": "Real configured Auth, RPC/RLS, photo-processing/Storage and hosted Nuxt/CLIP. Clearly marked temporary QA reports at a verified alert-isolated coordinate; no password/account-role changes. Synthetic canary photos validate the flow, not animal identity quality. Soft-deleted QA history/review receipts remain according to the domain."
+}

@@ -1,5 +1,112 @@
 # Estado del proyecto
 
+## Coincidencias: validación funcional terminada con servidor real —05/11/2026
+
+HU-25/#71 y HU-26/#72. **Finalizada la validación funcional pendiente:** dos
+cuentas reales, publicación/procesado/Storage, comparación CLIP alojada, índices,
+revisión/reintento, privacidad, ficha, cierre y retirada. [Informe final y evidencia](revisiones/coincidencias-2026-11-05.md).
+Sustituye el bloqueo de A y la falta de demo alojada del03/11.
+
+Se comprobó por búsqueda exacta en Auth que A ya existía y estaba confirmada.
+Se generó/verificó una capacidad magiclink administrativa para esa cuenta QA,
+sin enviar correos, crear usuarios, cambiar contraseña, permisos ni perfil.
+Refresh A/B guardados solo en configuración local ignorada. Preflight7/7 pasa;
+tras limpiar, ambas cuentas vuelven a lista vacía200. Las claves administrativas
+solo se usan en herramientas locales; no entran en aplicación cliente ni evidencias.
+
+Flujo alojado final12/12 comprobaciones aprobadas mediante dominio/repositorio
+reales y servidor https://entrehuellas.app. Reportes QA identificados como prueba,
+coordenada de ensayo0/0 con comprobación previa de ausencia de zonas de interés
+en el entorno de50km (radio máximo permitido). Fotografías canario propias de
+onboarding, procesadas por Edge/Storage real; búsqueda comunitaria A y hallazgo
+independiente B. Vectores512D normalizados, caché durable, revisión confirmada/
+descartada, ACK ignorado y replay UUID, rechazo de actor ajeno y revisión obsoleta,
+sin cierre ni asignación de propietario por confirmar. Al retirar B desaparece;
+al cerrar A queda fuera de búsquedas y comparar devuelve403. Casos retirados y
+sus cuatro objetos Storage eliminados; recibos/historial QA conservan el contrato.
+
+Navegador alojado5/5: foto autorizada, comparación, confirmar/descartar persistidos,
+ficha vigente/retorno,320/texto200%/reducido y fallo de red/reintento. Sesión Auth
+válida insertada mediante el serializador/cookie HttpOnly existente; no se afirma
+una nueva prueba de entrada por contraseña/OTP. Android Pixel_9a/API36: sesión QA
+por callback existente, Inicio→Coincidencias con resultado real de B, revisión
+confirmada y toast, ficha QA/retorno y fuente200%/escalas reducidas; restauradas.
+
+La primera ejecución detectó una expectativa errónea del harness: SELECT directo
+de notificaciones con service_role devuelve403 por diseño. Corregida la prueba
+para conservar/verificar esa prohibición, sin ampliar grants; flujo final completo
+repetido12/12 con limpieza. El navegador se hizo repetible cuando otra UI ya había
+confirmado la revisión; la aplicación no necesitó correcciones de producto.
+
+La evaluación de calidad ya está terminada y sigue dando Recall@5=56% (28/50),
+top1=22% (11/50) en Sibetan. Se conservan el resultado, versión y límites del03/11;
+el canario alojado no modifica esas métricas ni demuestra precisión adicional.
+Las900 pruebas locales anteriores corresponden al mismo código de producto.
+No se cambia modelo, ranking, SQL, política de acceso ni alcance MVP. Sin despliegue,
+fusión ni cierre automático de historias: validación terminada y evidencia lista
+para la decisión de aceptación del producto. Teléfono físico fuera de la prueba
+solicitada (usuario eligió emulador).
+
+## Coincidencias: validación de cierre y bloqueos reales —03/11/2026
+
+HU-25/#71 y HU-26/#72. Código de `feature/case-matching` ya integrado en main:
+ascendencia comprobada con Git y main/origin/main en4dab80e tras fetch.
+Validación y correcciones en `feature/case-matching-validation`; sin cerrar
+historias ni presentar esta validación técnica como aceptación del modelo.
+[Informe reproducible y capturas](revisiones/coincidencias-2026-11-03.md).
+
+Resultados actuales:710/710 Flutter con AMBIENT_BACKGROUND_MOTION=false,
+análisis completo sin incidencias,88/88 web y34/34 servidor compilado,
+typecheck/build Nuxt aprobados y68/68 SQL/PGlite/PostGIS. El último CI Flutter
+de main tenía nueve fallos: dos pruebas sin binding y siete con temporizadores
+de retención pendientes al verificar invariantes. Corregidas las fixtures,
+sin modificar el comportamiento del producto;29 pruebas focalizadas y después
+la suite completa pasan. El primer intento local sin el define de CI se detuvo
+por timeouts del fondo animado; no se cuenta como corrida aprobada.
+
+Chrome real:1440/390/320, origen/fullscreen/retorno con fotogramas, reducido,
+revisión, ficha, texto200% y fallo/reintento aprobados con fixtures. Renders de
+Flutter390/320-texto200% regenerados. Smoke del encoder real512D y servidor
+compilado con índices/reintento aprobados en Windows. Docker Desktop iniciado;
+imagen de producción Linux construida, healthy y usuario1000 sin fuentes/tests/
+.env. Ambas versiones empaquetadas de sharp/libvips decodifican JPEG en Linux.
+Servidor del contenedor con CLIP real, backend de prueba e índices pasa también
+sin red externa y como usuario node. Canarios sintéticos: no miden identidad.
+
+Preflight alojado reproducible en
+`apps/platform/scripts/check-matching-hosted.mjs`: health200, anónimo redirigido,
+API sin autorización403 y token inválido401. La cuenta B se autentica renovando
+su sesión local y lista búsquedas con200/vacío confirmado. La cuenta A recibe400
+en Auth: bloquea la demo con dos cuentas. No se publicaron casos ni revisiones,
+no se aplicó SQL ni se desplegó. El refresh token rotado se conserva únicamente
+en config local ignorada; no se registran tokens, correos ni contraseñas.
+
+Evaluación real reproducible con Sibetan-v1 (LIRMM,CC BY4.0):59 perros totales,
+cinco identidades de desarrollo separadas de54 de prueba;50 consultas positivas,
+50 casos de galería y cuatro consultas sin pareja.114 fotos distintas, etiquetas
+individuales del ground truth oficial (las carpetas son tracklets, no identidades).
+Recall@5=28/50 (56%), top1 correcto11/50 (22%),39 top1 incorrectos y4/4 negativos
+con sugerencias. Encoder Windows CPU48ms/foto de media en esta muestra, no latencia
+alojada.39 pares cruzan tracklets y solo siete cámaras; perros/cámaras trampa de
+una zona/semana de2019, sin gatos ni casos locales. Tiempo/geografía iguales son
+constantes declaradas del experimento que neutralizan esas señales, no metadatos
+reales. Scripts/sha256/procedencia y resultados versionados en el informe.
+No existía un umbral numérico de aceptación acordado; no se inventa uno ni se
+presenta esta cifra como precisión global. Falta mejorar/aceptar la calidad observada.
+
+APK profile x64 recompilado e instalado conservando datos en AVD Pixel_9a/API36.
+Inicio→Buscar con una foto→Coincidencias contra servidor real confirma vacío,
+retorno, fuente de sistema200% y escalas de animación reducidas; ajustes restaurados.
+No había búsquedas activas, por lo que no se comparó/revisó un caso nativo real.
+Usuario eligió emulador; no hay prueba en teléfono físico. El error inicial Java
+loopback se resolvió con el workaround de CONFIGURACION solo en el proceso.
+
+Pendiente de cierre: credencial/sesión vigente de A y demo alojada completa A/B;
+aceptación de calidad después de revisar/mejorar el resultado exploratorio.
+Auth devuelve explícitamente invalid_credentials para A; B funciona con refresh,
+sin necesitar conocer su contraseña. No se cambian contraseñas ni datos de cuentas.
+Sin commit/push, nueva CI remota ni cierre de #71/#72 en esta tarea.
+
 ## Scripts de limpieza global de mascotas y casos —30/10/2026
 
 Petición explícita: SQL para vaciar mascotas y casos de todas las cuentas,

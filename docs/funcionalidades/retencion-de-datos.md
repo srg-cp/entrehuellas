@@ -1,5 +1,12 @@
 # Retención de datos y actualización al volver
 
+03/11: al validar Coincidencias se reproducen los nueve fallos del CI actual de
+Flutter. Las fixtures de GPS inicializan el binding; las de carga/archivo de
+mascotas desmontan widgets y disponen su ProviderContainer antes de verificar
+temporizadores. Sin cambios en RetainedQuery ni en el comportamiento del producto.
+29 pruebas focalizadas y710 de la suite completa aprobadas; análisis limpio.
+[Evidencia](../revisiones/coincidencias-2026-11-03.md).
+
 30/10/2026, [ADR-169](../decisiones/169-retencion-acotada-y-revalidacion-mobile.md).
 
 ## Qué hace y recorrido

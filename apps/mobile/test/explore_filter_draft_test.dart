@@ -30,6 +30,8 @@ class DraftLocation implements CurrentLocationRepository {
 }
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
   test(
     'GPS only edits a draft; apply preserves chosen label through refresh and pages',
     () async {

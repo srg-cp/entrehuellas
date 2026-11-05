@@ -88,6 +88,8 @@ void main() {
         expect(tester.getRect(find.text('Mis mascotas')), titleRect);
         expect(tester.getRect(find.byType(PetListFilter)), filterRect);
         expect(tester.takeException(), isNull);
+        await tester.pumpWidget(const SizedBox.shrink());
+        container.dispose();
       },
     );
 
@@ -150,6 +152,8 @@ void main() {
         await tester.pumpAndSettle();
         expect(find.text('Aún no tienes mascotas'), findsOneWidget);
         expect(tester.takeException(), isNull);
+        await tester.pumpWidget(const SizedBox.shrink());
+        container.dispose();
       },
     );
   }
@@ -214,6 +218,8 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.text('Aún no tienes mascotas'), findsOneWidget);
       expect(tester.takeException(), isNull);
+      await tester.pumpWidget(const SizedBox.shrink());
+      container.dispose();
     },
   );
 }

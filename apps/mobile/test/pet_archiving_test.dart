@@ -399,6 +399,8 @@ void main() {
         await tap('Activas');
         expect(find.text('Luna'), findsOneWidget);
         expect(tester.takeException(), isNull);
+        await tester.pumpWidget(const SizedBox.shrink());
+        container.dispose();
       },
     );
   }

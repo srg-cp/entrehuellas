@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "checks": [
+    "hosted-search-and-authorized-photo",
+    "hosted-human-review-confirm-and-dismiss",
+    "hosted-live-candidate-detail",
+    "hosted-320-text-200-reduced-motion-and-scroll",
+    "hosted-network-error-and-retry"
+  ],
+  "errors": [],
+  "sessionSetup": "Existing verified QA Auth token serialized into the standard HttpOnly server cookie; no password/OTP UI claim."
+}

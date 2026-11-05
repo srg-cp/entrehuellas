@@ -1,5 +1,11 @@
 # Entre Huellas: guía de proyecto, chats, sprints y GitHub
 
+05/11: validación funcional de HU-25/#71 y HU-26/#72 terminada con dos cuentas,
+Auth/Supabase/Storage/Edge y Nuxt/CLIP alojados, navegador y emulador Android.
+QA retirados al terminar. Se conserva la evaluación Sibetan (56% Recall@5), sin
+aceptación de precisión inventada ni cierre automático de historias. Sin nuevas
+HU/RF/modelo/SQL ni ampliación de MVP. [Informe final](revisiones/coincidencias-2026-11-05.md).
+
 30/10: optimización de lectura móvil de mascotas/Explorar existentes, sin nuevas
 HU/RF ni cierre de historias. [ADR-169](decisiones/169-retencion-acotada-y-revalidacion-mobile.md).
 Retención en memoria y revalidación al volver/foco. Preparación para lanzamiento:
