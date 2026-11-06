@@ -1,5 +1,75 @@
 # Coincidencias entre casos de mascotas
 
+06/11: el [README raíz](../../README.md#coincidencias-de-casos) documenta el modelo
+vigente, fotos/metadatos usados, ranking, datos y métricas de evaluación, límites
+y evidencia funcional. Publicación de la validación por PR autorizada por el
+usuario; no implica cambiar el modelo ni aceptar una precisión superior.
+
+## Validación funcional finalizada —05/11/2026
+
+Completado el recorrido que faltaba con Auth/Supabase/Storage/Edge y Nuxt/CLIP
+reales: dos cuentas, búsqueda A/hallazgo B, índices y reintento, revisión persistida
+e idempotente, privacidad, ficha, retirada de candidato y cierre de búsqueda.
+Flujo alojado12/12, navegador5/5 y recorrido nativo en emulador aprobados;
+preflight final7/7 con ambas listas vacías tras limpiar. [Informe y resultados](../revisiones/coincidencias-2026-11-05.md).
+
+El bloqueo de A se resolvió obteniendo una sesión Auth administrativa para la
+cuenta QA existente, sin correo ni cambio de contraseña/permisos/perfil. Solo
+herramientas locales acceden a esa capacidad. Refresh tokens en archivo ignorado.
+Reportes explícitamente QA en zona sin destinatarios de alertas cercanos,
+retirados al terminar y fotos eliminadas; se conservan recibos/historial de dominio.
+No se amplían grants para comprobar notificaciones privadas (SELECT403 esperado).
+
+El resultado del modelo sigue siendo el benchmark Sibetan del03/11:56% Recall@5,
+22% top1, sin probabilidad calibrada ni garantías globales. Evaluación y validación
+operativa terminadas; aceptación de calidad es una decisión de producto distinta
+de ejecutar más pruebas. Sin cambios del modelo, SQL, despliegue o cierre automático
+de HU/issues. Las notas anteriores de bloqueo/falta de demo quedan como historial.
+
+## Estado vigente de validación —03/11/2026
+
+Implementación integrada en main; comprobada la ascendencia de la rama original.
+**HU-25/#71 y HU-26/#72 continúan abiertas**: implementación técnica validada
+localmente, aceptación de calidad y demo alojada completa pendientes.
+[Informe con comandos, resultados y capturas](../revisiones/coincidencias-2026-11-03.md).
+
+710 pruebas Flutter,88 web,34 de servidor compilado y68 SQL/PostGIS aprobadas;
+análisis Flutter, typecheck/build Nuxt, recorrido Chrome responsive/reducido/
+texto200% y modelo real en Windows/Linux aprobados. El contenedor de producción
+funciona sin fuentes ni secretos de desarrollo; inferencia/indexación/reintento
+con canarios y backend de prueba pasan sin red externa. Esto sustituye el
+pendiente de contenedor local de las notas históricas, sin acreditar precisión.
+
+El preflight alojado usa `node scripts/check-matching-hosted.mjs` desde
+apps/platform: lee solo las configuraciones locales ignoradas y termina con
+código distinto de cero si no supera todos los checks. No publica ni compara ni
+guarda revisiones. La cuenta B renueva sesión y obtiene lista vacía200; la
+credencial de A es rechazada400. La rotación de su refresh token, cuando existe,
+se guarda en el mismo archivo privado. Salud/acceso anónimo/token inválido
+comprobados. A devuelve invalid_credentials aunque su contraseña está presente
+en configuración; B no requiere conocer su contraseña. Se requieren dos cuentas
+vigentes para continuar la demo completa, sin cambiar credenciales de terceros.
+
+Evaluación pública Sibetan-v1 (CC BY4.0):114 imágenes, cinco identidades de
+desarrollo y54 de prueba separadas,50 consultas positivas/50 casos de galería,
+cuatro negativas. Recall@5=56% (28/50), top1 correcto22% (11/50), cuatro negativas
+con sugerencias. Media local del encoder48ms/foto. Solo perros de cámaras trampa;
+39 pares de tracklets distintos y siete de cámaras distintas. Constantes iguales
+neutralizan tiempo/geografía; no se inventan metadatos reales. Sin umbral de
+aceptación previamente acordado ni afirmación de precisión global. Preparación
+reproducible: `scripts/prepare-sibetan-evaluation.mjs`; resultado y límites en informe.
+
+APK profile x64 nuevo instalado en emulador API36: acceso real desde Inicio,
+vacío confirmado, retorno, texto del sistema200% y animación reducida comprobados.
+El usuario eligió emulador; no se acredita teléfono físico. Sin búsquedas activas
+no se ejecutó comparación/revisión nativa con casos reales.
+
+SQL040 ya fue confirmado por el usuario el25/10; no se reaplicó. La lectura200
+de B confirma ese endpoint alojado, sin demostrar todas las RPC/políticas de la
+instalación remota. Falta demo alojada completa A/B y aceptar/mejorar la calidad
+observada. Las notas inferiores se conservan como
+historial y no sustituyen este estado vigente.
+
 29/10: el motor móvil compartido elimina la cortina/fondo local previo al
 stagger; una entrada por etapa y sin repetición al resolver skeleton o editar.
 [Alcance y validación ADR-156](../decisiones/156-entrada-mobile-unica-sin-cortinas.md).

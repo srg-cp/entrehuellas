@@ -1,0 +1,39 @@
+{
+  "date": "2026-11-03",
+  "dataset": {
+    "source": "https://www.lirmm.fr/YT-BB-Dog_Sibetan/",
+    "license": "CC BY 4.0 — https://creativecommons.org/licenses/by/4.0/",
+    "attribution": "Sibetan-v1 (27/10/2025), LIRMM/SEAdogSEA; published individual labels in gt_sibetan.json, not tracklet directory names. Eugênio Dias Ribeiro Neto et al., Background-invariant re-identification of dogs from camera-trap videos in non-controlled environments, Ecological Informatics (2025), DOI:10.1016/j.ecoinf.2025.103547.",
+    "archive": {
+      "url": "https://www.lirmm.fr/YT-BB-Dog_Sibetan/files/Sibetan.zip",
+      "sha256": "df974f837086ebfb25c439f8464c5102e3fb610f4e81b0f1a85a571852a7c2f9"
+    },
+    "groundTruthSha256": "9ad6b21558136cf1e9d96851588e0f51b7cfa0cda4118c485d3f42197ba761e0",
+    "manifestSha256": "bb3ac92b12bb8e333b89719fcc5b050eaa3e014b73929e6d7ffd81e0cbcd0cde",
+    "protocol": "Deterministic 5 development / 54 test identities: 50 positive queries, 50 gallery cases, 4 negative queries. One image per role/case. Equal experiment constants neutralize time/geography; these are not real event metadata. Cross-camera then cross-tracklet query selection, without viewing scores.",
+    "testPairs": {
+      "positives": 50,
+      "crossCamera": 7,
+      "crossTracklet": 39
+    },
+    "limitations": "Dogs only, cropped camera-trap images from one location/week in 2019. Some pairs share a video/tracklet; repeated frames/background can inflate retrieval. No local Peruvian cases, cats, calibrated thresholds, deployment latency or identification probability is established."
+  },
+  "metrics": {
+    "model": {
+      "id": "Xenova/clip-vit-base-patch32",
+      "revision": "d15189d7028b43f1d3e65039190477f6af591c2a",
+      "version": "clip-vit-b32-d15189d-q8-v1",
+      "dimensions": 512
+    },
+    "rankingVersion": "visual85-geography10-time5-v1",
+    "testIdentities": 54,
+    "positiveQueries": 50,
+    "recallAt5": 0.56,
+    "wrongTop1": 39,
+    "negativeQueries": 4,
+    "negativesWithSuggestions": 4,
+    "meanEncodingMs": 48,
+    "exploratorySampleSufficient": true,
+    "limitations": "No calibrated identity probability or automatic notification threshold. Operator must review dataset quality and results before activation."
+  }
+}

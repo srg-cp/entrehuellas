@@ -1,0 +1,12 @@
+{
+  "checks": [
+    "native-real-auth-callback",
+    "home-origin-to-hosted-matching",
+    "hosted-candidate-from-other-account",
+    "persisted-review-confirmed-with-toast",
+    "live-public-case-detail-with-QA-label",
+    "system-font-200-and-reduced-motion",
+    "return-to-matching"
+  ],
+  "passed": true
+}

@@ -1,7 +1,7 @@
 import assert from'node:assert/strict';
 import{resolve}from'node:path';
 import{matchingFixture,lost}from'../tests/matching_fixture.mjs';
-const server=await matchingFixture({uncached:true,modelDirectory:resolve('.cache/matching/clip-vit-b32-d15189d-q8-v1')});
+const server=await matchingFixture({uncached:true,modelDirectory:resolve(process.env.MATCH_MODEL_DIRECTORY||'.cache/matching/clip-vit-b32-d15189d-q8-v1')});
 try{
  const search=()=>fetch(server.origin+'/api/app/matching/search',{method:'POST',headers:{Authorization:'Bearer '+'o'.repeat(30),'Content-Type':'application/json'},body:JSON.stringify({source:'lost',id:lost})});
  const first=await search();assert.equal(first.status,200);const result=await first.json();assert.equal(result.complete,true);assert.equal(result.candidates.length,1);assert.equal(server.indexed.size,2);
