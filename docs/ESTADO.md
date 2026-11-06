@@ -7991,6 +7991,21 @@ Las pruebas de sesión usan un repositorio sustituido; no equivalen a acceso con
 - Indicadores reducidos de 16 a 12 (margen 5); radio explícito 26 en Continuar/Comenzar para reducir forma de píldora. Conservados ancho completo, alto, flecha y flujo.
 - Formato/análisis correctos y 65 pruebas aprobadas, incluido viewport pequeño/texto ampliado. Render QA aprobado e inspeccionadas primera/tercera etapa. Actualizado DISENO_UI; sin backend ni actualización del emulador, revisar tras recarga.
 
+<<<<<<< HEAD
+## Actualización integral del README principal, 9 de octubre de 2026
+
+- Se realizó un análisis exhaustivo del proyecto: arquitectura limpia por funcionalidad (`features/auth`, `features/onboarding`, `features/home`), estado de la suite de pruebas (65 pruebas unitarias/widgets), estructura del esquema SQL modular (001–009) en `database`, migraciones en `supabase/migrations`, y decisiones arquitectónicas (ADR-001 al ADR-005).
+- Se actualizó el `README.md` raíz para reflejar fielmente la realidad del proyecto:
+  - Visión general del MVP de recuperación colaborativa y flujos de publicación, QR y avistamiento ciudadano sin app.
+  - Base técnica y principios arquitectónicos: Clean Architecture, MVVM, Riverpod, desacoplamiento del dominio y regla de oro de feedback sin SnackBar (ADR-005).
+  - Estructura detallada de carpetas del repositorio.
+  - Detalle de funcionalidades implementadas: Login con correo y Google OAuth PKCE, Crear cuenta (`/register`) con `OriginPageTransition`, validación contextual y pantalla de confirmación por correo con temporizador, Onboarding sin "Omitir" (ADR-004) con ilustraciones dedicadas, cascada desenfocada y persistencia mediante RPC `complete_onboarding`.
+  - Organización de base de datos (`database/`), estándar de nombres (`snake_case`), `run_all.sql` idempotente y suite de pruebas PGlite.
+  - Guía completa de puesta en marcha: clonación, configuración local de Supabase (`supabase.local.json`), perfiles de VS Code F5 y comandos de terminal.
+  - Resumen de comandos de verificación (`dart format`, `flutter analyze`, `flutter test`, `npm test`).
+  - Índice exhaustivo de documentación interna y decisiones arquitectónicas (ADR-001 a ADR-005).
+- Validación: enlaces relativos verificados, `git diff --check` sin incidencias. Sin cambios en lógica ni código de la app Flutter; árbol de trabajo conservado.
+=======
 ## Mascota de Revisa tu correo, 8 de octubre de 2026 — S1 / HU-01 / RF-01,34
 
 - Rama `main`, sin cambios locales al iniciar. Generado con image_gen integrado el perrito con sobre/corazón del mockup, usando además la mascota del onboarding como referencia de identidad. PNG RGBA 1254 × 1254 con transparencia, guardado sin recomprimir en `assets/illustrations/dog_with_envelope.png`; prompt exacto y origen documentados junto al asset.
@@ -8093,6 +8108,7 @@ Las pruebas de sesión usan un repositorio sustituido; no equivalen a acceso con
 - Retirada UI anterior de Inicio (AppBar/Tu comunidad/aviso futuro). Destino provisional reutiliza layout/marca/título/acción/cover/stagger de referencia y mantiene bienvenida, cierre de sesión real y error contextual. No es diseño definitivo ni añade funcionalidades. Layout y estilo de botón extraídos a core con aliases/wrapper de Auth; ninguna importación de presentación Auth desde Home. Tema base alineado a blanco, negro/gris y botón radio 24/alto mínimo 60/texto 18. Conservados sesión/onboarding/OTP y cambios existentes.
 - Formato/análisis correctos, 102 pruebas aprobadas y enlaces de norma comprobados. Render QA aprobado; login y nuevo Inicio normal/320 × 350 con escala 2 revisados, cierre alcanzable por scroll. Suite conserva pruebas de fronteras, acceso, navegación y recuperación. Sin APK/instalación, backend ni GitHub.
 - Siguiente paso: usar la norma en todo incremento visual y diseñar Inicio definitivo alrededor de funcionalidades/HU reales. Revisión perceptiva en Android pendiente; corrección de máscara splash sigue requiriendo build/reinstalación desde entorno con Gradle operativo. Validación Auth/SMTP real no se acredita con estos renders.
+>>>>>>> 4dab80e3fac03b7e18bf342123c45bd9a3aa0135
 
 ## Pendiente
 
