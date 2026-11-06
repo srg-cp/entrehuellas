@@ -1,5 +1,10 @@
 # Coincidencias entre casos de mascotas
 
+06/11: el [README raíz](../../README.md#coincidencias-de-casos) documenta el modelo
+vigente, fotos/metadatos usados, ranking, datos y métricas de evaluación, límites
+y evidencia funcional. Publicación de la validación por PR autorizada por el
+usuario; no implica cambiar el modelo ni aceptar una precisión superior.
+
 ## Validación funcional finalizada —05/11/2026
 
 Completado el recorrido que faltaba con Auth/Supabase/Storage/Edge y Nuxt/CLIP

@@ -1,6 +1,29 @@
 # Estado del proyecto
 
+## README de Coincidencias y publicación autorizada por PR —06/11/2026
+
+El usuario autoriza ahora publicar los cambios y abrir una PR hacia main;
+esta instrucción sustituye la pausa de publicación del05/11. Comprobado main
+protegido, en4dab80e, y rama local feature/case-matching-validation un commit
+por delante. Se conserva el commit44ca683 y la anotación local de la retirada
+anterior. El run42084285663 consta completed/cancelled.
+
+README raíz actualizado antes de publicar: CLIP ViT-B/32 q8/revisión fija,
+CPU/Nuxt/Transformers.js, recorte224 en memoria, vectores512D, fotos procesadas,
+especie, zona/fecha aproximadas, pesos85/10/5, límites6fotos/100candidatos/top5,
+revisión humana y privacidad. Incluye datos de evaluación Sibetan,56% Recall@5,
+22% top1, negativos con sugerencias y límites del ensayo, diferenciando evaluación
+de entrenamiento y validación operativa de calidad. No se cambia el modelo.
+Verificación documental y publicación/CI registradas en la PR de esta rama.
+Sin fusión, despliegue ni cierre automático de HU/issues en esta tarea.
+
 ## Coincidencias: validación funcional terminada con servidor real —05/11/2026
+
+Publicación detenida por instrucción posterior del usuario: el commit44ca683 y
+su push pendiente habían concluido al comprobarlo; se retiró únicamente la rama
+remota feature/case-matching-validation verificando su SHA, conservando el commit
+y todos los archivos locales. Sin PR, fusión ni despliegue. Cancelación del run
+de CI42084285663 solicitada. No volver a publicar sin nueva autorización.
 
 HU-25/#71 y HU-26/#72. **Finalizada la validación funcional pendiente:** dos
 cuentas reales, publicación/procesado/Storage, comparación CLIP alojada, índices,

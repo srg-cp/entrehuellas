@@ -13,6 +13,7 @@
   </p>
   <p>
     <a href="#primeros-pasos">Primeros pasos</a> ·
+    <a href="#coincidencias-de-casos">Modelo y resultados de coincidencias</a> ·
     <a href="#configuracion-local">Configuración</a> ·
     <a href="INSTALACION_ANDROID.md">Instalar/publicar APK</a> ·
     <a href="#trabajo-en-equipo">Colaborar</a> ·
@@ -27,14 +28,96 @@
 Entre Huellas conecta a quienes buscan una mascota con personas que pueden aportar información para recuperarla. El MVP contempla búsquedas de mascotas perdidas, avisos vinculados, fichas públicas mediante QR y seguimiento de la recuperación.
 
 Las coincidencias visuales también forman parte del MVP (HU-25/#71 y HU-26/#72),
-con hallazgos independientes y revisión humana. La implementación está en
-`feature/case-matching`; el patch040 fue aplicado según confirmación del usuario.
-La evaluación con fotos autorizadas, la prueba entre dos cuentas y la aceptación
-siguen pendientes. Consulta el [recorrido y la configuración](docs/funcionalidades/coincidencias-de-casos.md).
+con hallazgos independientes y revisión humana. Su implementación está integrada
+en `main`; el patch040 fue aplicado según confirmación del usuario. La validación
+funcional con dos cuentas, servidor alojado, web y emulador está terminada; la
+evaluación de calidad es exploratoria y su aceptación de producto sigue separada.
+Consulta el [modelo, datos y resultados](#coincidencias-de-casos) y el
+[recorrido y la configuración](docs/funcionalidades/coincidencias-de-casos.md).
 
 La app cuenta con implementaciones de acceso y onboarding por cuenta, perfil, mascotas y fotos, zonas de interés, preferencias de alertas, búsquedas y avisos vinculados, y consulta de Mis reportes. **Implementado no significa historia cerrada ni despliegue confirmado**: la evidencia y los pendientes se registran en [las fichas funcionales](docs/funcionalidades/README.md) y [el estado del proyecto](docs/ESTADO.md).
 
 Explorar, la web pública QR y la entrega real de alertas tienen trabajo pendiente. Guardar preferencias de alertas no implica que ya se envíen notificaciones. Consulta el alcance en [la guía del MVP](docs/GUIA_MVP.md).
+
+<a id="coincidencias-de-casos"></a>
+
+## 🔎 Coincidencias de casos: modelo, datos y acierto medido
+
+### Modelo actual y procesamiento de fotografías
+
+Usamos **CLIP ViT-B/32 cuantizado a 8 bits (q8)**, con los pesos preentrenados de
+[`Xenova/clip-vit-base-patch32`](https://huggingface.co/Xenova/clip-vit-base-patch32),
+revisión fija `d15189d7028b43f1d3e65039190477f6af591c2a` y versión del proyecto
+`clip-vit-b32-d15189d-q8-v1`. Se ejecuta en CPU dentro del servidor Nuxt mediante
+Transformers.js 3.8.1, con pesos locales verificados por hash; cada foto produce
+un vector normalizado de 512 valores. No se entrenó ni ajustó el modelo con fotos
+de las cuentas de Entre Huellas, ni se envían esas fotos a inferencia externa.
+
+Las fotos del caso se normalizan, orientan y sanitizan al subirlas, conservando
+sus proporciones. **El recorte central a 224 × 224 para CLIP se aplica en memoria
+en Nuxt al comparar**, mediante `fit:'cover'`; no sustituye la fotografía guardada
+ni la ficha. Se leen las versiones procesadas autorizadas de Storage, no las
+miniaturas. Los vectores se indexan por caso/foto/hash/versión y se reutilizan;
+una petición procesa hasta seis fotos pendientes y permite continuar después.
+El código está en el [encoder](apps/platform/server/features/matching/data/clip_image_encoder.ts)
+y el [repositorio de coincidencias](apps/platform/server/features/matching/data/server_matching_repository.ts).
+
+### Qué datos participan en la búsqueda
+
+El responsable selecciona una búsqueda activa propia o comunitaria con fotos.
+Se comparan hasta tres fotografías por caso con hallazgos independientes y
+encontrados históricos activos de la misma especie, sujetos a visibilidad,
+permisos y bloqueos. Los avisos ya vinculados a una búsqueda conservan su función
+de colaboración y no se presentan como hallazgos independientes. El piloto admite
+hasta 100 casos candidatos elegibles y muestra hasta cinco sugerencias por caso;
+superar el límite devuelve un error explícito, sin truncar silenciosamente.
+
+| Dato | Uso actual |
+| --- | --- |
+| Fotografías procesadas | Similitud coseno entre vectores; se toma la mayor similitud entre pares de fotos de ambos casos |
+| Especie | Filtro de compatibilidad entre búsqueda y candidatos |
+| Ubicación pública aproximada | Proximidad geográfica suave, sin excluir automáticamente un caso lejano |
+| Fecha/hora del suceso | Cercanía temporal suave, sin excluir automáticamente un reporte tardío |
+| Estado, fotos vigentes, permisos y bloqueos | Elegibilidad y rechazo de resultados obsoletos o no autorizados |
+
+El [ranking actual](apps/platform/shared/features/matching/domain/matching.ts)
+combina **85% de similitud visual, 10% de proximidad geográfica y 5% de cercanía
+temporal**. La proximidad decae de forma exponencial con escalas de 50 km y 90 días,
+respectivamente. Son pesos de una fórmula exploratoria, **no porcentajes de
+certeza ni de acierto**. Nombre, rasgos escritos, raza y sexo no aportan puntuación
+al ranking visual actual. El resultado siempre requiere revisión humana;
+confirmarlo no asigna propietario ni confirma recuperación automáticamente.
+
+### Evaluación y limitaciones conocidas
+
+El 03/11/2026 se evaluó el modelo con [Sibetan-v1](https://www.lirmm.fr/YT-BB-Dog_Sibetan/)
+(LIRMM/SEAdogSEA, CC BY 4.0), usando etiquetas oficiales de individuos: 114 fotos
+distintas de 59 perros, con cinco identidades de desarrollo y 54 de prueba
+separadas. Hubo 50 consultas positivas frente a 50 casos de galería y cuatro
+consultas sin pareja en la galería. **Es un conjunto de evaluación; no se usó
+para entrenar el modelo.**
+
+| Métrica | Resultado medido |
+| --- | --- |
+| Mascota correcta entre las cinco sugerencias (Recall@5) | **28/50 — 56%** |
+| Primera sugerencia correcta (top1) | **11/50 — 22%** |
+| Consultas sin pareja que recibieron sugerencias | **4/4** |
+| Tiempo medio local del encoder en CPU Windows |48 ms/foto; no representa la latencia total del servidor alojado |
+
+Los datos son perros de cámaras trampa de una zona/semana de 2019; 39 pares cruzan
+secuencias de vídeo y solo siete cruzan cámaras. No representan gatos ni todos
+los escenarios de fotos de celulares/reportes locales. Se igualaron ubicación y
+fecha en el experimento para aislar el componente visual. No hay un umbral
+calibrado para rechazar todos los candidatos ni una precisión global garantizada;
+el porcentaje medido no debe presentarse como probabilidad de identidad.
+
+La validación funcional del 05/11 aprobó el flujo real con dos cuentas, fotos,
+Supabase/Storage/Edge y Nuxt/CLIP, revisión/reintento, ficha, cierre/retirada,
+navegador y emulador Android. Esa comprobación acredita funcionamiento en los
+escenarios ensayados y no aumenta las métricas de identificación anteriores.
+Véanse la [evaluación reproducible y sus hashes](docs/revisiones/coincidencias-2026-11-03.md),
+los [resultados de calidad en JSON](docs/revisiones/coincidencias-2026-11-03/sibetan-resultados.json)
+y la [validación alojada final](docs/revisiones/coincidencias-2026-11-05.md).
 
 <a id="primeros-pasos"></a>
 
