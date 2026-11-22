@@ -2,12 +2,13 @@ import '../../../../core/domain/entities/missing_report_value.dart';
 import '../../../offline_drafts/domain/entities/local_report_draft.dart';
 import '../../../offline_drafts/providers/submission_queue_providers.dart';
 import '../../../offline_drafts/domain/entities/queued_report.dart';
-import 'dart:async';
+import '../../../../core/presentation/state/report_draft_coordinator.dart';
 import '../../../offline_drafts/providers/local_draft_providers.dart';
 import '../state/found_local_draft.dart';
 import '../../../../core/presentation/state/event_date_time_draft.dart';
 import 'recovery_case_view_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/misc.dart' show ProviderListenable;
 import '../../../../core/domain/utils/new_entity_id.dart';
 import '../../domain/entities/found_case.dart';
 import '../../providers/found_case_providers.dart';
@@ -21,173 +22,120 @@ final foundEditorViewModelProvider =
       retry: (_, _) => null,
     );
 
-class FoundEditorViewModel extends AsyncNotifier<FoundEditorState> {
+class FoundEditorViewModel extends AsyncNotifier<FoundEditorState>
+    with
+        ReportDraftCoordinator<
+          FoundEditorState,
+          SubmissionStatus,
+          QueuedReport
+        > {
   FoundEditorViewModel({Duration? operationTimeout})
     : _operationTimeout = operationTimeout ?? const Duration(seconds: 90);
   final Duration _operationTimeout;
   bool get communitySearch =>
       ref.read(foundEditorContextProvider).communitySearch;
-  int _generation = 0;
-  List<QueuedReport> _queueSnapshot = const [];
-  void _observeQueue(String owner) {
-    _queueSnapshot = const [];
-    final generation = _generation;
-    ref.listen(queuedReportsProvider(owner), (previous, next) {
-      if (generation != _generation || next.isLoading || next.hasError) return;
-      _queueSnapshot = next.asData?.value ?? const [];
-      _applyQueue(generation, owner);
-    });
-  }
+  String _slot = '';
 
-  void _applyQueue(int generation, String owner) {
-    if (!_current(generation, owner)) return;
-    final v = state.requireValue;
-    if (v.busy || v.published != null) return;
-    final entry = _queueSnapshot
-        .where((e) => e.command.id == v.draftId)
-        .firstOrNull;
-    if (entry == null) {
-      if (v.submissionStatus != null) {
-        state = AsyncData(v.copyWith(clearSubmissionStatus: true));
-      }
-      return;
-    }
+  @override
+  String get draftSlot => _slot;
+  @override
+  Future<void> saveLocalDraft(FoundEditorState value, String slot) =>
+      ref.read(saveLocalDraftProvider)(foundLocalDraft(value, slot));
+  @override
+  Future<void> removeLocalDraft(String owner, String slot, String id) =>
+      ref.read(removeLocalDraftProvider)(owner, slot, id);
+  @override
+  Future<void> cancelLocalSubmission(String owner, String id) =>
+      ref.read(cancelLocalSubmissionProvider)(owner, id);
+  @override
+  ProviderListenable<AsyncValue<List<QueuedReport>>> queuedReports(
+    String owner,
+  ) => queuedReportsProvider(owner);
+  @override
+  String queuedDraftId(QueuedReport entry) => entry.command.id;
+  @override
+  SubmissionStatus queuedStatus(QueuedReport entry) => entry.status;
+  @override
+  Object draftCheckpoint(FoundEditorState value) => foundCheckpointKey(value);
+  @override
+  FoundEditorState withBusy(FoundEditorState value, bool busy) =>
+      value.copyWith(busy: busy);
+  @override
+  FoundEditorState withSubmissionStatus(
+    FoundEditorState value,
+    SubmissionStatus? status,
+  ) => status == null
+      ? value.copyWith(clearSubmissionStatus: true)
+      : value.copyWith(submissionStatus: status);
+  @override
+  FoundEditorState? confirmedByQueue(
+    FoundEditorState value,
+    QueuedReport entry,
+  ) {
     final receipt = entry.receipt;
-    if (receipt != null) {
-      state = AsyncData(
-        v.copyWith(
-          stage: FoundStage.confirmed,
-          published: receipt.found,
-          dirty: false,
-          busy: false,
-          submissionStatus: entry.status,
-          clearIssue: true,
-        ),
-      );
-    } else if (v.submissionStatus != entry.status) {
-      state = AsyncData(v.copyWith(submissionStatus: entry.status));
-    }
-  }
-
-  Object? _checkpointKey;
-  void Function()? _stopObserving;
-  String _slot = "";
-  Future<bool> discardLocalDraft(String expectedId) async {
-    final value = state.asData?.value;
-    if (value == null || value.draftId != expectedId || value.busy) {
-      return false;
-    }
-    final generation = _generation;
-    final remove = ref.read(removeLocalDraftProvider);
-    final cancel = ref.read(cancelLocalSubmissionProvider);
-    final slot = _slot;
-    final keep = ref.keepAlive();
-    state = AsyncData(value.copyWith(busy: true));
-    try {
-      await cancel(value.ownerId, value.draftId);
-      if (!_current(generation, value.ownerId)) return false;
-      if (value.attempted && !await _performDiscard(alreadyBusy: true)) {
-        return false;
-      }
-      if (!_current(generation, value.ownerId)) return false;
-      state = AsyncData(state.requireValue.copyWith(busy: true));
-      await remove(value.ownerId, slot, value.draftId);
-      if (!_current(generation, value.ownerId)) return false;
-      ref.invalidateSelf();
-      return true;
-    } catch (error) {
-      if (_current(generation, value.ownerId)) {
-        state = AsyncData(
-          state.requireValue.copyWith(
-            busy: false,
-            issue: error is SubmissionFailure
-                ? FoundFailureKind.conflict
-                : FoundFailureKind.localStorage,
-          ),
-        );
-      }
-      return false;
-    } finally {
-      keep.close();
-    }
-  }
-
-  Future<bool> saveForLater() async {
-    final value = state.asData?.value;
-    if (value == null || state.isLoading) return false;
-    final generation = _generation;
-    final saved = await _saveLocal(value);
-    if (saved &&
-        _current(generation, value.ownerId) &&
-        state.requireValue.issue == FoundFailureKind.localStorage) {
-      state = AsyncData(state.requireValue.copyWith(clearIssue: true));
-    }
-    return saved;
-  }
-
-  Future<bool> _saveLocal(FoundEditorState value) async {
-    if (!value.dirty && value.lockedDraft == null) return true;
-    final generation = _generation;
-    final slot = _slot;
-    final save = ref.read(saveLocalDraftProvider);
-    final keep = ref.keepAlive();
-    try {
-      await save(foundLocalDraft(value, slot));
-      return true;
-    } catch (_) {
-      if (_current(generation, value.ownerId) &&
-          foundCheckpointKey(state.requireValue) == foundCheckpointKey(value)) {
-        state = AsyncData(
-          state.requireValue.copyWith(issue: FoundFailureKind.localStorage),
-        );
-      }
-      return false;
-    } finally {
-      keep.close();
-    }
-  }
-
-  void _observeDraft() {
-    _checkpointKey = null;
-    _stopObserving?.call();
-    final generation = _generation;
-    _stopObserving = listenSelf((previous, next) {
-      if (generation != _generation) return;
-      scheduleMicrotask(() {
-        if (ref.mounted) {
-          _applyQueue(generation, next.asData?.value.ownerId ?? '');
-        }
-      });
-      final value = next.asData?.value;
-      if (next.isLoading || value == null) return;
-      final key = foundCheckpointKey(value);
-      if (_checkpointKey == key) return;
-      _checkpointKey = key;
-      if (value.stage == FoundStage.confirmed) {
-        final remove = ref.read(removeLocalDraftProvider);
-        unawaited(
-          remove(value.ownerId, _slot, value.draftId).catchError((Object _) {
-            // The receipt remains confirmed. An undeleted exact command is safe to replay.
-          }),
-        );
-      } else {
-        unawaited(_saveLocal(value));
-      }
-    });
+    if (receipt == null) return null;
+    return value.copyWith(
+      stage: FoundStage.confirmed,
+      published: receipt.found,
+      dirty: false,
+      busy: false,
+      submissionStatus: entry.status,
+      clearIssue: true,
+    );
   }
 
   @override
+  FoundEditorState withEventDetails(
+    FoundEditorState value, {
+    required EventDateTimeDraft dateTimeDraft,
+    required bool dirty,
+    double? latitude,
+    double? longitude,
+    bool clearPoint = false,
+    String? placeReference,
+  }) => value.copyWith(
+    dateTimeDraft: dateTimeDraft,
+    latitude: latitude,
+    longitude: longitude,
+    clearPoint: clearPoint,
+    placeReference: placeReference,
+    dirty: dirty,
+    clearIssue: true,
+  );
+  @override
+  FoundEditorState withDraftIssue(
+    FoundEditorState value,
+    ReportDraftIssue issue,
+  ) => value.copyWith(issue: _failureOf(issue));
+  @override
+  bool hasDraftIssue(FoundEditorState value, ReportDraftIssue issue) =>
+      value.issue == _failureOf(issue);
+  @override
+  FoundEditorState withoutIssue(FoundEditorState value) =>
+      value.copyWith(clearIssue: true);
+  @override
+  bool isConflict(Object error) => error is SubmissionFailure;
+  FoundFailureKind _failureOf(ReportDraftIssue issue) => switch (issue) {
+    ReportDraftIssue.localStorage => FoundFailureKind.localStorage,
+    ReportDraftIssue.conflict => FoundFailureKind.conflict,
+  };
+
+  // An attempted command may exist on the server: release it there first.
+  @override
+  Future<bool> releaseBeforeDiscard(FoundEditorState value) async =>
+      !value.attempted || await _performDiscard(alreadyBusy: true);
+
+  @override
   Future<FoundEditorState> build() async {
-    final generation = ++_generation;
+    final generation = nextDraftGeneration();
     final session = await ref.watch(foundSessionProvider.future);
-    if (!ref.mounted || generation != _generation) {
+    if (!ref.mounted || generation != draftGeneration) {
       throw const FoundFailure(FoundFailureKind.forbidden);
     }
     if (session == null) throw const FoundFailure(FoundFailureKind.forbidden);
     final context = ref.watch(foundEditorContextProvider);
     _slot = foundDraftSlot(context);
-    _observeDraft();
-    _observeQueue(session.userId);
+    startDraftCoordination(session.userId);
     final local = await ref.read(readLocalDraftProvider)(session.userId, _slot);
     if (local != null) return restoreFoundLocalDraft(local, context);
     final target = context.communitySearch
@@ -220,12 +168,8 @@ class FoundEditorViewModel extends AsyncNotifier<FoundEditorState> {
   }
 
   void retry() => ref.invalidateSelf();
-  bool _current(int g, String owner) =>
-      ref.mounted &&
-      g == _generation &&
-      !state.isLoading &&
-      state.asData?.value.ownerId == owner;
-  bool _editable(FoundEditorState? v) =>
+  @override
+  bool isEditable(FoundEditorState? v) =>
       v != null &&
       !state.isLoading &&
       !v.busy &&
@@ -238,7 +182,7 @@ class FoundEditorViewModel extends AsyncNotifier<FoundEditorState> {
       v.stage != FoundStage.confirmed;
   void chooseObservation(String kind) {
     final value = state.asData?.value;
-    if (!_editable(value) ||
+    if (!isEditable(value) ||
         value!.communitySearch ||
         !{'sighting', 'with_reporter'}.contains(kind)) {
       return;
@@ -247,59 +191,6 @@ class FoundEditorViewModel extends AsyncNotifier<FoundEditorState> {
       value.copyWith(
         reportKind: kind,
         custody: kind == 'with_reporter' ? 'with_me' : 'not_with_me',
-        dirty: true,
-        clearIssue: true,
-      ),
-    );
-  }
-
-  /// Restores report fields without changing animal data or photos.
-  void restoreReportDetails({
-    required String ownerId,
-    required EventDateTimeDraft dateTime,
-    required double? latitude,
-    required double? longitude,
-    required String placeReference,
-  }) {
-    final current = state.asData?.value;
-    if (!_editable(current) || current!.ownerId != ownerId) return;
-    final hasDetails =
-        dateTime.date != null ||
-        dateTime.hour != null ||
-        latitude != null ||
-        longitude != null ||
-        placeReference.isNotEmpty;
-    state = AsyncData(
-      current.copyWith(
-        dateTimeDraft: dateTime,
-        latitude: latitude,
-        longitude: longitude,
-        clearPoint: latitude == null && longitude == null,
-        placeReference: placeReference,
-        dirty: current.dirty || hasDetails,
-        clearIssue: true,
-      ),
-    );
-  }
-
-  void chooseDate(DateTime date) {
-    final current = state.asData?.value;
-    if (!_editable(current)) return;
-    state = AsyncData(
-      current!.copyWith(
-        dateTimeDraft: current.dateTimeDraft.withDate(date),
-        dirty: true,
-        clearIssue: true,
-      ),
-    );
-  }
-
-  void chooseTime(int hour, int minute) {
-    final current = state.asData?.value;
-    if (!_editable(current)) return;
-    state = AsyncData(
-      current!.copyWith(
-        dateTimeDraft: current.dateTimeDraft.withTime(hour, minute),
         dirty: true,
         clearIssue: true,
       ),
@@ -319,7 +210,7 @@ class FoundEditorViewModel extends AsyncNotifier<FoundEditorState> {
     double? longitude,
   }) {
     final v = state.asData?.value;
-    if (!_editable(v)) return;
+    if (!isEditable(v)) return;
     state = AsyncData(
       v!.copyWith(
         species: species,
@@ -342,15 +233,15 @@ class FoundEditorViewModel extends AsyncNotifier<FoundEditorState> {
 
   Future<void> choosePhoto({bool camera = false, bool recover = false}) async {
     final v = state.asData?.value;
-    if (!_editable(v) || v!.photos.length >= 3) return;
-    final g = _generation;
+    if (!isEditable(v) || v!.photos.length >= 3) return;
+    final g = draftGeneration;
     state = AsyncData(v.copyWith(busy: true, clearIssue: true));
     try {
       final action = ref.read(chooseFoundPhotoProvider);
       final bytes = recover
           ? await action.recover(v.ownerId, v.draftId)
           : await action(v.ownerId, v.draftId, camera: camera);
-      if (!_current(g, v.ownerId)) return;
+      if (!isCurrentDraft(g, v.ownerId)) return;
       state = AsyncData(
         state.requireValue.copyWith(
           busy: false,
@@ -361,7 +252,7 @@ class FoundEditorViewModel extends AsyncNotifier<FoundEditorState> {
         ),
       );
     } catch (e) {
-      if (_current(g, v.ownerId)) {
+      if (isCurrentDraft(g, v.ownerId)) {
         state = AsyncData(
           state.requireValue.copyWith(
             busy: false,
@@ -374,7 +265,7 @@ class FoundEditorViewModel extends AsyncNotifier<FoundEditorState> {
 
   void removePhoto(String id) {
     final v = state.asData?.value;
-    if (!_editable(v)) return;
+    if (!isEditable(v)) return;
     state = AsyncData(
       v!.copyWith(
         photos: v.photos.where((p) => p.id != id).toList(),
@@ -403,7 +294,7 @@ class FoundEditorViewModel extends AsyncNotifier<FoundEditorState> {
   );
   void preview() {
     final v = state.asData?.value;
-    if (!_editable(v)) return;
+    if (!isEditable(v)) return;
     try {
       ref.read(publishFoundCaseProvider).validate(_draft(v!), DateTime.now());
       state = AsyncData(
@@ -421,7 +312,7 @@ class FoundEditorViewModel extends AsyncNotifier<FoundEditorState> {
 
   void backToForm() {
     final v = state.asData?.value;
-    if (!_editable(v)) return;
+    if (!isEditable(v)) return;
     state = AsyncData(v!.copyWith(stage: FoundStage.form, clearIssue: true));
   }
 
@@ -436,24 +327,24 @@ class FoundEditorViewModel extends AsyncNotifier<FoundEditorState> {
         v.stage != FoundStage.preview) {
       return;
     }
-    final g = _generation, keep = ref.keepAlive();
+    final g = draftGeneration, keep = ref.keepAlive();
     final d = v.lockedDraft ?? _draft(v);
     state = AsyncData(
       v.copyWith(busy: true, lockedDraft: d, attempted: true, clearIssue: true),
     );
     try {
-      if (!await _saveLocal(state.requireValue)) {
-        if (_current(g, v.ownerId)) {
+      if (!await saveLocalCheckpoint(state.requireValue)) {
+        if (isCurrentDraft(g, v.ownerId)) {
           state = AsyncData(state.requireValue.copyWith(busy: false));
         }
         return;
       }
-      if (!_current(g, v.ownerId)) return;
+      if (!isCurrentDraft(g, v.ownerId)) return;
       final result = await ref
           .read(dispatchQueuedReportsProvider)
           .send(
             foundLocalDraft(state.requireValue, _slot),
-            isCurrent: () => _current(g, v.ownerId),
+            isCurrent: () => isCurrentDraft(g, v.ownerId),
             resolveRejected: v.lockedDraft == null,
           )
           .timeout(
@@ -461,7 +352,7 @@ class FoundEditorViewModel extends AsyncNotifier<FoundEditorState> {
             onTimeout: () =>
                 throw const FoundFailure(FoundFailureKind.timedOut),
           );
-      if (!_current(g, v.ownerId)) return;
+      if (!isCurrentDraft(g, v.ownerId)) return;
       final published = result.found!;
       state = AsyncData(
         state.requireValue.copyWith(
@@ -488,7 +379,7 @@ class FoundEditorViewModel extends AsyncNotifier<FoundEditorState> {
                   : FoundFailureKind.unavailable,
             )
           : error;
-      if (_current(g, v.ownerId)) {
+      if (isCurrentDraft(g, v.ownerId)) {
         state = AsyncData(
           state.requireValue.copyWith(
             busy: false,
@@ -523,11 +414,11 @@ class FoundEditorViewModel extends AsyncNotifier<FoundEditorState> {
     }
     if (!v.attempted) return true;
     final cancel = ref.read(cancelLocalSubmissionProvider);
-    final g = _generation, keep = ref.keepAlive();
+    final g = draftGeneration, keep = ref.keepAlive();
     state = AsyncData(v.copyWith(busy: true, clearIssue: true));
     try {
       await cancel(v.ownerId, v.draftId);
-      if (!_current(g, v.ownerId)) return false;
+      if (!isCurrentDraft(g, v.ownerId)) return false;
       await ref
           .read(discardFoundDraftProvider)(v.ownerId, v.draftId)
           .timeout(
@@ -535,12 +426,12 @@ class FoundEditorViewModel extends AsyncNotifier<FoundEditorState> {
             onTimeout: () =>
                 throw const FoundFailure(FoundFailureKind.timedOut),
           );
-      if (!_current(g, v.ownerId)) return false;
+      if (!isCurrentDraft(g, v.ownerId)) return false;
       state = AsyncData(state.requireValue.copyWith(busy: false, dirty: false));
       ref.invalidate(myFoundCasesViewModelProvider);
       return true;
     } catch (e) {
-      if (_current(g, v.ownerId)) {
+      if (isCurrentDraft(g, v.ownerId)) {
         state = AsyncData(
           state.requireValue.copyWith(
             busy: false,
