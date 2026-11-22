@@ -1,3 +1,4 @@
+import '../../../../core/domain/entities/case_status.dart';
 import '../../../offline_drafts/domain/entities/queued_report.dart';
 import '../../../../core/presentation/state/event_date_time_draft.dart';
 import '../../../../core/domain/use_cases/approximate_case_location.dart';
@@ -56,7 +57,7 @@ class CaseEditorState {
     final location = approximateCaseLocation(latitude!, longitude!);
     return PublicLostCase(
       id: draftId,
-      status: 'active',
+      status: CaseStatus.active,
       occurredAt: occurredAt!,
       latitude: location.latitude,
       longitude: location.longitude,

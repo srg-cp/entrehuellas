@@ -1,3 +1,4 @@
+import '../../../../core/providers/case_change_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../case_timeline/providers/case_timeline_providers.dart';
 import '../../../found_cases/domain/entities/found_case.dart';
@@ -20,6 +21,12 @@ class CaseJourneyViewModel extends AsyncNotifier<CaseJourneyState> {
   @override
   Future<CaseJourneyState> build() async {
     _generation++;
+    final caseChanges = ref
+        .watch(caseChangesProvider)
+        .changes
+        .where((change) => change.id == target.id)
+        .listen((_) => ref.invalidateSelf());
+    ref.onDispose(caseChanges.cancel);
     final session = await ref.watch(timelineSessionProvider.future);
     if (session == null) throw const FoundFailure(FoundFailureKind.forbidden);
     return CaseJourneyState(

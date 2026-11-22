@@ -1,3 +1,4 @@
+import '../../theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
 /// Shared secondary action in an opaque panel, with accessible icon-only mode.
@@ -24,7 +25,7 @@ class PanelActionButton extends StatelessWidget {
           style: IconButton.styleFrom(
             backgroundColor: const Color(0xFFEEEEF0),
             disabledBackgroundColor: const Color(0xFFEEEEF0),
-            foregroundColor: const Color(0xFF111111),
+            foregroundColor: AppColors.ink,
             fixedSize: const Size.square(56),
             shape: const CircleBorder(),
           ),

@@ -194,7 +194,7 @@ class _PlaceSearchFieldsState extends ConsumerState<PlaceSearchFields> {
                 constraints: BoxConstraints(maxHeight: height),
                 child: Material(
                   key: const ValueKey('place-suggestions'),
-                  color: const Color(0xFFF5F5F7),
+                  color: AppColors.surface,
                   elevation: 2,
                   shadowColor: const Color(0x22171918),
                   borderRadius: BorderRadius.circular(22),

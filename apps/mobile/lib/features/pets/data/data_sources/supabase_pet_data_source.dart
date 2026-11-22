@@ -41,7 +41,7 @@ class SupabasePetDataSource implements PetDataSource {
     Uri? cover;
     final photos =
         (row['pet_photos'] as List? ?? [])
-            .whereType<Map>()
+            .whereType<Map<String, dynamic>>()
             .where((photo) => photo['status'] == 'published')
             .toList()
           ..sort(

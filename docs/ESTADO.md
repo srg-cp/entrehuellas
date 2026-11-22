@@ -1,5 +1,57 @@
 # Estado del proyecto
 
+## Correcciones no críticas de la auditoría móvil —21/11/2026
+
+Por solicitud del usuario («todas las correcciones faltantes»), aplicadas según
+[ADR-173](decisiones/173-correcciones-no-criticas-auditoria-mobile.md):
+- router: política única para `/home/...`, validador UUID común y conversión de
+  slot a ruta en un solo lugar;
+- evento de dominio `CaseChanges`, que sustituye las invalidaciones cruzadas
+  del router;
+- tipos `CaseKind`, `CaseStatus`/`isActive`, `ReportSlot` y
+  `CommunityCaseTarget`;
+- datos: enums tolerantes y firma de fotos en bloque;
+- robustez: sin doble envío durante la sincronización, cola activa en
+  `inactive` y reintento homogéneo de los providers de sesión;
+- plataforma: localización `es` y teselas CARTO por defecto;
+- calidad: 178 colores pasan a tokens, lints estrictos y siete widgets sin
+  uso eliminados.
+
+El ADR detalla lo descartado y su motivo: textos en ViewModels, editores
+duplicados, `directives_ordering`, debounce, fondo y contrato de errores SQL.
+
+Validación local (Windows, Flutter 3.35.3): formato sin cambios, `flutter
+analyze` sin incidencias con los lints nuevos y **719/719 pruebas**. Las
+pruebas con SDK falso de casos perdidos/encontrados se adaptaron al endpoint de
+firma en bloque. Sin prueba física, CI remota ni commit firmado: el commit de
+ADR-172 quedó preparado, pero la firma GPG requiere la frase de paso del
+usuario. Siguiente paso: firmar los commits, revisar visualmente las fechas en
+español y el mapa por defecto, y planificar la unificación de los editores.
+
+## Correcciones críticas de la auditoría móvil —21/11/2026
+
+Por solicitud del usuario, tras auditar `apps/mobile`, se corrigen los cuatro
+críticos según [ADR-172](decisiones/172-correcciones-criticas-auditoria-mobile.md):
+(1) `flutter test` sin define ya no falla; `test/flutter_test_config.dart`
+desactiva el fondo ambiental y la CI deja de usar
+`AMBIENT_BACKGROUND_MOTION=false`. (2) El applicationId Android pasa a
+`app.entrehuellas`, igual que 9114c0a de la rama `Bruno`. (3) La sesión y el
+PKCE de Supabase se guardan en Keystore/Keychain, migrando la sesión en claro
+previa. (4) Hay manejo global de errores de framework y asíncronos, con
+registro local sin mensajes y sin bloque gris en release.
+
+Validación local (Windows, Flutter 3.35.3): formato de 745 archivos sin
+cambios, `flutter analyze` sin incidencias y **719/719 pruebas con `flutter test`
+sin argumentos** (incluye 9 nuevas de almacenamiento seguro y errores).
+
+No acreditado: migración de una sesión real en un dispositivo físico, nuevo
+registro Firebase/FCM para `app.entrehuellas` ni CI remota. Las instalaciones
+Android con el identificador provisional deben desinstalarse. iOS conserva su
+bundle provisional. Sin commit/push. Siguiente paso: revisar los cambios,
+registrar el identificador en Firebase si se activa push y abordar los puntos
+no críticos de la auditoría (referencias de caso unificadas, editores
+duplicados, router).
+
 ## README de Coincidencias y publicación autorizada por PR —06/11/2026
 
 El usuario autoriza ahora publicar los cambios y abrir una PR hacia main;

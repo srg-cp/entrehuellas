@@ -1,3 +1,4 @@
+import '../../theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
 /// Shared horizontal gallery geometry for pet details, editors and reports.
@@ -47,7 +48,7 @@ class PhotoGalleryTile extends StatelessWidget {
         child: Stack(
           fit: StackFit.expand,
           children: [
-            ColoredBox(color: const Color(0xFFF5F5F7), child: child),
+            ColoredBox(color: AppColors.surface, child: child),
             if (pending)
               const Align(
                 alignment: Alignment.bottomCenter,
@@ -67,10 +68,7 @@ class PhotoGalleryTile extends StatelessWidget {
                 child: DecoratedBox(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(22),
-                    border: Border.all(
-                      color: const Color(0xFFB53F48),
-                      width: 3.5,
-                    ),
+                    border: Border.all(color: AppColors.error, width: 3.5),
                   ),
                 ),
               ),
@@ -106,7 +104,7 @@ class PhotoGalleryTile extends StatelessWidget {
                         value: selected,
                         onChanged: onSelectionChanged,
                         activeColor: Colors.white,
-                        checkColor: const Color(0xFF111111),
+                        checkColor: AppColors.ink,
                         side: const BorderSide(color: Colors.white),
                       ),
                     ),

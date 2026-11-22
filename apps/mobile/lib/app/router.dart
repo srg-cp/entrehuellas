@@ -1,3 +1,4 @@
+import '../core/presentation/navigation/case_routes.dart';
 import '../features/case_matching/presentation/screens/matching_screen.dart';
 import '../features/case_journey/presentation/screens/case_journey_screen.dart';
 import '../features/case_journey/presentation/widgets/case_journey_card.dart';
@@ -6,6 +7,9 @@ import '../core/presentation/widgets/case_action_button.dart';
 import '../features/offline_cases/presentation/widgets/cached_cases_section.dart';
 import '../features/offline_drafts/presentation/screens/submission_queue_screen.dart';
 import '../features/offline_drafts/presentation/screens/local_drafts_screen.dart';
+import '../features/offline_drafts/domain/entities/report_slot.dart';
+import '../core/domain/entities/case_kind.dart';
+import '../core/providers/case_change_providers.dart';
 import '../features/user_blocks/presentation/screens/user_blocks_screen.dart';
 import '../features/user_blocks/presentation/widgets/user_block_controls.dart';
 import '../features/case_contacts/presentation/view_models/case_contact_view_model.dart';
@@ -13,8 +17,6 @@ import '../features/case_posters/presentation/widgets/case_share_button.dart';
 import '../features/case_contacts/presentation/widgets/case_contact_panel.dart';
 import '../features/content_reports/presentation/screens/content_report_screen.dart';
 import '../features/case_closure/presentation/screens/case_closure_screen.dart';
-import '../features/found_cases/presentation/view_models/found_read_view_model.dart';
-import '../features/explore/presentation/view_models/explore_view_model.dart';
 import '../features/notifications/presentation/screens/inbox_screen.dart';
 import '../features/notifications/presentation/widgets/follow_target_button.dart';
 import '../features/explore/presentation/widgets/explore_section.dart';
@@ -30,8 +32,6 @@ import '../features/saved_cases/presentation/screens/saved_cases_screen.dart';
 import '../features/saved_cases/domain/entities/saved_case_ref.dart';
 import '../features/saved_cases/presentation/widgets/save_case_button.dart';
 import '../features/found_cases/presentation/widgets/recovery_case_actions.dart';
-import '../features/lost_cases/presentation/view_models/case_read_view_model.dart';
-import '../features/pets/presentation/view_models/pet_list_view_model.dart';
 import '../features/found_cases/providers/found_case_providers.dart';
 import '../features/found_cases/domain/entities/found_case.dart';
 import 'navigation/entity_editor_page.dart';
@@ -69,10 +69,35 @@ import '../features/pets/presentation/widgets/pets_section.dart';
 import '../features/pets/presentation/screens/pet_editor_screen.dart';
 import '../features/pets/presentation/screens/pet_detail_screen.dart';
 import '../features/pets/domain/entities/pet.dart';
+import '../features/pets/presentation/state/pet_detail_entry.dart';
 import '../features/onboarding/presentation/screens/entry_screen.dart';
 import '../features/onboarding/presentation/screens/onboarding_screen.dart';
 import '../features/onboarding/presentation/view_models/entry_view_model.dart';
 import '../features/onboarding/presentation/state/entry_destination.dart';
+
+final _uuid = RegExp(
+  r'^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$',
+  caseSensitive: false,
+);
+
+/// Case utility routes need a lost/found source and a UUID; otherwise home.
+String? _invalidCaseRoute(GoRouterState state, String sourceParameter) =>
+    const {'lost', 'found'}.contains(state.pathParameters[sourceParameter]) &&
+        _uuid.hasMatch(state.pathParameters['id'] ?? '')
+    ? null
+    : '/home';
+
+/// Editor that reopens a local draft or queued submission.
+String? _draftEditorRoute(String slot) => switch (ReportSlot.tryParse(slot)) {
+  LostReportSlot() => '/home/lost-cases/new',
+  CommunitySearchSlot() => '/home/lost-cases/community/new',
+  IndependentFoundSlot() => '/home/found-cases/new?independent=true',
+  FoundTargetSlot(:final targetId, :final community) => Uri(
+    path: '/home/found-cases/new',
+    queryParameters: {'case': targetId, 'community': '$community'},
+  ).toString(),
+  null => null,
+};
 
 final routerProvider = Provider<GoRouter>((ref) {
   void refreshCaseContacts() {
@@ -135,43 +160,9 @@ final routerProvider = Provider<GoRouter>((ref) {
               }.contains(state.uri.queryParameters['community']))) {
         return '/home';
       }
-      if (path == '/home' &&
-          (state.uri.path == '/home/found-cases/new' ||
-              state.uri.path == '/home/my-found-cases' ||
-              state.uri.path.startsWith('/home/found-cases/') ||
-              state.uri.path == '/home/lost-cases/new' ||
-              state.uri.path == '/home/lost-cases/community/new' ||
-              state.uri.path == '/home/my-cases' ||
-              state.uri.path == '/home/my-reports' ||
-              state.uri.path == '/home/saved-cases' ||
-              state.uri.path == '/home/notifications' ||
-              state.uri.path == '/home/drafts' ||
-              state.uri.path == '/home/submissions' ||
-              state.uri.path == '/home/blocked-users' ||
-              state.uri.path == '/home/appeals' ||
-              state.uri.path == '/home/coincidencias' ||
-              state.uri.path == '/home/explore-map' ||
-              state.uri.path.startsWith('/home/posters/') ||
-              state.uri.path.startsWith('/home/timeline/') ||
-              state.uri.path.startsWith('/home/journey/') ||
-              state.uri.path.startsWith('/home/denounce/') ||
-              state.uri.path.startsWith('/home/closure/') ||
-              state.uri.path.startsWith('/home/cases/'))) {
-        return null;
-      }
-      if (path == '/home' &&
-          {'/home/profile', '/home/profile/edit'}.contains(state.uri.path)) {
-        return null;
-      }
-      if (path == '/home' && state.uri.path == '/home/interest-zones') {
-        return null;
-      }
-      if (path == '/home' && state.uri.path == '/home/alert-preferences') {
-        return null;
-      }
-      if (path == '/home' && state.uri.path.startsWith('/home/pets/')) {
-        return null;
-      }
+      // Every /home/... route shares the home access policy; route-level
+      // redirects below validate their own parameters.
+      if (path == '/home' && state.uri.path.startsWith('/home/')) return null;
       return state.uri.path == path ? null : path;
     },
     routes: [
@@ -268,7 +259,10 @@ final routerProvider = Provider<GoRouter>((ref) {
               child: MatchingScreen(
                 onOpen: (reference, origin) async {
                   await context.push(
-                    '/home/${reference.source == 'lost' ? 'cases' : 'found-cases'}/${reference.id}',
+                    caseDetailRoute(
+                      CaseKind.tryParse(reference.source)!,
+                      reference.id,
+                    ),
                     extra: origin,
                   );
                 },
@@ -369,19 +363,7 @@ final routerProvider = Provider<GoRouter>((ref) {
                     context.push('/home/found-cases/${receipt!.id}');
                     return;
                   }
-                  final p = d.slot.split(':');
-                  final route = d.slot == 'independent-found'
-                      ? '/home/found-cases/new?independent=true'
-                      : d.slot == 'lost'
-                      ? '/home/lost-cases/new'
-                      : d.slot == 'community-search'
-                      ? '/home/lost-cases/community/new'
-                      : p.length == 3 && p[0] == 'found'
-                      ? Uri(
-                          path: '/home/found-cases/new',
-                          queryParameters: {'case': p[2], 'community': p[1]},
-                        ).toString()
-                      : null;
+                  final route = _draftEditorRoute(d.slot);
                   if (route != null) context.push(route);
                 },
               ),
@@ -394,22 +376,7 @@ final routerProvider = Provider<GoRouter>((ref) {
               key: state.pageKey,
               child: LocalDraftsScreen(
                 onOpen: (draft) async {
-                  final parts = draft.slot.split(':');
-                  final path = draft.slot == 'independent-found'
-                      ? '/home/found-cases/new?independent=true'
-                      : draft.slot == 'lost'
-                      ? '/home/lost-cases/new'
-                      : draft.slot == 'community-search'
-                      ? '/home/lost-cases/community/new'
-                      : parts.first == 'found' && parts.length == 3
-                      ? Uri(
-                          path: '/home/found-cases/new',
-                          queryParameters: {
-                            'case': parts[2],
-                            'community': parts[1],
-                          },
-                        ).toString()
-                      : null;
+                  final path = _draftEditorRoute(draft.slot);
                   if (path != null) await context.push<void>(path);
                 },
               ),
@@ -471,15 +438,10 @@ final routerProvider = Provider<GoRouter>((ref) {
                 journey: CaseJourneyCard(
                   target: (id: state.pathParameters['id']!, community: true),
                 ),
-                onActivityChanged: () {
-                  ref.invalidate(
-                    caseJourneyViewModelProvider((
-                      id: state.pathParameters['id']!,
-                      community: true,
-                    )),
-                  );
-                  ref.read(exploreViewModelProvider.notifier).refresh();
-                },
+                onActivityChanged: () => ref.read(notifyCaseChangedProvider)(
+                  CaseKind.found,
+                  state.pathParameters['id']!,
+                ),
                 utilitiesBuilder: (canPoster) => TimelineAccessButton(
                   onReturn: () => ref.invalidate(
                     caseJourneyViewModelProvider((
@@ -606,19 +568,14 @@ final routerProvider = Provider<GoRouter>((ref) {
                   id: value.id,
                   community: false,
                   canResolve: value.canResolve,
-                  open: value.status == 'active',
+                  open: value.isActive,
                   onChanged: () {
+                    // The detail refreshes itself; other screens follow the event.
                     onChanged();
-                    ref.read(exploreViewModelProvider.notifier).refresh();
-                    ref.invalidate(
-                      caseJourneyViewModelProvider((
-                        id: value.id,
-                        community: false,
-                      )),
+                    ref.read(notifyCaseChangedProvider)(
+                      CaseKind.lost,
+                      value.id,
                     );
-                    ref.invalidate(myCasesViewModelProvider);
-                    ref.invalidate(petListViewModelProvider);
-                    ref.invalidate(petDetailViewModelProvider);
                   },
                 ),
               ),
@@ -634,13 +591,7 @@ final routerProvider = Provider<GoRouter>((ref) {
           ),
           GoRoute(
             path: 'denounce/:kind/:id',
-            redirect: (_, state) =>
-                !['lost', 'found'].contains(state.pathParameters['kind']) ||
-                    !RegExp(
-                      r'^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$',
-                    ).hasMatch(state.pathParameters['id'] ?? '')
-                ? '/home'
-                : null,
+            redirect: (_, state) => _invalidCaseRoute(state, 'kind'),
             pageBuilder: (context, state) => entityEditorPage(
               context: context,
               key: state.pageKey,
@@ -655,13 +606,7 @@ final routerProvider = Provider<GoRouter>((ref) {
           ),
           GoRoute(
             path: 'closure/:source/:id',
-            redirect: (_, state) =>
-                !['lost', 'found'].contains(state.pathParameters['source']) ||
-                    !RegExp(
-                      r'^[0-9a-f-]{36}$',
-                    ).hasMatch(state.pathParameters['id'] ?? '')
-                ? '/home'
-                : null,
+            redirect: (_, state) => _invalidCaseRoute(state, 'source'),
             pageBuilder: (context, state) => entityEditorPage(
               context: context,
               key: state.pageKey,
@@ -669,29 +614,21 @@ final routerProvider = Provider<GoRouter>((ref) {
               child: CaseClosureScreen(
                 target: (
                   id: state.pathParameters['id']!,
-                  community: state.pathParameters['source'] == 'found',
+                  community: CaseKind.tryParse(
+                    state.pathParameters['source'],
+                  )!.isCommunity,
                 ),
-                onSaved: () {
-                  ref.invalidate(publicCaseViewModelProvider);
-                  ref.invalidate(publicFoundViewModelProvider);
-                  ref.invalidate(myCasesViewModelProvider);
-                  ref.invalidate(myFoundCasesViewModelProvider);
-                  ref.invalidate(petListViewModelProvider);
-                  ref.invalidate(petDetailViewModelProvider);
-                  ref.read(exploreViewModelProvider.notifier).refresh();
-                },
+                onSaved: () => ref.read(notifyCaseChangedProvider)(
+                  CaseKind.tryParse(state.pathParameters['source'])!,
+                  state.pathParameters['id']!,
+                  lifecycle: true,
+                ),
               ),
             ),
           ),
           GoRoute(
             path: 'journey/:source/:id',
-            redirect: (_, state) =>
-                !['lost', 'found'].contains(state.pathParameters['source']) ||
-                    !RegExp(
-                      r'^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$',
-                    ).hasMatch(state.pathParameters['id'] ?? '')
-                ? '/home'
-                : null,
+            redirect: (_, state) => _invalidCaseRoute(state, 'source'),
             pageBuilder: (context, state) => entityEditorPage(
               context: context,
               key: state.pageKey,
@@ -699,20 +636,16 @@ final routerProvider = Provider<GoRouter>((ref) {
               child: CaseJourneyScreen(
                 target: (
                   id: state.pathParameters['id']!,
-                  community: state.pathParameters['source'] == 'found',
+                  community: CaseKind.tryParse(
+                    state.pathParameters['source'],
+                  )!.isCommunity,
                 ),
               ),
             ),
           ),
           GoRoute(
             path: 'timeline/:source/:id',
-            redirect: (_, state) =>
-                !['lost', 'found'].contains(state.pathParameters['source']) ||
-                    !RegExp(
-                      r'^[0-9a-f-]{36}$',
-                    ).hasMatch(state.pathParameters['id'] ?? '')
-                ? '/home'
-                : null,
+            redirect: (_, state) => _invalidCaseRoute(state, 'source'),
             pageBuilder: (context, state) => entityEditorPage(
               context: context,
               key: state.pageKey,
@@ -720,17 +653,16 @@ final routerProvider = Provider<GoRouter>((ref) {
               child: CaseTimelineScreen(
                 target: (
                   id: state.pathParameters['id']!,
-                  community: state.pathParameters['source'] == 'found',
+                  community: CaseKind.tryParse(
+                    state.pathParameters['source'],
+                  )!.isCommunity,
                 ),
               ),
             ),
           ),
           GoRoute(
             path: 'posters/:source/:id',
-            redirect: (_, state) =>
-                !['lost', 'found'].contains(state.pathParameters['source'])
-                ? '/home'
-                : null,
+            redirect: (_, state) => _invalidCaseRoute(state, 'source'),
             pageBuilder: (context, state) => entityEditorPage(
               context: context,
               key: state.pageKey,
@@ -758,7 +690,7 @@ final routerProvider = Provider<GoRouter>((ref) {
               final child = PetDetailScreen(
                 petId: state.pathParameters['id']!,
                 savedPet: state.extra is Pet ? state.extra as Pet : null,
-                canEdit: state.extra != 'inspect',
+                canEdit: state.extra != PetDetailEntry.inspect,
               );
               return entityDetailPage(
                 context: context,

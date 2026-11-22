@@ -58,7 +58,7 @@ class CollectionAddButton extends StatelessWidget {
                         ? const WidgetStatePropertyAll(Colors.transparent)
                         : description == null
                         ? null
-                        : const WidgetStatePropertyAll(Color(0xFFF5F5F7)),
+                        : const WidgetStatePropertyAll(AppColors.surface),
                     foregroundColor: description == null
                         ? null
                         : const WidgetStatePropertyAll(AppColors.ink),
@@ -88,7 +88,7 @@ class CollectionAddButton extends StatelessWidget {
                                 ? const Color(0xFF2887EF)
                                 : description == null
                                 ? AppColors.ink
-                                : const Color(0xFFF5F5F7),
+                                : AppColors.surface,
                             radius: compact ? origin.shortestSide / 2 : 24,
                             child: _identity(context),
                           ),
@@ -169,7 +169,7 @@ class CollectionAddButton extends StatelessWidget {
                       fontSize: 14,
                       fontWeight: FontWeight.w400,
                       height: 1.4,
-                      color: Color(0xFF6E6E73),
+                      color: AppColors.secondary,
                     ),
                   ),
                 ],

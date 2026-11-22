@@ -1,3 +1,4 @@
+import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../../../../core/presentation/widgets/app_scaffold.dart';
 import '../../../../core/presentation/widgets/scroll_safe_area.dart';
@@ -249,7 +250,7 @@ class _InterestZonesScreenState extends ConsumerState<InterestZonesScreen> {
     children: [
       const Text(
         'Elige dónde quieres consultar novedades. No necesitas activar tu ubicación.',
-        style: TextStyle(fontSize: 16, height: 1.4, color: Color(0xFF6E6E73)),
+        style: TextStyle(fontSize: 16, height: 1.4, color: AppColors.secondary),
       ),
       const SizedBox(height: 20),
       if (data.zones.isEmpty)
@@ -279,7 +280,7 @@ class _InterestZonesScreenState extends ConsumerState<InterestZonesScreen> {
     child: Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xFFF5F5F7),
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(22),
       ),
       child: Column(
@@ -290,13 +291,13 @@ class _InterestZonesScreenState extends ConsumerState<InterestZonesScreen> {
             style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,
-              color: Color(0xFF111111),
+              color: AppColors.ink,
             ),
           ),
           const SizedBox(height: 6),
           Text(
             'Radio de ${(zone.radiusMeters / 1000).toStringAsFixed(1)} km',
-            style: const TextStyle(color: Color(0xFF6E6E73)),
+            style: const TextStyle(color: AppColors.secondary),
           ),
           Wrap(
             spacing: 12,
@@ -328,7 +329,7 @@ class _InterestZonesScreenState extends ConsumerState<InterestZonesScreen> {
                         },
                   child: const Text(
                     'Eliminar',
-                    style: TextStyle(color: Color(0xFFB53F48)),
+                    style: TextStyle(color: AppColors.error),
                   ),
                 ),
               ),

@@ -95,6 +95,7 @@ import '../features/interest_zones/data/repositories/interest_zone_repository_im
 import '../features/interest_zones/data/repositories/unavailable_interest_zone_repository.dart';
 
 import '../core/config/app_config.dart';
+import '../core/data_sources/secure_session_storage.dart';
 import '../core/config/startup_state.dart';
 import '../features/auth/data/data_sources/supabase_auth_data_source.dart';
 import '../features/auth/data/repositories/auth_repository_impl.dart';
@@ -189,12 +190,23 @@ Future<AppBootstrap> bootstrapApp(AppConfig config) async {
       return _unavailable(StartupStatus.invalidConfiguration);
     case ConfigurationStatus.ready:
       try {
+        final secureSessions =
+            !kIsWeb &&
+            (defaultTargetPlatform == TargetPlatform.android ||
+                defaultTargetPlatform == TargetPlatform.iOS);
         final supabase = await Supabase.initialize(
           url: config.supabaseUrl,
           publishableKey: config.supabaseKey,
           debug: false,
-          authOptions: const FlutterAuthClientOptions(
+          authOptions: FlutterAuthClientOptions(
             authFlowType: AuthFlowType.pkce,
+            // Refresh tokens live in Keystore/Keychain, never in plain prefs.
+            localStorage: secureSessions
+                ? SecureSessionStorage(
+                    persistSessionKey: supabaseSessionKey(config.supabaseUrl),
+                  )
+                : null,
+            pkceAsyncStorage: secureSessions ? const SecurePkceStorage() : null,
           ),
         );
         final source = SupabaseAuthDataSource(

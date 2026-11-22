@@ -1,3 +1,4 @@
+import '../../../../core/theme/app_theme.dart';
 import '../../../../core/presentation/widgets/app_scaffold.dart';
 import '../../../../core/presentation/widgets/confirmation_toast.dart';
 import 'package:flutter/material.dart';
@@ -46,7 +47,7 @@ class AccessScreen extends ConsumerWidget {
                 order: 7,
                 child: Row(
                   children: [
-                    Expanded(child: Divider(color: Color(0xFFE5E5EA))),
+                    Expanded(child: Divider(color: AppColors.divider)),
                     Expanded(
                       flex: 2,
                       child: Padding(
@@ -56,12 +57,12 @@ class AccessScreen extends ConsumerWidget {
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 16,
-                            color: Color(0xFF6E6E73),
+                            color: AppColors.secondary,
                           ),
                         ),
                       ),
                     ),
-                    Expanded(child: Divider(color: Color(0xFFE5E5EA))),
+                    Expanded(child: Divider(color: AppColors.divider)),
                   ],
                 ),
               ),
@@ -109,7 +110,10 @@ class AccessScreen extends ConsumerWidget {
                   children: [
                     const Text(
                       '¿No tienes una cuenta?',
-                      style: TextStyle(fontSize: 15, color: Color(0xFF6E6E73)),
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: AppColors.secondary,
+                      ),
                     ),
                     CreateAccountButton(enabled: !login.isBusy),
                   ],

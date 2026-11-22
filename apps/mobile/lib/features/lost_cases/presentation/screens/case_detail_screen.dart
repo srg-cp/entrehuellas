@@ -90,8 +90,7 @@ class CaseDetailScreen extends ConsumerWidget {
                           : [
                               if (timelineAction != null) timelineAction!,
                               if (recoveryActions == null &&
-                                  state.requireValue.value!.status ==
-                                      'active') ...[
+                                  state.requireValue.value!.isActive) ...[
                                 CollectionAddButton(
                                   label: 'Reportar avistamiento',
                                   icon: Icons.visibility_outlined,

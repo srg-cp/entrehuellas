@@ -1,3 +1,4 @@
+import '../../../../core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -72,7 +73,7 @@ class HomeExploreBanner extends StatelessWidget {
                 'Cada mirada puede ayudar.',
                 style: TextStyle(
                   fontSize: 16,
-                  color: Color(0xFF6E6E73),
+                  color: AppColors.secondary,
                   height: 1.4,
                 ),
               ),

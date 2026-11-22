@@ -1,4 +1,6 @@
+import '../../../../core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
+import '../state/pet_detail_entry.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/presentation/widgets/app_text_field.dart';
@@ -160,7 +162,7 @@ class _PetFormState extends ConsumerState<_PetForm> {
           if (label != null)
             Text(
               label,
-              style: const TextStyle(fontSize: 16, color: Color(0xFF111111)),
+              style: const TextStyle(fontSize: 16, color: AppColors.ink),
             ),
           if (label != null) const SizedBox(height: 8),
           field,
@@ -217,7 +219,10 @@ class _PetFormState extends ConsumerState<_PetForm> {
       onAction: issue == PetFailureKind.conflict
           ? () {
               model.refreshDetail();
-              context.push('/home/pets/${value.id}', extra: 'inspect');
+              context.push(
+                '/home/pets/${value.id}',
+                extra: PetDetailEntry.inspect,
+              );
             }
           : null,
       child: Column(
@@ -385,7 +390,7 @@ class _PetFormState extends ConsumerState<_PetForm> {
                           '${text.text.runes.length} de 200 caracteres',
                       style: const TextStyle(
                         fontSize: 13,
-                        color: Color(0xFF6E6E73),
+                        color: AppColors.secondary,
                       ),
                     ),
                   ),
@@ -414,7 +419,7 @@ class _PetFormState extends ConsumerState<_PetForm> {
                             side: issue != null && value.invalidFields.isEmpty
                                 ? const WidgetStatePropertyAll(
                                     BorderSide(
-                                      color: Color(0xFFB53F48),
+                                      color: AppColors.error,
                                       width: 3.5,
                                     ),
                                   )

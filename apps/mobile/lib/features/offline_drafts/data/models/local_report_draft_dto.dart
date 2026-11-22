@@ -133,6 +133,7 @@ class LocalReportDraftDto {
           .map((v) => _readPet(v as Map<String, dynamic>))
           .toList(),
       petPhotos: (p['petPhotos'] as List)
+          .cast<Map<String, dynamic>>()
           .map(
             (v) => PetPhoto(
               id: v['id'] as String,
@@ -146,6 +147,7 @@ class LocalReportDraftDto {
           .toList(),
       selectedPhotos: (p['selected'] as List).cast<String>(),
       photos: (p['photos'] as List)
+          .cast<Map<String, dynamic>>()
           .map(
             (v) => FoundPhotoDraft(
               v['id'] as String,

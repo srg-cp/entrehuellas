@@ -1,3 +1,4 @@
+import '../../theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'immersive_photo_sheet_geometry.dart';
 import 'loading_shimmer.dart';
@@ -18,7 +19,7 @@ class CasePublicSkeleton extends StatelessWidget {
       child: ExcludeSemantics(
         child: Stack(
           children: [
-            const Positioned.fill(child: ColoredBox(color: Color(0xFFF5F5F7))),
+            const Positioned.fill(child: ColoredBox(color: AppColors.surface)),
             ConstrainedBox(
               constraints: BoxConstraints(
                 minHeight: MediaQuery.sizeOf(context).height,
@@ -100,7 +101,7 @@ class _Shape extends StatelessWidget {
     height: height,
     child: DecoratedBox(
       decoration: BoxDecoration(
-        color: const Color(0xFFE5E5EA),
+        color: AppColors.divider,
         borderRadius: BorderRadius.circular(radius),
       ),
     ),

@@ -1,3 +1,4 @@
+import '../../../../core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -40,7 +41,7 @@ class ExploreMapButton extends ConsumerWidget {
                           ? null
                           : OriginPageSource(
                               bounds: bounds,
-                              color: const Color(0xFFF5F5F7),
+                              color: AppColors.surface,
                               radius: 26,
                               child: const FittedBox(
                                 fit: BoxFit.scaleDown,
@@ -68,14 +69,14 @@ class _MapLabel extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Icons.map_outlined, size: 22, color: Color(0xFF111111)),
+          Icon(Icons.map_outlined, size: 22, color: AppColors.ink),
           SizedBox(width: 8),
           Text(
             'Mapa',
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w600,
-              color: Color(0xFF111111),
+              color: AppColors.ink,
             ),
           ),
         ],

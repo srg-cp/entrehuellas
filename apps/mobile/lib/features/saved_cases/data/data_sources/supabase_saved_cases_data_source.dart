@@ -1,3 +1,4 @@
+import '../../../../core/domain/entities/case_kind.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'dart:convert';
 import '../../../../core/data/models/public_case_page_dto.dart';
@@ -35,7 +36,7 @@ class SupabaseSavedCasesDataSource implements SavedCasesDataSource {
     try {
       final url = await _client.storage
           .from(
-            source == 'lost'
+            source == CaseKind.lost.name
                 ? 'pet-photo-thumbnails'
                 : 'found-photo-thumbnails',
           )

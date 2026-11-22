@@ -1,3 +1,5 @@
+import 'dart:async';
+import '../../../../core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/presentation/widgets/confirm_discard_action.dart';
@@ -28,7 +30,7 @@ class PreferenceOptions extends ConsumerWidget {
       ),
       subtitle: Text(
         description,
-        style: const TextStyle(fontSize: 14, color: Color(0xFF6E6E73)),
+        style: const TextStyle(fontSize: 14, color: AppColors.secondary),
       ),
       value: value,
       onChanged: state.busy ? null : change,
@@ -43,7 +45,7 @@ class PreferenceOptions extends ConsumerWidget {
             children: [
               const Text(
                 'Elige qué avisos quieres recibir. Puedes pausarlos sin perder tu selección.',
-                style: TextStyle(fontSize: 18, color: Color(0xFF6E6E73)),
+                style: TextStyle(fontSize: 18, color: AppColors.secondary),
               ),
               const SizedBox(height: 12),
               toggle(
@@ -114,7 +116,7 @@ class PreferenceOptions extends ConsumerWidget {
                 style: TextStyle(
                   fontSize: 16,
                   height: 1.4,
-                  color: Color(0xFF6E6E73),
+                  color: AppColors.secondary,
                 ),
               ),
             ],
@@ -139,7 +141,7 @@ class PreferenceOptions extends ConsumerWidget {
                               'Consultar',
                             )) {
                               if (context.mounted) {
-                                vm.refresh(discardDraft: true);
+                                unawaited(vm.refresh(discardDraft: true));
                               }
                             }
                           },
@@ -188,7 +190,9 @@ class PreferenceOptions extends ConsumerWidget {
                               'Se descartará la selección sin guardar.',
                               'Consultar',
                             )) {
-                          if (context.mounted) vm.refresh(discardDraft: true);
+                          if (context.mounted) {
+                            unawaited(vm.refresh(discardDraft: true));
+                          }
                         }
                       },
                 icon: const Icon(Icons.refresh_rounded),

@@ -1,3 +1,4 @@
+import '../../../../core/domain/entities/missing_report_value.dart';
 import '../../../offline_drafts/domain/entities/local_report_draft.dart';
 import '../../../offline_drafts/providers/submission_queue_providers.dart';
 import '../../../offline_drafts/domain/entities/queued_report.dart';
@@ -341,9 +342,9 @@ class CaseEditorViewModel extends AsyncNotifier<CaseEditorState> {
       id: current.draftId,
       petId: current.pet?.id ?? '',
       petVersion: current.pet?.version ?? 0,
-      occurredAt: current.occurredAt ?? DateTime.utc(1999),
-      latitude: current.latitude ?? double.nan,
-      longitude: current.longitude ?? double.nan,
+      occurredAt: current.occurredAt ?? MissingReportValue.occurredAt,
+      latitude: current.latitude ?? MissingReportValue.coordinate,
+      longitude: current.longitude ?? MissingReportValue.coordinate,
       placeReference: current.placeReference,
       photoIds: current.selectedPhotos.toList(),
     );
@@ -382,6 +383,8 @@ class CaseEditorViewModel extends AsyncNotifier<CaseEditorState> {
     if (current == null ||
         state.isLoading ||
         current.busy ||
+        // Background sync is transmitting this same command right now.
+        current.submissionStatus == SubmissionStatus.sending ||
         current.stage != CaseEditorStage.preview) {
       return;
     }

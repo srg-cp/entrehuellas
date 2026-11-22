@@ -1,3 +1,4 @@
+import '../../../../core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -124,14 +125,14 @@ class HomeNotice extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, color: const Color(0xFF6E6E73), size: 28),
+          Icon(icon, color: AppColors.secondary, size: 28),
           const SizedBox(height: 12),
           Text(
             title,
             style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,
-              color: Color(0xFF111111),
+              color: AppColors.ink,
             ),
           ),
           const SizedBox(height: 8),
@@ -140,7 +141,7 @@ class HomeNotice extends StatelessWidget {
             style: const TextStyle(
               fontSize: 16,
               height: 1.4,
-              color: Color(0xFF6E6E73),
+              color: AppColors.secondary,
             ),
           ),
         ],

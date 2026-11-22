@@ -1,3 +1,4 @@
+import '../../../../core/theme/app_theme.dart';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -122,7 +123,7 @@ class _CaseJourneyScreenState extends ConsumerState<CaseJourneyScreen> {
                           isLoading: true,
                           isAction: false,
                           loadingLabel: 'Consultando recorrido',
-                          child: ColoredBox(color: Color(0xFFE5E5EA)),
+                          child: ColoredBox(color: AppColors.divider),
                         )
                 else
                   ContentRefresh(
@@ -298,7 +299,7 @@ class _LocationConnector extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = const Color(0xFFE5E5EA)
+      ..color = AppColors.divider
       ..strokeWidth = 1
       ..strokeCap = StrokeCap.round;
     for (var y = 0.0; y < size.height; y += 5) {

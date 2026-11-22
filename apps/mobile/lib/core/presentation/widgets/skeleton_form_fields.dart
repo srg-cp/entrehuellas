@@ -1,3 +1,4 @@
+import '../../theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
 /// Placeholder geometry only; the caller supplies real loading state and shimmer.
@@ -44,7 +45,7 @@ class _FormShape extends StatelessWidget {
   Widget build(BuildContext context) => Container(
     height: height,
     decoration: BoxDecoration(
-      color: const Color(0xFFE5E5EA),
+      color: AppColors.divider,
       borderRadius: BorderRadius.circular(radius),
     ),
   );

@@ -1,3 +1,5 @@
+import '../../../../core/domain/entities/case_kind.dart';
+import '../../../../core/providers/case_change_providers.dart';
 import '../../../offline_cases/providers/case_cache_providers.dart';
 import '../../../offline_cases/domain/entities/cached_case.dart';
 import '../../../../core/presentation/state/retained_read.dart';
@@ -17,6 +19,12 @@ class MyFoundCasesViewModel extends AsyncNotifier<FoundListState> {
   @override
   Future<FoundListState> build() async {
     _generation++;
+    final caseChanges = ref
+        .watch(caseChangesProvider)
+        .changes
+        .where((change) => change.lifecycle)
+        .listen((_) => ref.invalidateSelf());
+    ref.onDispose(caseChanges.cancel);
     final session = await ref.watch(foundSessionProvider.future);
     if (session == null) throw const FoundFailure(FoundFailureKind.forbidden);
     final cases = await ref.watch(listMyFoundCasesProvider)(session.userId);
@@ -163,6 +171,17 @@ class PublicFoundViewModel extends AsyncNotifier<PublicFoundState> {
   @override
   Future<PublicFoundState> build() async {
     _generation++;
+    final caseChanges = ref
+        .watch(caseChangesProvider)
+        .changes
+        .where(
+          (change) =>
+              change.lifecycle &&
+              change.kind == CaseKind.found &&
+              change.id == id,
+        )
+        .listen((_) => ref.invalidateSelf());
+    ref.onDispose(caseChanges.cancel);
     final session = await ref.watch(foundSessionProvider.future);
     final result = await _read(session?.userId);
     return PublicFoundState(

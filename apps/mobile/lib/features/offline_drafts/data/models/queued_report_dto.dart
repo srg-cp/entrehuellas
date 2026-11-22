@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import '../../domain/entities/local_report_draft.dart';
 import '../../domain/entities/queued_report.dart';
+import '../../domain/entities/report_slot.dart';
 import '../../../lost_cases/domain/entities/lost_case.dart';
 import '../../../found_cases/domain/entities/found_case.dart';
 import 'local_report_draft_dto.dart';
@@ -11,26 +12,26 @@ class QueuedReportDto {
     if (r.id != d.id) {
       return false;
     }
-    if (d.slot == 'lost') {
+    final slot = ReportSlot.tryParse(d.slot);
+    if (slot == null) return false;
+    if (slot is LostReportSlot) {
       return r.lost != null &&
           r.lost!.ownerId == d.owner &&
           r.lost!.petId == d.pet?.id &&
-          r.lost!.status == 'active';
+          r.lost!.isActive;
     }
-    final f = r.found, p = d.slot.split(':');
+    final f = r.found;
     if (f == null ||
         f.ownerId != d.owner ||
-        f.status != 'active' ||
+        !f.isActive ||
         f.reportKind != d.reportKind) {
       return false;
     }
-    if ({'community-search', 'independent-found'}.contains(d.slot)) {
-      return f.targetId == null && !f.communityTarget;
-    }
-    return p.length == 3 &&
-        p[0] == 'found' &&
-        f.targetId == p[2] &&
-        f.communityTarget == (p[1] == 'true');
+    return switch (slot) {
+      FoundTargetSlot(:final targetId, :final community) =>
+        f.targetId == targetId && f.communityTarget == community,
+      _ => f.targetId == null && !f.communityTarget,
+    };
   }
 
   /// Fingerprint only the actual command, not UI/snapshot metadata or signed URLs.
@@ -42,7 +43,7 @@ class QueuedReportDto {
       'instant': d.instant?.toUtc().toIso8601String(),
       'lat': d.latitude,
       'lng': d.longitude,
-      if (d.slot == 'lost') ...{
+      if (d.slot == ReportSlot.lostValue) ...{
         'pet': d.pet?.id,
         'version': d.pet?.version,
         'place': d.place.trim(),

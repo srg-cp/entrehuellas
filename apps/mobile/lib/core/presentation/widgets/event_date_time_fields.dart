@@ -1,3 +1,4 @@
+import '../../theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import '../state/event_date_time_draft.dart';
 import 'app_field_surface.dart';
@@ -93,14 +94,14 @@ class _PickerFieldState extends State<_PickerField> {
           focused: _focused,
           invalid: widget.invalid,
           suffix: ExcludeSemantics(
-            child: Icon(widget.icon, size: 20, color: const Color(0xFF6E6E73)),
+            child: Icon(widget.icon, size: 20, color: AppColors.secondary),
           ),
           child: Text(
             widget.value,
             style: const TextStyle(
               fontSize: 16,
               height: 1.7,
-              color: Color(0xFF111111),
+              color: AppColors.ink,
             ),
           ),
         ),

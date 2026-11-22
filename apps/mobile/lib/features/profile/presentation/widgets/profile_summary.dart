@@ -1,3 +1,4 @@
+import '../../../../core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/presentation/widgets/failure_feedback.dart';
@@ -27,19 +28,19 @@ class ProfileSummary extends ConsumerWidget {
         child: ExcludeSemantics(
           child: Row(
             children: [
-              CircleAvatar(radius: 36, backgroundColor: Color(0xFFE5E5EA)),
+              CircleAvatar(radius: 36, backgroundColor: AppColors.divider),
               SizedBox(width: 16),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     ColoredBox(
-                      color: Color(0xFFE5E5EA),
+                      color: AppColors.divider,
                       child: SizedBox(height: 22),
                     ),
                     SizedBox(height: 8),
                     ColoredBox(
-                      color: Color(0xFFE5E5EA),
+                      color: AppColors.divider,
                       child: SizedBox(height: 16),
                     ),
                   ],
@@ -77,7 +78,7 @@ class ProfileSummary extends ConsumerWidget {
               style: const TextStyle(
                 fontSize: 16,
                 height: 1.4,
-                color: Color(0xFF6E6E73),
+                color: AppColors.secondary,
               ),
             ),
           ],

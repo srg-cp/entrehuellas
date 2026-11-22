@@ -1,3 +1,4 @@
+import '../../theme/app_theme.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'zone_map_picker.dart';
 import 'immersive_photo_sheet_geometry.dart';
@@ -95,7 +96,7 @@ class _ImmersivePhotoSheetState extends State<ImmersivePhotoSheet> {
       children: [
         Positioned.fill(
           child: ColoredBox(
-            color: const Color(0xFF6E6E73),
+            color: AppColors.secondary,
             child: PageView(
               onPageChanged: (index) => setState(() => _photo = index),
               children: widget.photos,
@@ -189,7 +190,7 @@ class _ImmersivePhotoSheetState extends State<ImmersivePhotoSheet> {
                                 vertical: 6,
                               ),
                               decoration: BoxDecoration(
-                                color: const Color(0xFFB53F48),
+                                color: AppColors.error,
                                 borderRadius: BorderRadius.circular(24),
                               ),
                               child: Text(
@@ -362,7 +363,7 @@ class _ImmersivePhotoSheetState extends State<ImmersivePhotoSheet> {
                                               style: const TextStyle(
                                                 fontSize: 13,
                                                 height: 1.4,
-                                                color: Color(0xFF6E6E73),
+                                                color: AppColors.secondary,
                                               ),
                                             ),
                                           ],

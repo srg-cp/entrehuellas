@@ -1,3 +1,4 @@
+import '../../../../core/theme/app_theme.dart';
 import '../../../../core/presentation/widgets/failure_feedback.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -144,7 +145,7 @@ class _ProfileFieldsState extends State<_ProfileFields> {
           suffix: const Icon(
             Icons.lock_outline_rounded,
             size: 22,
-            color: Color(0xFF6E6E73),
+            color: AppColors.secondary,
           ),
           child: Semantics(
             label: 'Correo electrónico, solo lectura',
@@ -153,7 +154,7 @@ class _ProfileFieldsState extends State<_ProfileFields> {
               style: const TextStyle(
                 fontSize: 16,
                 height: 27 / 16,
-                color: Color(0xFF6E6E73),
+                color: AppColors.secondary,
               ),
             ),
           ),

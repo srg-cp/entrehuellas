@@ -1,3 +1,4 @@
+import '../../../../core/theme/app_theme.dart';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -95,7 +96,7 @@ class _ExploreCaseMapState extends State<ExploreCaseMap> {
         }
 
         if (widget.query.latitude == null || widget.query.longitude == null) {
-          return const ColoredBox(color: Color(0xFFF5F5F7));
+          return const ColoredBox(color: AppColors.surface);
         }
         return ZoneMapPicker(
           controller: _map,

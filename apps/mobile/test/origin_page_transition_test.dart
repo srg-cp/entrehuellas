@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_application_entrehuellas/core/presentation/widgets/origin_page_transition.dart';
@@ -171,7 +172,7 @@ void main() {
       expect(tester.widget<Opacity>(content).opacity, 1);
       await tester.tap(find.text('Destination'));
       expect(taps, 1);
-      controller.reverse();
+      unawaited(controller.reverse());
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 256));
       expect(tester.getRect(surface), earlyRect);
@@ -228,7 +229,7 @@ void main() {
       await tester.pump();
       expect(tester.getRect(surface), const Rect.fromLTWH(0, 0, 400, 800));
       expect(tester.widget<Opacity>(content).opacity, 1);
-      controller.reverse();
+      unawaited(controller.reverse());
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 240));
       expect(tester.getRect(surface).width, closeTo(middle.width, .1));

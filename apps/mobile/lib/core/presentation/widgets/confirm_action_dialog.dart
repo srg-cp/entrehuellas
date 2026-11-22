@@ -1,3 +1,4 @@
+import '../../theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'origin_dialog_transition.dart';
 import 'popup_dialog_transition.dart';
@@ -48,7 +49,7 @@ Future<bool> confirmActionDialog(
                   description,
                   style: const TextStyle(
                     fontSize: 16,
-                    color: Color(0xFF6E6E73),
+                    color: AppColors.secondary,
                   ),
                 ),
                 const SizedBox(height: 24),
@@ -75,7 +76,7 @@ class _ConfirmationHeader extends StatelessWidget {
       const style = TextStyle(
         fontSize: 22,
         fontWeight: FontWeight.w700,
-        color: Color(0xFF111111),
+        color: AppColors.ink,
       );
       final painter = TextPainter(
         text: TextSpan(text: title.split(' ').first, style: style),
@@ -88,7 +89,7 @@ class _ConfirmationHeader extends StatelessWidget {
       final close = IconButton(
         tooltip: 'Cerrar confirmación',
         onPressed: () => Navigator.pop(context, false),
-        icon: const Icon(Icons.close_rounded, color: Color(0xFF6E6E73)),
+        icon: const Icon(Icons.close_rounded, color: AppColors.secondary),
       );
       return stacked
           ? Column(
@@ -164,9 +165,9 @@ class _ConfirmationActions extends StatelessWidget {
         child: OutlinedButton(
           onPressed: () => Navigator.pop(context, false),
           style: style.copyWith(
-            foregroundColor: const WidgetStatePropertyAll(Color(0xFF111111)),
+            foregroundColor: const WidgetStatePropertyAll(AppColors.ink),
             side: const WidgetStatePropertyAll(
-              BorderSide(color: Color(0xFFE5E5EA)),
+              BorderSide(color: AppColors.divider),
             ),
           ),
           child: Text(cancelLabel, textAlign: TextAlign.center),
@@ -179,10 +180,10 @@ class _ConfirmationActions extends StatelessWidget {
           onPressed: () => Navigator.pop(context, true),
           style: style.copyWith(
             backgroundColor: WidgetStatePropertyAll(
-              destructive ? const Color(0xFFF9ECEE) : const Color(0xFF111111),
+              destructive ? const Color(0xFFF9ECEE) : AppColors.ink,
             ),
             foregroundColor: WidgetStatePropertyAll(
-              destructive ? const Color(0xFFB53F48) : Colors.white,
+              destructive ? AppColors.error : Colors.white,
             ),
           ),
           child: Text(action, textAlign: TextAlign.center),

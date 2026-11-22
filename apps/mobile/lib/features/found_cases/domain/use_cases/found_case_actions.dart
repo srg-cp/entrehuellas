@@ -78,7 +78,7 @@ class PublishFoundCase {
     final result = await _repository.publish(owner, draft);
     if (result.id != draft.id ||
         result.ownerId != owner ||
-        result.status != 'active' ||
+        !result.isActive ||
         result.reportKind != draft.reportKind ||
         result.targetId != draft.targetId ||
         result.communityTarget != draft.communityTarget) {

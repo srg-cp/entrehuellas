@@ -1,3 +1,4 @@
+import '../../theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'navigation_accent_surface.dart';
@@ -190,7 +191,7 @@ class _CaseUtilityButtonState extends State<CaseUtilityButton> {
             style: const TextStyle(
               fontSize: 12,
               height: 1.3,
-              color: Color(0xFF6E6E73),
+              color: AppColors.secondary,
             ),
           ),
         ],

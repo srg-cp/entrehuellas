@@ -56,7 +56,7 @@ class CaseTimelineScreen extends ConsumerWidget {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           Text(
-                            v.page.caseStatus == 'active'
+                            v.page.caseActive
                                 ? 'Búsqueda abierta'
                                 : 'Caso cerrado',
                             style: const TextStyle(fontWeight: FontWeight.w600),

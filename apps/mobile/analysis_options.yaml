@@ -3,3 +3,14 @@ include: package:flutter_lints/flutter.yaml
 analyzer:
   exclude:
     - build/**
+  language:
+    # Server rows arrive as dynamic maps; casts must be explicit.
+    strict-casts: true
+    strict-raw-types: true
+
+linter:
+  rules:
+    - avoid_dynamic_calls
+    - unawaited_futures
+    - cancel_subscriptions
+    - close_sinks

@@ -1,9 +1,14 @@
 /// Presentation-only map service configuration; contains no credentials or location.
 class MapConfig {
   const MapConfig._();
+
+  /// Defaults to CARTO Positron (ADR-104), so builds without MAP_TILE_URL
+  /// keep the approved style and its attribution, and never load the OSM
+  /// community tile servers whose policy excludes app traffic.
   static const tileUrl = String.fromEnvironment(
     'MAP_TILE_URL',
-    defaultValue: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+    defaultValue:
+        'https://basemaps.cartocdn.com/rastertiles/light_all/{z}/{x}/{y}.png',
   );
 
   static bool get usesCarto =>

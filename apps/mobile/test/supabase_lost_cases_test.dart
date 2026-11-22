@@ -112,15 +112,22 @@ void main() {
                     },
                   ];
           } else {
+            // Photos are signed in one batch request per read.
             expect(
               request.url.path,
-              '/storage/v1/object/sign/pet-photo-renditions/opaque/photo.jpg',
+              '/storage/v1/object/sign/pet-photo-renditions',
             );
-            expect(jsonDecode(request.body), {'expiresIn': 300});
-            response = {
-              'signedURL':
-                  '/object/sign/pet-photo-renditions/opaque/photo.jpg?token=fake',
-            };
+            expect(jsonDecode(request.body), {
+              'expiresIn': 300,
+              'paths': ['opaque/photo.jpg'],
+            });
+            response = [
+              {
+                'path': 'opaque/photo.jpg',
+                'signedURL':
+                    '/object/sign/pet-photo-renditions/opaque/photo.jpg?token=fake',
+              },
+            ];
           }
         }
         return http.Response(

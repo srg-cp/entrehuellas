@@ -1,3 +1,4 @@
+import '../../../../core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -124,9 +125,9 @@ class ProfileScreen extends ConsumerWidget {
                       child: FilledButton(
                         style: FilledButton.styleFrom(
                           backgroundColor: const Color(0xFFF9ECEE),
-                          foregroundColor: const Color(0xFFB53F48),
+                          foregroundColor: AppColors.error,
                           disabledBackgroundColor: const Color(0xFFF9ECEE),
-                          disabledForegroundColor: const Color(0xFFB53F48),
+                          disabledForegroundColor: AppColors.error,
                           minimumSize: const Size(0, 48),
                           padding: const EdgeInsets.symmetric(
                             horizontal: 16,

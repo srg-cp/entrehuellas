@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_application_entrehuellas/core/presentation/widgets/origin_dialog_transition.dart';
@@ -75,7 +76,7 @@ void main() {
           expect(tester.widget<Opacity>(content).opacity, 1);
           await tester.tap(find.text('Confirmar'));
           expect(taps, 1);
-          animation.reverse();
+          unawaited(animation.reverse());
           await tester.pump();
           await tester.pump(const Duration(milliseconds: 300));
           expect(find.text('Ficha origen'), findsNothing);

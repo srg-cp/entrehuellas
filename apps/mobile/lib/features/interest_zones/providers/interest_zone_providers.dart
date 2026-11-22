@@ -8,6 +8,7 @@ final interestZoneRepositoryProvider = Provider<InterestZoneRepository>(
 );
 final zoneSessionProvider = StreamProvider.autoDispose(
   (ref) => ref.watch(watchAuthSessionProvider)(),
+  retry: (_, _) => null,
 );
 final listInterestZonesProvider = Provider(
   (ref) => ListInterestZones(ref.watch(interestZoneRepositoryProvider)),

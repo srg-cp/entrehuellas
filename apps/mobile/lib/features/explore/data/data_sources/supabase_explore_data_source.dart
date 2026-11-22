@@ -1,3 +1,4 @@
+import '../../../../core/domain/entities/case_kind.dart';
 import 'dart:convert';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../domain/entities/explore_query.dart';
@@ -55,7 +56,7 @@ class SupabaseExploreDataSource implements ExploreDataSource {
     try {
       final url = await _client.storage
           .from(
-            source == 'lost'
+            source == CaseKind.lost.name
                 ? 'pet-photo-thumbnails'
                 : 'found-photo-thumbnails',
           )

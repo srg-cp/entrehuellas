@@ -9,6 +9,7 @@ final cancelLocalSubmissionProvider = Provider(
 
 final localDraftSessionProvider = StreamProvider.autoDispose(
   (ref) => ref.watch(watchAuthSessionProvider)(),
+  retry: (_, _) => null,
 );
 final listLocalDraftsProvider = Provider(
   (ref) => ListLocalDrafts(ref.watch(localDraftRepositoryProvider)),

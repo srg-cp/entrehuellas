@@ -1,3 +1,4 @@
+import '../../../../core/theme/app_theme.dart';
 import 'dart:async';
 import 'package:flutter/material.dart';
 import '../../../../core/presentation/widgets/filter_choice_group.dart';
@@ -200,7 +201,7 @@ class _ExploreFilterEditorState extends State<ExploreFilterEditor> {
       const SizedBox(height: 8),
       const Text(
         'Solo ves los casos resueltos de tu cuenta.',
-        style: TextStyle(fontSize: 14, color: Color(0xFF6E6E73)),
+        style: TextStyle(fontSize: 14, color: AppColors.secondary),
       ),
       const SizedBox(height: 20),
       FilterChoiceGroup<int>(
@@ -289,7 +290,7 @@ class _ExploreFilterEditorState extends State<ExploreFilterEditor> {
           child: DecoratedBox(
             decoration: BoxDecoration(
               border: Border.all(
-                color: _invalid ? const Color(0xFFB53F48) : Colors.transparent,
+                color: _invalid ? AppColors.error : Colors.transparent,
                 width: 3.5,
               ),
               borderRadius: BorderRadius.circular(22),

@@ -395,7 +395,7 @@ Set-Location apps/mobile
 flutter pub get --enforce-lockfile
 ```
 
-El identificador conservado es `com.example.flutter_application_entrehuellas`; sigue pendiente elegir el definitivo antes de distribuir.
+El identificador Android definitivo es `app.entrehuellas` (ADR-172); sustituye al provisional `com.example.flutter_application_entrehuellas`, que Google Play no admite.
 
 **Criterio de salida:** app inicial ejecutada en Android, estructura comprensible, versión registrada, comprobaciones pertinentes pasando y procedimiento para configurar Supabase documentado. Si Android sigue bloqueado, registrar lo que se verificó por otra vía y mantener el build Android pendiente.
 

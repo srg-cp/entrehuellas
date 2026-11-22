@@ -1,3 +1,4 @@
+import '../../domain/entities/case_status.dart';
 import 'stagger_reveal.dart';
 import 'package:flutter/material.dart';
 import 'two_option_filter.dart';
@@ -48,7 +49,10 @@ class _ManagedCaseCollectionState extends State<ManagedCaseCollection> {
   @override
   Widget build(BuildContext context) {
     final items = widget.items
-        .where((i) => i.status == (_resolved ? 'resolved' : 'active'))
+        .where(
+          (i) =>
+              i.status == (_resolved ? CaseStatus.resolved : CaseStatus.active),
+        )
         .toList();
     return StaggerRevealItem(
       order: 1,

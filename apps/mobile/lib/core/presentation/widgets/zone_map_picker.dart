@@ -1,3 +1,4 @@
+import '../../theme/app_theme.dart';
 import 'confirmation_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show listEquals;
@@ -165,7 +166,7 @@ class _ZoneMapPickerState extends State<ZoneMapPicker> {
           MapConfig.displayTileUrl.contains('{r}') &&
           RetinaMode.isHighDensity(context),
       tileProvider: _tiles,
-      userAgentPackageName: 'com.example.flutter_application_entrehuellas',
+      userAgentPackageName: 'app.entrehuellas',
       panBuffer: 0,
       errorTileCallback: (_, _, _) => _failure(attempt),
       tileBuilder: (context, child, tile) => LoadingShimmer(
@@ -235,7 +236,7 @@ class _ZoneMapPickerState extends State<ZoneMapPicker> {
                           radius: widget.radiusMeters.toDouble(),
                           useRadiusInMeter: true,
                           color: const Color(0x22111111),
-                          borderColor: const Color(0xFF111111),
+                          borderColor: AppColors.ink,
                           borderStrokeWidth: 2,
                         ),
                       ],
@@ -248,7 +249,7 @@ class _ZoneMapPickerState extends State<ZoneMapPicker> {
                           width: BrandMapPin.markerWidth,
                           height: BrandMapPin.markerHeight,
                           alignment: Alignment.center,
-                          child: const BrandMapPin(color: Color(0xFF111111)),
+                          child: const BrandMapPin(color: AppColors.ink),
                         ),
                       ],
                     ),

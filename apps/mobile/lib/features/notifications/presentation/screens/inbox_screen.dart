@@ -1,3 +1,5 @@
+import '../../../../core/presentation/navigation/case_routes.dart';
+import '../../../../core/domain/entities/case_kind.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -117,7 +119,13 @@ class InboxScreen extends ConsumerWidget {
                                                   if (opened &&
                                                       context.mounted) {
                                                     await context.push(
-                                                      '/home/${item.source == 'lost' ? 'cases' : 'found-cases'}/${item.caseId}',
+                                                      caseDetailRoute(
+                                                        CaseKind.tryParse(
+                                                              item.source,
+                                                            ) ??
+                                                            CaseKind.found,
+                                                        item.caseId,
+                                                      ),
                                                     );
                                                   }
                                                 },

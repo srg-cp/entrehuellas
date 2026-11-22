@@ -1,3 +1,4 @@
+import '../../theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
 /// Expands text in place without replaying the screen's entrance.
@@ -19,11 +20,7 @@ class _ExpandableDescriptionState extends State<ExpandableDescription> {
   @override
   Widget build(BuildContext context) => LayoutBuilder(
     builder: (context, constraints) {
-      const style = TextStyle(
-        fontSize: 16,
-        height: 1.4,
-        color: Color(0xFF111111),
-      );
+      const style = TextStyle(fontSize: 16, height: 1.4, color: AppColors.ink);
       final painter = TextPainter(
         text: TextSpan(text: widget.text, style: style),
         maxLines: 2,
@@ -49,7 +46,7 @@ class _ExpandableDescriptionState extends State<ExpandableDescription> {
                 style: const TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
-                  color: Color(0xFF111111),
+                  color: AppColors.ink,
                 ),
               ),
             ),

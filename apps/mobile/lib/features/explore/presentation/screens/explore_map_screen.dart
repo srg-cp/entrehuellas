@@ -1,3 +1,4 @@
+import '../../../../core/theme/app_theme.dart';
 import '../../../../core/presentation/widgets/map_sheet_header.dart';
 import '../../../../core/presentation/widgets/app_scaffold.dart';
 import 'package:flutter/material.dart';
@@ -83,7 +84,7 @@ class _ExploreMapScreenState extends ConsumerState<ExploreMapScreen> {
                     : const LoadingShimmer(
                         isLoading: true,
                         loadingLabel: 'Consultando casos',
-                        child: ColoredBox(color: Color(0xFFE5E5EA)),
+                        child: ColoredBox(color: AppColors.divider),
                       )
               else
                 ContentRefresh(

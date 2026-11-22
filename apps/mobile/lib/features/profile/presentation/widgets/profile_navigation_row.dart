@@ -1,3 +1,4 @@
+import '../../../../core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
 /// A single accessible target for a profile destination, including its chevron.
@@ -71,7 +72,7 @@ class ProfileNavigationRow extends StatelessWidget {
                     child: Icon(
                       Icons.chevron_right_rounded,
                       size: 24,
-                      color: Color(0xFF6E6E73),
+                      color: AppColors.secondary,
                     ),
                   ),
                 ],

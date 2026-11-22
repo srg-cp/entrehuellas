@@ -1,3 +1,5 @@
+import '../../../../core/data/models/enum_parsing.dart';
+import '../../../../core/domain/entities/case_kind.dart';
 import '../../../lost_cases/domain/entities/lost_case.dart';
 import '../../../found_cases/domain/entities/found_case.dart';
 import '../../../pets/domain/entities/pet.dart';
@@ -46,7 +48,7 @@ class CachedCaseDto {
 
     return CachedCase(
       storedAt: DateTime.parse(row['stored_at'] as String),
-      lost: row['source'] != 'lost'
+      lost: row['source'] != CaseKind.lost.name
           ? null
           : PublicLostCase(
               id: row['id'] as String,
@@ -56,16 +58,10 @@ class CachedCaseDto {
               longitude: (row['longitude'] as num).toDouble(),
               fields: PetFields(
                 name: row['name'] as String,
-                species: row['species'] == null
-                    ? null
-                    : PetSpecies.values.byName(row['species'] as String),
+                species: enumByNameOrNull(PetSpecies.values, row['species']),
                 speciesDetail: row['species_detail'] as String?,
-                size: row['size'] == null
-                    ? null
-                    : PetSize.values.byName(row['size'] as String),
-                sex: row['sex'] == null
-                    ? null
-                    : PetSex.values.byName(row['sex'] as String),
+                size: enumByNameOrNull(PetSize.values, row['size']),
+                sex: enumByNameOrNull(PetSex.values, row['sex']),
                 ageMonths: row['age_months'] as int?,
                 traits: row['traits'] as String?,
               ),
@@ -73,7 +69,7 @@ class CachedCaseDto {
                   .map((p) => CasePhoto(id: p['id'] as String, uri: photo(p)))
                   .toList(),
             ),
-      found: row['source'] != 'found'
+      found: row['source'] != CaseKind.found.name
           ? null
           : PublicFoundCase(
               id: row['id'] as String,

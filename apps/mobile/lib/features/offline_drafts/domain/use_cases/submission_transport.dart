@@ -4,6 +4,7 @@ import '../../../found_cases/domain/entities/found_case.dart';
 import '../../../found_cases/domain/use_cases/found_case_actions.dart';
 import '../entities/local_report_draft.dart';
 import '../entities/queued_report.dart';
+import '../entities/report_slot.dart';
 
 /// Uses the same concrete product operations and receipt validation as the editors.
 class SubmissionTransport {
@@ -24,17 +25,12 @@ class SubmissionTransport {
     photoIds: d.selectedPhotos,
   );
   FoundCaseDraft _found(LocalReportDraft d) {
-    final parts = d.slot.split(':');
+    final slot = ReportSlot.tryParse(d.slot);
     return FoundCaseDraft(
       id: d.id,
       reportKind: d.reportKind,
-      targetId: {'community-search', 'independent-found'}.contains(d.slot)
-          ? null
-          : parts[2],
-      communityTarget:
-          {'community-search', 'independent-found'}.contains(d.slot)
-          ? false
-          : parts[1] == 'true',
+      targetId: slot is FoundTargetSlot ? slot.targetId : null,
+      communityTarget: slot is FoundTargetSlot && slot.community,
       occurredAt: d.instant!,
       latitude: d.latitude!,
       longitude: d.longitude!,
@@ -57,33 +53,25 @@ class SubmissionTransport {
         d.longitude == null) {
       throw const SubmissionFailure(SubmissionIssue.invalid);
     }
-    if (d.slot == 'lost') {
-      if (d.pet == null) {
+    switch (ReportSlot.tryParse(d.slot)) {
+      case LostReportSlot():
+        if (d.pet == null) {
+          throw const SubmissionFailure(SubmissionIssue.invalid);
+        }
+        validateLostCasePet(d.pet);
+        lost.validate(_lost(d), DateTime.now());
+      case CommunitySearchSlot() || IndependentFoundSlot() || FoundTargetSlot():
+        found.validate(_found(d), DateTime.now());
+      case null:
         throw const SubmissionFailure(SubmissionIssue.invalid);
-      }
-      validateLostCasePet(d.pet);
-      lost.validate(_lost(d), DateTime.now());
-    } else if ({'community-search', 'independent-found'}.contains(d.slot) ||
-        d.slot.startsWith('found:')) {
-      if (!{'community-search', 'independent-found'}.contains(d.slot) &&
-          d.slot.split(':').length != 3) {
-        throw const SubmissionFailure(SubmissionIssue.invalid);
-      }
-      found.validate(_found(d), DateTime.now());
-    } else {
-      throw const SubmissionFailure(SubmissionIssue.invalid);
     }
   }
 
   Future<SubmissionReceipt> send(LocalReportDraft d) async {
     validate(d);
-    if (d.slot == 'lost') {
-      return SubmissionReceipt.lost(await lost(d.owner, _lost(d)));
-    }
-    if ({'community-search', 'independent-found'}.contains(d.slot) ||
-        d.slot.startsWith('found:')) {
-      return SubmissionReceipt.found(await found(d.owner, _found(d)));
-    }
-    throw const SubmissionFailure(SubmissionIssue.invalid);
+    // validate() already rejected unknown slots.
+    return ReportSlot.tryParse(d.slot) is LostReportSlot
+        ? SubmissionReceipt.lost(await lost(d.owner, _lost(d)))
+        : SubmissionReceipt.found(await found(d.owner, _found(d)));
   }
 }

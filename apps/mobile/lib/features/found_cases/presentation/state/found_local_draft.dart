@@ -1,13 +1,19 @@
 import '../../../offline_drafts/domain/entities/local_report_draft.dart';
+import '../../../offline_drafts/domain/entities/report_slot.dart';
 import '../../../../core/presentation/state/event_date_time_draft.dart';
 import '../../domain/entities/found_case.dart';
 import 'found_editor_state.dart';
 
-String foundDraftSlot(FoundEditorContext c) => c.independentFound
-    ? 'independent-found'
-    : c.communitySearch
-    ? 'community-search'
-    : 'found:${c.communityTarget}:${c.targetId}';
+String foundDraftSlot(FoundEditorContext c) =>
+    (c.independentFound
+            ? const IndependentFoundSlot()
+            : c.communitySearch
+            ? const CommunitySearchSlot()
+            : FoundTargetSlot(
+                targetId: c.targetId ?? '',
+                community: c.communityTarget,
+              ))
+        .value;
 LocalReportDraft foundLocalDraft(FoundEditorState v, String slot) =>
     LocalReportDraft(
       owner: v.ownerId,

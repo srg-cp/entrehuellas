@@ -81,7 +81,9 @@ class SupabaseFoundCaseDataSource implements FoundCaseDataSource {
           'found-photo-thumbnails',
         ]) {
           _identity(owner);
-          final paths = retired.map((r) => r['path'] as String).toList();
+          final paths = retired
+              .map((r) => (r as Map<String, dynamic>)['path'] as String)
+              .toList();
           if (paths.isNotEmpty) {
             await _client.storage
                 .from(bucket)
@@ -152,16 +154,19 @@ class SupabaseFoundCaseDataSource implements FoundCaseDataSource {
         : FoundCaseDto(Map<String, dynamic>.from(rows.single as Map));
   });
   @override
-  Future<Uri?> photoUri(String path) async {
+  Future<Map<String, Uri>> photoUris(List<String> paths) async {
+    if (paths.isEmpty) return const {};
     try {
-      return Uri.parse(
-        await _client.storage
-            .from('found-photo-renditions')
-            .createSignedUrl(path, 300)
-            .timeout(_requestTimeout),
-      );
+      final results = await _client.storage
+          .from('found-photo-renditions')
+          .createSignedUrlsResult(paths, 300)
+          .timeout(_requestTimeout);
+      return {
+        for (final result in results.whereType<SignedUrlSuccess>())
+          result.path: Uri.parse(result.signedUrl),
+      };
     } catch (_) {
-      return null;
+      return const {};
     }
   }
 
@@ -186,7 +191,9 @@ class SupabaseFoundCaseDataSource implements FoundCaseDataSource {
             as List;
     for (final bucket in ['found-photo-renditions', 'found-photo-thumbnails']) {
       _identity(owner);
-      final paths = rows.map((r) => r['path'] as String).toList();
+      final paths = rows
+          .map((r) => (r as Map<String, dynamic>)['path'] as String)
+          .toList();
       if (paths.isNotEmpty) {
         await _client.storage
             .from(bucket)

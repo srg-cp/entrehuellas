@@ -3,6 +3,14 @@ import '../../domain/entities/found_case.dart';
 class FoundCaseDto {
   const FoundCaseDto(this.row);
   final Map<String, dynamic> row;
+  String? get coverPath => row['cover_path'] as String?;
+
+  /// Storage paths of the report photos, in display order.
+  List<({String id, String path})> get photoRefs => [
+    for (final photo
+        in (row['photos'] as List? ?? const []).cast<Map<String, dynamic>>())
+      (id: photo['id'] as String, path: photo['path'] as String),
+  ];
   FoundPublication publication({Uri? coverUri}) => FoundPublication(
     id: row['id'] as String,
     reportKind: row['report_kind'] as String? ?? 'legacy_found',

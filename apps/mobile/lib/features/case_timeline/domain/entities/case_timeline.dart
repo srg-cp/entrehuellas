@@ -1,4 +1,7 @@
-typedef TimelineTarget = ({String id, bool community});
+import '../../../../core/domain/entities/case_kind.dart';
+import '../../../../core/domain/entities/case_status.dart';
+
+typedef TimelineTarget = CommunityCaseTarget;
 
 enum TimelineIssue {
   unavailable,
@@ -35,6 +38,7 @@ class TimelinePage {
   TimelinePage(this.caseStatus, List<TimelineEvent> items, this.next)
     : items = List.unmodifiable(items);
   final String caseStatus;
+  bool get caseActive => caseStatus == CaseStatus.active;
   final List<TimelineEvent> items;
   final TimelineCursor? next;
 }

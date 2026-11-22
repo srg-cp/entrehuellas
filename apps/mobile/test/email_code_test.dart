@@ -72,7 +72,7 @@ void main() {
           ),
         );
         await tester.pumpAndSettle();
-        container.read(routerProvider).push('/recover-password');
+        unawaited(container.read(routerProvider).push('/recover-password'));
         await tester.pumpAndSettle();
         await tester.enterText(
           find.byKey(const ValueKey('recovery-email')),
@@ -464,6 +464,7 @@ void main() {
         await tester.pumpAndSettle();
         container
             .read(routerProvider)
+            // ignore: unawaited_futures
             .push(recovery ? '/recover-password' : '/register');
         await tester.pumpAndSettle();
         if (recovery) {

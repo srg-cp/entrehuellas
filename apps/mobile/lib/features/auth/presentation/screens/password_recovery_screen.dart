@@ -1,3 +1,4 @@
+import '../../../../core/theme/app_theme.dart';
 import '../../../../core/presentation/widgets/app_scaffold.dart';
 import '../../../../core/presentation/widgets/confirmation_toast.dart';
 import 'package:flutter/material.dart';
@@ -124,7 +125,7 @@ class PasswordRecoveryScreen extends ConsumerWidget {
                                 style: const TextStyle(
                                   fontSize: 18,
                                   height: 1.4,
-                                  color: Color(0xFF6E6E73),
+                                  color: AppColors.secondary,
                                 ),
                               ),
                             ),

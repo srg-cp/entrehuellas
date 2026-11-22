@@ -14,8 +14,9 @@ origen de los valores, cinco secrets, primera ejecución, instalación y actuali
 Esta ficha mantiene el contrato técnico y los límites de la funcionalidad.
 
 Infraestructura de entrega del MVP, 22/10/2026. No cierra HU ni acredita
-funcionalidades remotas. Conserva el identificador Android existente
-`com.example.flutter_application_entrehuellas`, sin migrar instalaciones.
+funcionalidades remotas. Desde ADR-172 el identificador Android es
+`app.entrehuellas`; las instalaciones con el provisional `com.example...` no se
+actualizan y deben desinstalarse e instalar el APK nuevo.
 
 ## Qué hace y recorrido
 

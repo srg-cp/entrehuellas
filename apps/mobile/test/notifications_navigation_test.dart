@@ -22,6 +22,7 @@ import 'support/fake_profile.dart';
 
 class _Push implements PushRepository {
   int watches = 0;
+  // ignore: close_sinks
   final signals = StreamController<PushSignal>.broadcast();
   final owners = <String?>[];
   @override

@@ -1,3 +1,4 @@
+import '../../theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
 class PhotoAddTile extends StatelessWidget {
@@ -14,11 +15,11 @@ class PhotoAddTile extends StatelessWidget {
   final bool invalid;
   @override
   Widget build(BuildContext context) => Material(
-    color: const Color(0xFFF5F5F7),
+    color: AppColors.surface,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(22),
       side: BorderSide(
-        color: invalid ? const Color(0xFFB53F48) : const Color(0xFFE5E5EA),
+        color: invalid ? AppColors.error : AppColors.divider,
         width: invalid ? 3.5 : 1,
       ),
     ),
@@ -35,9 +36,7 @@ class PhotoAddTile extends StatelessWidget {
             child: Icon(
               Icons.add_photo_alternate_outlined,
               size: 40,
-              color: invalid
-                  ? const Color(0xFFB53F48)
-                  : const Color(0xFF6E6E73),
+              color: invalid ? AppColors.error : AppColors.secondary,
             ),
           ),
         ),

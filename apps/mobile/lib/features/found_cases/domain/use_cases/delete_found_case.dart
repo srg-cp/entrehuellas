@@ -1,3 +1,4 @@
+import '../../../../core/domain/entities/case_status.dart';
 import '../entities/found_case.dart';
 import '../repositories/found_case_repository.dart';
 
@@ -8,7 +9,7 @@ class DeleteFoundPublication {
     if (value.ownerId != owner) {
       throw const FoundFailure(FoundFailureKind.forbidden);
     }
-    if (!{'active', 'resolved'}.contains(value.status)) {
+    if (!{CaseStatus.active, CaseStatus.resolved}.contains(value.status)) {
       throw const FoundFailure(FoundFailureKind.conflict);
     }
     return _repository.delete(owner, value.id);

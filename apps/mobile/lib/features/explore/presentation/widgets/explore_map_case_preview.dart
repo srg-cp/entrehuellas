@@ -1,3 +1,4 @@
+import '../../../../core/theme/app_theme.dart';
 import '../../../../core/presentation/widgets/map_case_panel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -106,7 +107,7 @@ class ExploreMapPreviewContent extends StatelessWidget {
                     child: SizedBox(
                       width: 80,
                       height: 16,
-                      child: ColoredBox(color: Color(0xFFE5E5EA)),
+                      child: ColoredBox(color: AppColors.divider),
                     ),
                   )
                 : Text(size),

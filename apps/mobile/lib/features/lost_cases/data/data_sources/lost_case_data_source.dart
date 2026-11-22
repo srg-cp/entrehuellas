@@ -5,7 +5,9 @@ abstract interface class LostCaseDataSource {
   Future<LostCaseDto> publish(String owner, LostCaseDraft draft);
   Future<LostCaseDto?> readPublic(String id);
   Future<List<LostCaseDto>> listMine(String owner);
-  Future<Uri?> photoUri(String path);
+
+  /// One signed URL request for many photos; missing paths are omitted.
+  Future<Map<String, Uri>> photoUris(List<String> paths);
   Future<void> delete(String owner, String id);
 }
 

@@ -107,15 +107,18 @@ class SupabaseLostCaseDataSource implements LostCaseDataSource {
         .toList();
   });
   @override
-  Future<Uri?> photoUri(String path) async {
+  Future<Map<String, Uri>> photoUris(List<String> paths) async {
+    if (paths.isEmpty) return const {};
     try {
-      return Uri.parse(
-        await _client.storage
-            .from('pet-photo-renditions')
-            .createSignedUrl(path, 300),
-      );
+      final results = await _client.storage
+          .from('pet-photo-renditions')
+          .createSignedUrlsResult(paths, 300);
+      return {
+        for (final result in results.whereType<SignedUrlSuccess>())
+          result.path: Uri.parse(result.signedUrl),
+      };
     } catch (_) {
-      return null;
+      return const {};
     }
   }
 

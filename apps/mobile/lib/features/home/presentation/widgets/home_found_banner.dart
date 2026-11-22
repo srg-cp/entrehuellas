@@ -1,3 +1,4 @@
+import '../../../../core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
 import 'home_banner_surface.dart';
@@ -50,7 +51,7 @@ class HomeFoundBanner extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 16,
-                  color: Color(0xFF6E6E73),
+                  color: AppColors.secondary,
                   height: 1.4,
                 ),
               ),

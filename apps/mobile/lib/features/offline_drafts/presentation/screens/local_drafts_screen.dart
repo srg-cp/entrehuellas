@@ -1,3 +1,4 @@
+import '../../domain/entities/report_slot.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -66,7 +67,7 @@ class _LocalDraftsScreenState extends ConsumerState<LocalDraftsScreen> {
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             Text(
-                              d.slot == 'lost'
+                              d.slot == ReportSlot.lostValue
                                   ? 'Mascota perdida: ${d.pet?.fields.name ?? 'Mi mascota'}'
                                   : d.slot == 'community-search'
                                   ? 'Búsqueda de mascota'

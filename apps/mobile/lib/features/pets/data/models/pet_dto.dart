@@ -1,3 +1,4 @@
+import '../../../../core/data/models/enum_parsing.dart';
 import '../../domain/entities/pet.dart';
 
 class PetDto {
@@ -61,10 +62,10 @@ class PetDto {
     version: version,
     fields: PetFields(
       speciesDetail: speciesDetail,
-      size: size == null ? null : PetSize.values.byName(size!),
+      size: enumByNameOrNull(PetSize.values, size),
       name: name,
-      species: PetSpecies.values.byName(species),
-      sex: sex == null ? null : PetSex.values.byName(sex!),
+      species: enumByNameOrNull(PetSpecies.values, species),
+      sex: enumByNameOrNull(PetSex.values, sex),
       ageMonths: ageMonths,
       traits: traits,
     ),

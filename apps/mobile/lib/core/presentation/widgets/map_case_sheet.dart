@@ -1,3 +1,4 @@
+import '../../theme/app_theme.dart';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
@@ -339,7 +340,7 @@ class _MapSheetHandle extends SliverPersistentHeaderDelegate {
           width: 40,
           height: 5,
           decoration: BoxDecoration(
-            color: const Color(0xFFE5E5EA),
+            color: AppColors.divider,
             borderRadius: BorderRadius.circular(4),
           ),
         ),

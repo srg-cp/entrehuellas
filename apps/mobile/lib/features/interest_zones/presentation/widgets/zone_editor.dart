@@ -1,3 +1,4 @@
+import '../../../../core/theme/app_theme.dart';
 import '../../../../core/presentation/widgets/app_input_decoration.dart';
 import '../../../../core/presentation/widgets/validation_surface.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +24,11 @@ class ZoneEditor extends ConsumerWidget {
       children: [
         const Text(
           'Toca el mapa para elegir tu ubicación. Puedes moverlo y ampliar la vista. El nombre es opcional.',
-          style: TextStyle(fontSize: 16, color: Color(0xFF6E6E73), height: 1.4),
+          style: TextStyle(
+            fontSize: 16,
+            color: AppColors.secondary,
+            height: 1.4,
+          ),
         ),
         const SizedBox(height: 20),
         ShakeField(
@@ -32,7 +37,7 @@ class ZoneEditor extends ConsumerWidget {
           child: TextFormField(
             key: ValueKey('name-${draft.id}'),
             initialValue: draft.name,
-            style: const TextStyle(fontSize: 16, color: Color(0xFF111111)),
+            style: const TextStyle(fontSize: 16, color: AppColors.ink),
             enabled: !state.busy,
             decoration: _decoration(
               'Nombre (opcional)',
@@ -57,7 +62,7 @@ class ZoneEditor extends ConsumerWidget {
         if (draft.latitude == null)
           const Text(
             'Aún no seleccionaste un punto.',
-            style: TextStyle(color: Color(0xFF6E6E73)),
+            style: TextStyle(color: AppColors.secondary),
           ),
 
         const SizedBox(height: 12),
@@ -66,7 +71,7 @@ class ZoneEditor extends ConsumerWidget {
           style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w600,
-            color: Color(0xFF111111),
+            color: AppColors.ink,
           ),
         ),
         Slider(

@@ -1,3 +1,4 @@
+import '../../../../core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/presentation/widgets/entity_screen_shell.dart';
@@ -42,7 +43,7 @@ class CasePosterScreen extends ConsumerWidget {
                 loadingLabel: 'Preparando cartel',
                 child: SizedBox(
                   height: 280,
-                  child: ColoredBox(color: Color(0xFFF5F5F7)),
+                  child: ColoredBox(color: AppColors.surface),
                 ),
               )
             : value == null
@@ -132,7 +133,7 @@ class CasePosterScreen extends ConsumerWidget {
                   const SizedBox(height: 20),
                   const Text(
                     'Solo se incluyen datos y fotos públicos. La ubicación exacta y los documentos privados no forman parte del cartel.',
-                    style: TextStyle(color: Color(0xFF6E6E73)),
+                    style: TextStyle(color: AppColors.secondary),
                   ),
                 ],
               ),
