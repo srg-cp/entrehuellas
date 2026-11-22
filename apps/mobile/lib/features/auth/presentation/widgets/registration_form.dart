@@ -1,3 +1,4 @@
+import '../../../../core/theme/app_theme.dart';
 import 'auth_primary_button_style.dart';
 import '../../../../core/presentation/widgets/loading_shimmer.dart';
 
@@ -73,7 +74,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
             style: TextStyle(
               fontSize: 16,
               height: 27 / 16,
-              color: invalid ? const Color(0xFFB53F48) : null,
+              color: invalid ? AppColors.error : null,
             ),
             keyboardType: field == RegistrationField.email
                 ? TextInputType.emailAddress

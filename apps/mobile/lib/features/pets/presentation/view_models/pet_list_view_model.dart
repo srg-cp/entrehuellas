@@ -1,3 +1,5 @@
+import '../../../../core/domain/entities/case_kind.dart';
+import '../../../../core/providers/case_change_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/presentation/state/retained_query.dart';
 import '../../domain/entities/pet.dart';
@@ -36,6 +38,12 @@ class PetListViewModel extends AsyncNotifier<List<Pet>> {
   Future<List<Pet>> build() async {
     final generation = ++_generation;
     _refreshing = false;
+    final caseChanges = ref
+        .watch(caseChangesProvider)
+        .changes
+        .where((change) => change.kind == CaseKind.lost || change.lifecycle)
+        .listen((_) => ref.invalidateSelf());
+    ref.onDispose(caseChanges.cancel);
     late final RetainedQuery retained;
     final useCase = ref.watch(listMyPetsProvider);
     final notice = ref.watch(petListRefreshNoticeProvider(archived).notifier);
@@ -100,6 +108,12 @@ class PetDetailViewModel extends AsyncNotifier<Pet> {
   final String petId;
   @override
   Future<Pet> build() async {
+    final caseChanges = ref
+        .watch(caseChangesProvider)
+        .changes
+        .where((change) => change.kind == CaseKind.lost || change.lifecycle)
+        .listen((_) => ref.invalidateSelf());
+    ref.onDispose(caseChanges.cancel);
     final useCase = ref.watch(readPetProvider);
     final session = await ref.watch(petSessionProvider.future);
     if (session == null) throw const PetFailure(PetFailureKind.signedOut);

@@ -1,3 +1,4 @@
+import '../../theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'case_photo.dart';
 import 'entity_card_surface.dart';
@@ -70,7 +71,7 @@ class _CardSkeleton extends StatelessWidget {
         children: [
           AspectRatio(
             aspectRatio: 4 / 3,
-            child: ColoredBox(color: Color(0xFFE5E5EA)),
+            child: ColoredBox(color: AppColors.divider),
           ),
           Padding(
             padding: EdgeInsets.all(14),
@@ -81,7 +82,7 @@ class _CardSkeleton extends StatelessWidget {
                   widthFactor: .75,
                   child: SizedBox(
                     height: 20,
-                    child: ColoredBox(color: Color(0xFFE5E5EA)),
+                    child: ColoredBox(color: AppColors.divider),
                   ),
                 ),
                 SizedBox(height: 10),
@@ -89,7 +90,7 @@ class _CardSkeleton extends StatelessWidget {
                   widthFactor: .9,
                   child: SizedBox(
                     height: 14,
-                    child: ColoredBox(color: Color(0xFFE5E5EA)),
+                    child: ColoredBox(color: AppColors.divider),
                   ),
                 ),
               ],
@@ -125,12 +126,12 @@ class _CaseCard extends StatelessWidget {
                 children: [
                   item.coverUri == null
                       ? const ColoredBox(
-                          color: Color(0xFFE5E5EA),
+                          color: AppColors.divider,
                           child: Center(
                             child: Icon(
                               Icons.pets_outlined,
                               size: 40,
-                              color: Color(0xFF6E6E73),
+                              color: AppColors.secondary,
                             ),
                           ),
                         )
@@ -163,7 +164,7 @@ class _CaseCard extends StatelessWidget {
                       fontSize: 20,
                       height: 1.15,
                       fontWeight: FontWeight.w700,
-                      color: Color(0xFF111111),
+                      color: AppColors.ink,
                     ),
                   ),
                   if (item.distanceMeters != null) ...[
@@ -175,7 +176,7 @@ class _CaseCard extends StatelessWidget {
                       style: const TextStyle(
                         fontSize: 14,
                         height: 1.3,
-                        color: Color(0xFF6E6E73),
+                        color: AppColors.secondary,
                       ),
                     ),
                   ],
@@ -206,7 +207,7 @@ class _CaseBadge extends StatelessWidget {
           fontSize: 12,
           height: 1.2,
           fontWeight: FontWeight.w600,
-          color: Color(0xFF111111),
+          color: AppColors.ink,
         ),
       ),
     ),

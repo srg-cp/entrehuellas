@@ -36,7 +36,7 @@ class FoundPublicContent extends StatelessWidget {
     key: ValueKey(value.id),
     offline: offline,
     name: value.speciesDetail ?? foundSpeciesLabel(value.species),
-    eventLabel: value.status != 'active'
+    eventLabel: !value.isActive
         ? 'Reporte cerrado'
         : switch (value.reportKind) {
             'possible_loss' => 'Posiblemente perdida',
@@ -76,7 +76,7 @@ class FoundPublicContent extends StatelessWidget {
     longitude: value.longitude,
     privacy: isPreview ? casePublicationPrivacyNotice : null,
     actions: actions,
-    contact: value.status == 'active' ? contact : null,
+    contact: value.isActive ? contact : null,
   );
 }
 
@@ -116,7 +116,7 @@ class FoundPreviewContent extends StatelessWidget {
                   : CasePhotoView.network(photo.uri!),
           ],
           facts: [
-            if (!isPreview && value.status == 'active')
+            if (!isPreview && value.isActive)
               const PreviewFact(Icons.search, 'Reporte activo'),
             PreviewFact(Icons.pets_outlined, foundSpeciesLabel(value.species)),
             if (value.size != null)

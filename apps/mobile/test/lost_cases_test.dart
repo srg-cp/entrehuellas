@@ -616,7 +616,9 @@ void main() {
         throwsA(isA<CaseFailure>()),
       );
       cases.failRead = false;
-      container.read(publicCaseViewModelProvider('case').notifier).retry();
+      unawaited(
+        container.read(publicCaseViewModelProvider('case').notifier).retry(),
+      );
       expect(
         (await container.read(
           publicCaseViewModelProvider('case').future,

@@ -1,3 +1,4 @@
+import '../../theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'case_photo.dart';
@@ -47,7 +48,7 @@ class MapCasePanel extends StatelessWidget {
                         dimension: 112,
                         child: photo == null
                             ? const ColoredBox(
-                                color: Color(0xFFF5F5F7),
+                                color: AppColors.surface,
                                 child: Center(child: Icon(Icons.pets_outlined)),
                               )
                             : CasePhotoView.network(
@@ -77,7 +78,7 @@ class MapCasePanel extends StatelessWidget {
                               overflow: TextOverflow.ellipsis,
                               style: const TextStyle(
                                 fontSize: 14,
-                                color: Color(0xFF6E6E73),
+                                color: AppColors.secondary,
                                 height: 1.4,
                               ),
                             ),
@@ -148,7 +149,7 @@ class MapCasePanel extends StatelessWidget {
           ),
           const Padding(
             padding: EdgeInsets.symmetric(vertical: 16),
-            child: Divider(height: 1, color: Color(0xFFE5E5EA)),
+            child: Divider(height: 1, color: AppColors.divider),
           ),
           Text(
             sectionTitle,
@@ -210,7 +211,7 @@ class MapPanelFact extends StatelessWidget {
             DefaultTextStyle.merge(
               style: const TextStyle(
                 fontSize: 13,
-                color: Color(0xFF6E6E73),
+                color: AppColors.secondary,
                 height: 1.2,
               ),
               child: value,

@@ -1,3 +1,4 @@
+import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../../../../core/presentation/widgets/app_scaffold.dart';
 import '../../domain/failures/preference_failure.dart';
@@ -131,7 +132,7 @@ class AlertPreferencesScreen extends ConsumerWidget {
                           child: SizedBox(
                             height: 2,
                             width: double.infinity,
-                            child: ColoredBox(color: Color(0xFFE5E5EA)),
+                            child: ColoredBox(color: AppColors.divider),
                           ),
                         ),
                       ),

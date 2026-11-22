@@ -9,7 +9,9 @@ class FoundSourceFailure implements Exception {
 abstract interface class FoundCaseDataSource {
   Future<FoundCaseDto> publish(String owner, FoundCaseDraft draft);
   Future<FoundCaseDto?> readPublic(String id);
-  Future<Uri?> photoUri(String path);
+
+  /// One signed URL request for many photos; missing paths are omitted.
+  Future<Map<String, Uri>> photoUris(List<String> paths);
   Future<List<FoundCaseDto>> listMine(String owner);
   Future<void> discard(String owner, String id);
   Future<List<FoundCaseDto>> listObservations(String id, bool community);

@@ -98,11 +98,17 @@ void main() {
               return http.Response('{}', 200, headers: headers);
             case '/auth/v1/token':
               expect(request.url.queryParameters['grant_type'], 'pkce');
-              expect(jsonDecode(request.body)['auth_code'], 'fake-code');
+              expect(
+                (jsonDecode(request.body) as Map<String, dynamic>)['auth_code'],
+                'fake-code',
+              );
               return http.Response(jsonEncode(session), 200, headers: headers);
             case '/auth/v1/user':
               expect(request.method, 'PUT');
-              expect(jsonDecode(request.body)['password'], '  new password  ');
+              expect(
+                (jsonDecode(request.body) as Map<String, dynamic>)['password'],
+                '  new password  ',
+              );
               return http.Response(jsonEncode(user), 200, headers: headers);
             case '/auth/v1/logout':
               expect(request.url.queryParameters['scope'], 'local');

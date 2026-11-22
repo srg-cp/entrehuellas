@@ -23,7 +23,10 @@ class SavedCasesRepositoryImpl implements SavedCasesRepository {
           return PublicCasePageDto.toEntity(row, cover);
         }),
       );
-      return SavedCasePage(items: items, cursor: dto.nextCursor);
+      return SavedCasePage(
+        items: items.nonNulls.toList(),
+        cursor: dto.nextCursor,
+      );
     } catch (_) {
       throw const SavedCaseFailure(SavedCaseFailureKind.unavailable);
     }

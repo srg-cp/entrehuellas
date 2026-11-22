@@ -400,7 +400,7 @@ void main() {
         ),
       );
       await tester.pumpAndSettle();
-      container.read(routerProvider).push('/recover-password');
+      unawaited(container.read(routerProvider).push('/recover-password'));
       await tester.pumpAndSettle();
       await tester.ensureVisible(find.byKey(const ValueKey('recovery-email')));
       await tester.enterText(

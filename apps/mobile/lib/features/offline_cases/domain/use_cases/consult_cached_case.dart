@@ -1,3 +1,4 @@
+import '../../../../core/domain/entities/case_kind.dart';
 import 'dart:async';
 import '../../../lost_cases/domain/entities/lost_case.dart';
 import '../../../found_cases/domain/entities/found_case.dart';
@@ -54,17 +55,15 @@ class ConsultCachedCase {
       final stored = await cache.read(owner, source, id);
       if (stored == null) rethrow;
       return CaseConsultation<T>(
-        (source == 'lost' ? stored.lost : stored.found) as T?,
+        (source == CaseKind.lost.name ? stored.lost : stored.found) as T?,
         cachedAt: stored.storedAt,
       );
     }
     if (_requests[key] != request) return const CaseConsultation(null);
     if (owner == null || owner.isEmpty) return CaseConsultation(value);
     final active = value is PublicLostCase
-        ? value.status == 'active' && value.id == id
-        : value is PublicFoundCase &&
-              value.status == 'active' &&
-              value.id == id;
+        ? value.isActive && value.id == id
+        : value is PublicFoundCase && value.isActive && value.id == id;
     if (!active) {
       // A confirmed absence/closed case must never resurrect from local storage.
       return _invalidate(owner, source, id);

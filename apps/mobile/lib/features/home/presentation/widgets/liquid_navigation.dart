@@ -1,3 +1,4 @@
+import '../../../../core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import '../../../../core/presentation/widgets/glass_surface.dart';
 import '../../../../core/presentation/widgets/navigation_accent_surface.dart';
@@ -111,7 +112,7 @@ class _LiquidNavigationState extends State<LiquidNavigation> {
                                           LiquidNavigation.icons[section.index],
                                           size: 24,
                                           color: Color.lerp(
-                                            const Color(0xFF6E6E73),
+                                            AppColors.secondary,
                                             Colors.white,
                                             (1 -
                                                     (position - section.index)
@@ -141,7 +142,7 @@ class _LiquidNavigationState extends State<LiquidNavigation> {
           tooltip: 'Reportar',
           onPressed: () => widget.onReport(source),
           style: IconButton.styleFrom(
-            backgroundColor: const Color(0xFF111111),
+            backgroundColor: AppColors.ink,
             foregroundColor: Colors.white,
             minimumSize: const Size(64, 64),
             padding: const EdgeInsets.all(20),

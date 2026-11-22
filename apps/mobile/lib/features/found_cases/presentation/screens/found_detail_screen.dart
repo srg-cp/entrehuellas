@@ -128,9 +128,7 @@ class FoundDetailScreen extends ConsumerWidget {
                                       community: true,
                                       canResolve:
                                           state.requireValue.value!.canResolve,
-                                      open:
-                                          state.requireValue.value!.status ==
-                                          'active',
+                                      open: state.requireValue.value!.isActive,
                                       onChanged: () {
                                         model.retry();
                                         onActivityChanged?.call();
@@ -138,8 +136,7 @@ class FoundDetailScreen extends ConsumerWidget {
                                     )
                                   : state.requireValue.value!.targetId !=
                                             null &&
-                                        state.requireValue.value!.status ==
-                                            'active'
+                                        state.requireValue.value!.isActive
                                   ? TextButton(
                                       onPressed: () => context.push(
                                         state

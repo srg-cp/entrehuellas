@@ -1,3 +1,4 @@
+import '../../../../core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/presentation/widgets/loading_shimmer.dart';
@@ -21,7 +22,7 @@ class PetLifecycleActions extends ConsumerWidget {
         if (pet.isArchived) ...[
           const Text(
             'Archivada. Su ficha y fotos se conservan.',
-            style: TextStyle(fontSize: 16, color: Color(0xFF6E6E73)),
+            style: TextStyle(fontSize: 16, color: AppColors.secondary),
           ),
           const SizedBox(height: 12),
         ],

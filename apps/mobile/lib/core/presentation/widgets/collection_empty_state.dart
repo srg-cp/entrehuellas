@@ -1,3 +1,4 @@
+import '../../theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
 /// Shared empty collection layout; callers provide their copy and real action.
@@ -21,7 +22,7 @@ class CollectionEmptyState extends StatelessWidget {
     child: Column(
       children: [
         ExcludeSemantics(
-          child: Icon(icon, size: 88, color: const Color(0xFF6E6E73)),
+          child: Icon(icon, size: 88, color: AppColors.secondary),
         ),
         const SizedBox(height: 24),
         Text(
@@ -30,14 +31,14 @@ class CollectionEmptyState extends StatelessWidget {
           style: const TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.w600,
-            color: Color(0xFF111111),
+            color: AppColors.ink,
           ),
         ),
         const SizedBox(height: 8),
         Text(
           description,
           textAlign: TextAlign.center,
-          style: const TextStyle(fontSize: 16, color: Color(0xFF6E6E73)),
+          style: const TextStyle(fontSize: 16, color: AppColors.secondary),
         ),
         if (action != null) ...[
           const SizedBox(height: 24),

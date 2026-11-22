@@ -45,7 +45,7 @@ class PublishLostCase {
     if (result.id != draft.id ||
         result.ownerId != owner ||
         result.petId != draft.petId ||
-        result.status != 'active') {
+        !result.isActive) {
       throw const CaseFailure(CaseFailureKind.unavailable);
     }
     return result;

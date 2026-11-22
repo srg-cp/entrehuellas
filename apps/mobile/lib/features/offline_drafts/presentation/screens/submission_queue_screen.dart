@@ -1,3 +1,4 @@
+import '../../domain/entities/report_slot.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/presentation/widgets/entity_screen_shell.dart';
@@ -56,7 +57,7 @@ class SubmissionQueueScreen extends ConsumerWidget {
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             Text(
-                              entry.command.slot == 'lost'
+                              entry.command.slot == ReportSlot.lostValue
                                   ? 'Mascota perdida'
                                   : 'Búsqueda o aviso',
                             ),

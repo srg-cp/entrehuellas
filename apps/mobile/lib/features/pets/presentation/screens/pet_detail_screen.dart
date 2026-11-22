@@ -1,3 +1,4 @@
+import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../../domain/failures/pet_failure.dart';
 import '../../../../core/presentation/widgets/photo_gallery_strip.dart';
@@ -162,7 +163,7 @@ class _PetIdentity extends ConsumerWidget {
                       child: Icon(
                         Icons.pets_outlined,
                         size: size,
-                        color: const Color(0xFF6E6E73),
+                        color: AppColors.secondary,
                       ),
                     ),
                   ),
@@ -187,7 +188,7 @@ class _PetInformation extends StatelessWidget {
   Widget build(BuildContext context) => Container(
     padding: const EdgeInsets.all(20),
     decoration: BoxDecoration(
-      color: const Color(0xFFF5F5F7),
+      color: AppColors.surface,
       borderRadius: BorderRadius.circular(22),
     ),
     child: Column(
@@ -212,16 +213,13 @@ class _PetInformation extends StatelessWidget {
                   entry.$1,
                   style: const TextStyle(
                     fontSize: 14,
-                    color: Color(0xFF6E6E73),
+                    color: AppColors.secondary,
                   ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   entry.$2,
-                  style: const TextStyle(
-                    fontSize: 17,
-                    color: Color(0xFF111111),
-                  ),
+                  style: const TextStyle(fontSize: 17, color: AppColors.ink),
                 ),
               ],
             ),

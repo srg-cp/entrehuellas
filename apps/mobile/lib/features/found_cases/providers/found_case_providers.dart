@@ -29,6 +29,7 @@ final discardFoundDraftProvider = Provider(
 );
 final foundSessionProvider = StreamProvider.autoDispose<AuthSession?>(
   (ref) => ref.watch(watchAuthSessionProvider)(),
+  retry: (_, _) => null,
 );
 
 final deleteFoundPublicationProvider = Provider(

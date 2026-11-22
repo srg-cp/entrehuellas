@@ -1,3 +1,4 @@
+import '../../../../core/domain/entities/missing_report_value.dart';
 import '../../../offline_drafts/domain/entities/local_report_draft.dart';
 import '../../../offline_drafts/providers/submission_queue_providers.dart';
 import '../../../offline_drafts/domain/entities/queued_report.dart';
@@ -388,9 +389,9 @@ class FoundEditorViewModel extends AsyncNotifier<FoundEditorState> {
     reportKind: v.reportKind,
     targetId: v.targetId,
     communityTarget: v.communityTarget,
-    occurredAt: v.occurredAt ?? DateTime.utc(1999),
-    latitude: v.latitude ?? double.nan,
-    longitude: v.longitude ?? double.nan,
+    occurredAt: v.occurredAt ?? MissingReportValue.occurredAt,
+    latitude: v.latitude ?? MissingReportValue.coordinate,
+    longitude: v.longitude ?? MissingReportValue.coordinate,
     placeReference: v.placeReference,
     species: v.species,
     speciesDetail: v.species == 'other' ? v.speciesDetail : null,
@@ -429,6 +430,8 @@ class FoundEditorViewModel extends AsyncNotifier<FoundEditorState> {
     if (v == null ||
         state.isLoading ||
         v.busy ||
+        // Background sync is transmitting this same command right now.
+        v.submissionStatus == SubmissionStatus.sending ||
         v.issue == FoundFailureKind.targetClosed ||
         v.stage != FoundStage.preview) {
       return;

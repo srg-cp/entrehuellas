@@ -25,7 +25,10 @@ class ExploreRepositoryImpl implements ExploreRepository {
           return ExplorePageDto.toEntity(r, cover);
         }),
       );
-      return ExplorePage(items: items, nextCursor: dto.nextCursor);
+      return ExplorePage(
+        items: items.nonNulls.toList(),
+        nextCursor: dto.nextCursor,
+      );
     } on ExploreSourceFailure catch (e) {
       throw ExploreFailure(
         e.forbidden

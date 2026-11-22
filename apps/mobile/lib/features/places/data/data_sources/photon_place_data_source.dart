@@ -30,7 +30,7 @@ class PhotonPlaceDataSource implements PlaceSearchDataSource {
     }
 
     if (cancellation?.isCancelled == true) cancel();
-    cancellation?.whenCancelled.then((_) => cancel());
+    unawaited(cancellation?.whenCancelled.then((_) => cancel()));
     final request = http.AbortableRequest(
       'GET',
       base.replace(

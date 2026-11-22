@@ -52,7 +52,7 @@ class CasePublicContent extends StatelessWidget {
       key: ValueKey(value.id),
       offline: offline,
       name: f.name,
-      eventLabel: value.status == 'active' ? 'Perdido' : 'Búsqueda cerrada',
+      eventLabel: value.isActive ? 'Perdido' : 'Búsqueda cerrada',
       photos: [
         for (final photo in value.photos)
           photo.uri == null
@@ -84,7 +84,7 @@ class CasePublicContent extends StatelessWidget {
       longitude: value.longitude,
       privacy: isPreview ? casePublicationPrivacyNotice : null,
       actions: actions,
-      contact: value.status == 'active' ? contact : null,
+      contact: value.isActive ? contact : null,
     );
   }
 }

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/presentation/widgets/app_select_field.dart';
@@ -178,7 +179,7 @@ class MatchingScreen extends ConsumerWidget {
                                                   origin,
                                                 );
                                                 if (context.mounted) {
-                                                  model.search();
+                                                  unawaited(model.search());
                                                 }
                                               },
                                         child: const Text('Ver ficha'),

@@ -1,3 +1,4 @@
+import '../../theme/app_theme.dart';
 import 'dart:async';
 import 'dart:ui' show ImageFilter;
 import 'package:flutter/gestures.dart';
@@ -376,8 +377,8 @@ class _ConfirmationToastState extends State<_ConfirmationToast>
                                                           .error_outline_rounded
                                                     : Icons.check_rounded,
                                                 color: widget.isError
-                                                    ? const Color(0xFFB53F48)
-                                                    : const Color(0xFF111111),
+                                                    ? AppColors.error
+                                                    : AppColors.ink,
                                                 size: 20,
                                               ),
                                             ),
@@ -405,7 +406,7 @@ class _ConfirmationToastState extends State<_ConfirmationToast>
                                                     fontSize: 14,
                                                     fontWeight: FontWeight.w400,
                                                     height: 1.4,
-                                                    color: Color(0xFF111111),
+                                                    color: AppColors.ink,
                                                   ),
                                                 ),
                                               ),

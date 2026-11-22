@@ -1,3 +1,4 @@
+import '../../theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'glass_surface.dart';
 
@@ -7,7 +8,7 @@ class GlassNavigationButton extends StatelessWidget {
     required this.tooltip,
     required this.onPressed,
     this.icon = Icons.chevron_left_rounded,
-    this.foregroundColor = const Color(0xFF111111),
+    this.foregroundColor = AppColors.ink,
     this.finish = GlassSurfaceFinish.polished,
     this.iconSize = 28,
     this.iconWidget,

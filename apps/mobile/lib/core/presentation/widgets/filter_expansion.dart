@@ -1,3 +1,4 @@
+import '../../theme/app_theme.dart';
 import 'dart:math' show pi;
 import 'dart:ui' show ImageFilter;
 
@@ -302,7 +303,7 @@ class _FilterExpansionState<T> extends State<FilterExpansion<T>>
           child: ConstrainedBox(
             constraints: BoxConstraints(maxHeight: height),
             child: Material(
-              color: const Color(0xFFF5F5F7),
+              color: AppColors.surface,
               borderRadius: BorderRadius.circular(28),
               clipBehavior: Clip.antiAlias,
               child: SingleChildScrollView(

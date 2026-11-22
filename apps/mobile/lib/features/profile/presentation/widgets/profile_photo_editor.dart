@@ -1,3 +1,4 @@
+import '../../../../core/theme/app_theme.dart';
 import '../../../../core/presentation/widgets/glass_surface.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -77,7 +78,7 @@ class _ProfilePhotoEditorState extends ConsumerState<ProfilePhotoEditor> {
                 child: profile.isLoading
                     ? const CircleAvatar(
                         radius: 56,
-                        backgroundColor: Color(0xFFE5E5EA),
+                        backgroundColor: AppColors.divider,
                       )
                     : photo.recovered && photo.bytes != null
                     ? ClipOval(

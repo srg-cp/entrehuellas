@@ -1,3 +1,4 @@
+import '../../theme/app_theme.dart';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'case_photo_failure.dart';
@@ -47,7 +48,7 @@ class CasePhotoSkeleton extends StatelessWidget {
     radius: 0,
     loadingLabel: 'Consultando foto del caso',
     child: ExcludeSemantics(
-      child: SizedBox.expand(child: ColoredBox(color: Color(0xFFE5E5EA))),
+      child: SizedBox.expand(child: ColoredBox(color: AppColors.divider)),
     ),
   );
 }

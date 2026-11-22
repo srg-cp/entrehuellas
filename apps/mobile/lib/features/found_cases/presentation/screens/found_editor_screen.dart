@@ -1,3 +1,4 @@
+import '../../../../core/theme/app_theme.dart';
 import '../../../../core/presentation/navigation/complete_operation.dart';
 import '../../../../core/presentation/widgets/report_draft_status.dart';
 import '../../../../core/presentation/widgets/case_report_fields.dart';
@@ -430,7 +431,7 @@ class _FoundEditorScreenState extends ConsumerState<FoundEditorScreen> {
               children: [
                 const Text(
                   'Tamaño (opcional)',
-                  style: TextStyle(fontSize: 16, color: Color(0xFF111111)),
+                  style: TextStyle(fontSize: 16, color: AppColors.ink),
                 ),
                 const SizedBox(height: 8),
                 SizeChoiceSelector<String>(
@@ -497,7 +498,7 @@ class _FoundEditorScreenState extends ConsumerState<FoundEditorScreen> {
                   semanticsLabel: '${v.traits.runes.length} de 200 caracteres',
                   style: const TextStyle(
                     fontSize: 13,
-                    color: Color(0xFF6E6E73),
+                    color: AppColors.secondary,
                   ),
                 ),
               ),

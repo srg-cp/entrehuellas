@@ -1,4 +1,6 @@
-typedef ClosureTarget = ({String id, bool community});
+import '../../../../core/domain/entities/case_kind.dart';
+
+typedef ClosureTarget = CommunityCaseTarget;
 
 enum ClosureIssue { forbidden, invalid, conflict, closed, unavailable }
 

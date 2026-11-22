@@ -1,3 +1,4 @@
+import '../../theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'shake_field.dart';
 
@@ -21,7 +22,7 @@ class ValidationSurface extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(22),
           border: invalid
-              ? Border.all(color: const Color(0xFFB53F48), width: 3.5)
+              ? Border.all(color: AppColors.error, width: 3.5)
               : null,
         ),
         child: child,

@@ -1,3 +1,4 @@
+import '../../../../core/domain/entities/case_status.dart';
 import 'dart:typed_data';
 
 enum FoundFailureKind {
@@ -74,6 +75,7 @@ class FoundPublication {
   final bool communityTarget;
   final Uri? coverUri;
   final String id, ownerId, status;
+  bool get isActive => status == CaseStatus.active;
   final String? species;
 }
 
@@ -109,6 +111,7 @@ class PublicFoundCase {
   final bool canResolve;
   final bool canGeneratePoster;
   final String id, status, species, traits;
+  bool get isActive => status == CaseStatus.active;
   final String? speciesDetail, size, sex, custody;
   final DateTime occurredAt;
   final double latitude, longitude;

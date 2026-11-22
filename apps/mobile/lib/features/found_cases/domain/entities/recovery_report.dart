@@ -1,3 +1,4 @@
+import '../../../../core/domain/entities/case_status.dart';
 import '../../../lost_cases/domain/entities/lost_case.dart';
 import 'found_case.dart';
 
@@ -14,6 +15,7 @@ class RecoveryReport {
   String get id => petCase?.id ?? report!.id;
   String get key => '${fromPet ? 'pet' : 'community'}:$id';
   String get status => petCase?.status ?? report!.status;
+  bool get isActive => status == CaseStatus.active;
   Uri? get coverUri => petCase?.coverUri ?? report?.coverUri;
   bool get pending => {'draft', 'discarded'}.contains(status);
 }

@@ -1,4 +1,6 @@
-typedef JourneyTarget = ({String id, bool community});
+import '../../../../core/domain/entities/case_kind.dart';
+
+typedef JourneyTarget = CommunityCaseTarget;
 
 class JourneyCaseSummary {
   const JourneyCaseSummary({this.name = '', this.traits = '', this.photoUri});

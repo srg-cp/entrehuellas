@@ -1,3 +1,4 @@
+import '../../theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'app_field_surface.dart';
 import 'stagger_reveal.dart';
@@ -134,9 +135,7 @@ class _AppSelectFieldState<T> extends State<AppSelectField<T>> {
                   : const Duration(milliseconds: 180),
               child: Icon(
                 Icons.keyboard_arrow_down_rounded,
-                color: invalid
-                    ? const Color(0xFFB53F48)
-                    : const Color(0xFF6E6E73),
+                color: invalid ? AppColors.error : AppColors.secondary,
               ),
             ),
             child: Text(
@@ -146,10 +145,10 @@ class _AppSelectFieldState<T> extends State<AppSelectField<T>> {
                 fontSize: 16,
                 height: 27 / 16,
                 color: invalid
-                    ? const Color(0xFFB53F48)
+                    ? AppColors.error
                     : selected == null || !enabled
-                    ? const Color(0xFF6E6E73)
-                    : const Color(0xFF111111),
+                    ? AppColors.secondary
+                    : AppColors.ink,
               ),
             ),
           ),
@@ -193,7 +192,7 @@ class _SelectPanel<T> extends StatelessWidget {
                         fontFamily: 'sans-serif',
                         fontSize: 22,
                         fontWeight: FontWeight.w700,
-                        color: Color(0xFF111111),
+                        color: AppColors.ink,
                       ),
                     ),
                   ),
@@ -202,7 +201,7 @@ class _SelectPanel<T> extends StatelessWidget {
                     onPressed: () => Navigator.of(context).pop(),
                     icon: const Icon(
                       Icons.close_rounded,
-                      color: Color(0xFF6E6E73),
+                      color: AppColors.secondary,
                     ),
                   ),
                 ],
@@ -252,12 +251,10 @@ class _SelectRow<T> extends StatelessWidget {
   Widget build(BuildContext context) => Semantics(
     selected: selected,
     child: Material(
-      color: selected ? const Color(0xFF111111) : const Color(0xFFF5F5F7),
+      color: selected ? AppColors.ink : AppColors.surface,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(18),
-        side: BorderSide(
-          color: selected ? const Color(0xFF111111) : const Color(0xFFE5E5EA),
-        ),
+        side: BorderSide(color: selected ? AppColors.ink : AppColors.divider),
       ),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
@@ -272,7 +269,7 @@ class _SelectRow<T> extends StatelessWidget {
                   child: Icon(
                     option.icon,
                     size: 22,
-                    color: selected ? Colors.white : const Color(0xFF6E6E73),
+                    color: selected ? Colors.white : AppColors.secondary,
                   ),
                 ),
                 const SizedBox(width: 14),
@@ -283,7 +280,7 @@ class _SelectRow<T> extends StatelessWidget {
                       fontFamily: 'sans-serif',
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
-                      color: selected ? Colors.white : const Color(0xFF111111),
+                      color: selected ? Colors.white : AppColors.ink,
                     ),
                   ),
                 ),

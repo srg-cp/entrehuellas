@@ -1,3 +1,4 @@
+import '../../../../core/theme/app_theme.dart';
 import 'auth_primary_button_style.dart';
 import '../../../../core/presentation/widgets/loading_shimmer.dart';
 import '../../../../core/presentation/widgets/stagger_reveal.dart';
@@ -70,9 +71,7 @@ class _LoginCredentialsFormState extends State<LoginCredentialsForm> {
             style: TextStyle(
               fontSize: 16,
               height: 27 / 16,
-              color: widget.feedback.emailInvalid
-                  ? const Color(0xFFB53F48)
-                  : null,
+              color: widget.feedback.emailInvalid ? AppColors.error : null,
             ),
             enabled: !widget.isBusy,
             keyboardType: TextInputType.emailAddress,
@@ -96,9 +95,7 @@ class _LoginCredentialsFormState extends State<LoginCredentialsForm> {
             style: TextStyle(
               fontSize: 16,
               height: 27 / 16,
-              color: widget.feedback.passwordInvalid
-                  ? const Color(0xFFB53F48)
-                  : null,
+              color: widget.feedback.passwordInvalid ? AppColors.error : null,
             ),
             enabled: !widget.isBusy,
             obscureText: _obscure,

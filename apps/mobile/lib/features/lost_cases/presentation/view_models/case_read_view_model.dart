@@ -1,3 +1,5 @@
+import '../../../../core/domain/entities/case_kind.dart';
+import '../../../../core/providers/case_change_providers.dart';
 import '../../../offline_cases/providers/case_cache_providers.dart';
 import '../../../offline_cases/domain/entities/cached_case.dart';
 import '../../../../core/presentation/state/retained_read.dart';
@@ -19,6 +21,12 @@ class MyCasesViewModel extends AsyncNotifier<CaseListState> {
   @override
   Future<CaseListState> build() async {
     _generation++;
+    final caseChanges = ref
+        .watch(caseChangesProvider)
+        .changes
+        .where((change) => change.kind == CaseKind.lost || change.lifecycle)
+        .listen((_) => ref.invalidateSelf());
+    ref.onDispose(caseChanges.cancel);
     final session = await ref.watch(caseSessionProvider.future);
     if (session == null) throw const CaseFailure(CaseFailureKind.forbidden);
     final cases = await ref.watch(listMyLostCasesProvider)(session.userId);
@@ -127,6 +135,17 @@ class PublicCaseViewModel extends AsyncNotifier<PublicCaseState> {
   @override
   Future<PublicCaseState> build() async {
     _generation++;
+    final caseChanges = ref
+        .watch(caseChangesProvider)
+        .changes
+        .where(
+          (change) =>
+              change.lifecycle &&
+              change.kind == CaseKind.lost &&
+              change.id == id,
+        )
+        .listen((_) => ref.invalidateSelf());
+    ref.onDispose(caseChanges.cancel);
     final session = await ref.watch(caseSessionProvider.future);
     final result = await _read(session?.userId);
     return PublicCaseState(

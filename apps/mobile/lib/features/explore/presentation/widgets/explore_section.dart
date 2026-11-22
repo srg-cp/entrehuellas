@@ -1,3 +1,5 @@
+import 'dart:async';
+import '../../../../core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -31,7 +33,7 @@ class ExploreSection extends ConsumerWidget {
               tooltip: 'Ver casos guardados',
               constraints: const BoxConstraints.tightFor(width: 48, height: 48),
               iconSize: 24,
-              color: const Color(0xFF111111),
+              color: AppColors.ink,
               icon: const Icon(Icons.bookmark_border_rounded),
               onPressed: () {
                 final box = source.findRenderObject();
@@ -54,7 +56,7 @@ class ExploreSection extends ConsumerWidget {
                             child: Icon(
                               Icons.bookmark_border_rounded,
                               size: 24,
-                              color: Color(0xFF111111),
+                              color: AppColors.ink,
                             ),
                           ),
                         ),
@@ -88,7 +90,7 @@ class ExploreSection extends ConsumerWidget {
         extra: origin,
       );
       if (context.mounted) {
-        ref.read(exploreViewModelProvider.notifier).refreshIfStale();
+        unawaited(ref.read(exploreViewModelProvider.notifier).refreshIfStale());
       }
     }
 

@@ -5,6 +5,7 @@ import '../features/onboarding/presentation/state/entry_destination.dart';
 import '../features/auth/presentation/view_models/recovery_access_view_model.dart';
 import '../features/auth/domain/entities/recovery_access.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../core/theme/app_theme.dart';
@@ -38,12 +39,23 @@ class _EntreHuellasAppState extends ConsumerState<EntreHuellasApp>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState phase) {
-    _foreground = phase == AppLifecycleState.resumed;
-    if (widget.observeQueue) {
-      ref
-          .read(submissionSyncViewModelProvider.notifier)
-          .setEnabled(_foreground && _queueReady, owner: _queueOwner);
-    }
+    // `inactive` covers permission dialogs and the notification shade while
+    // the app stays visible; stopping there would abandon an in-flight send.
+    _foreground =
+        phase == AppLifecycleState.resumed ||
+        phase == AppLifecycleState.inactive;
+    _applyQueue();
+  }
+
+  bool _queueScheduled = false;
+
+  /// setEnabled ignores calls that do not change the gate.
+  void _applyQueue() {
+    _queueScheduled = false;
+    if (!widget.observeQueue || !mounted) return;
+    ref
+        .read(submissionSyncViewModelProvider.notifier)
+        .setEnabled(_foreground && _queueReady, owner: _queueOwner);
   }
 
   GoRouter? _router;
@@ -88,13 +100,11 @@ class _EntreHuellasAppState extends ConsumerState<EntreHuellasApp>
           !session.isLoading &&
           !session.hasError;
       _queueOwner = _queueReady ? session.asData?.value?.userId : null;
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted) {
-          ref
-              .read(submissionSyncViewModelProvider.notifier)
-              .setEnabled(_foreground && _queueReady, owner: _queueOwner);
-        }
-      });
+      if (!_queueScheduled) {
+        // Providers cannot be modified while this widget builds.
+        _queueScheduled = true;
+        WidgetsBinding.instance.addPostFrameCallback((_) => _applyQueue());
+      }
     }
     final router = ref.watch(routerProvider);
     if (_router != router) {
@@ -113,6 +123,10 @@ class _EntreHuellasAppState extends ConsumerState<EntreHuellasApp>
     return MaterialApp.router(
       title: 'Entre Huellas',
       debugShowCheckedModeBanner: false,
+      // Spanish-only app: date/time pickers and Material labels in Spanish.
+      locale: const Locale('es'),
+      supportedLocales: const [Locale('es')],
+      localizationsDelegates: GlobalMaterialLocalizations.delegates,
       theme: AppTheme.light,
       builder: (context, child) => StartupReveal(child: child!),
       routerConfig: router,

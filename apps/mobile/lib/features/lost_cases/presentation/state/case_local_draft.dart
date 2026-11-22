@@ -1,4 +1,5 @@
 import '../../../offline_drafts/domain/entities/local_report_draft.dart';
+import '../../../offline_drafts/domain/entities/report_slot.dart';
 import '../../../../core/presentation/state/event_date_time_draft.dart';
 import '../../domain/entities/lost_case.dart';
 import 'case_editor_state.dart';
@@ -6,7 +7,7 @@ import 'case_editor_state.dart';
 // Presentation maps its editor state to the persistent domain contract.
 LocalReportDraft caseLocalDraft(CaseEditorState v) => LocalReportDraft(
   owner: v.ownerId,
-  slot: 'lost',
+  slot: ReportSlot.lostValue,
   id: v.draftId,
   date: v.dateTimeDraft.date,
   hour: v.dateTimeDraft.hour,

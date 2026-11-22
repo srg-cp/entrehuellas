@@ -9,7 +9,7 @@ class ReadPublicLostCase {
     if (result != null && result.id != id) {
       throw const CaseFailure(CaseFailureKind.forbidden);
     }
-    return result?.status == 'active' ? result : null;
+    return result?.isActive == true ? result : null;
   }
 }
 

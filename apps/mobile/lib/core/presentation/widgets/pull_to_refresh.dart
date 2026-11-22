@@ -1,3 +1,5 @@
+import 'dart:async';
+import '../../theme/app_theme.dart';
 import 'dart:math' show pi;
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart' show CustomSemanticsAction;
@@ -194,7 +196,7 @@ class _PullToRefreshState extends State<PullToRefresh>
     if (refresh == null) return;
     _busy = true;
     _statusChanged(RefreshIndicatorStatus.refresh);
-    if (!_reduced) _rotation.repeat();
+    if (!_reduced) unawaited(_rotation.repeat());
     try {
       await refresh();
     } catch (_) {
@@ -281,7 +283,7 @@ class _PullToRefreshState extends State<PullToRefresh>
                                       child: const Icon(
                                         Icons.refresh_rounded,
                                         size: 28,
-                                        color: Color(0xFF111111),
+                                        color: AppColors.ink,
                                       ),
                                     ),
                                   ),

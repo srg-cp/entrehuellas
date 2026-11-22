@@ -13,6 +13,7 @@ import 'package:flutter_application_entrehuellas/features/auth/providers/auth_pr
 final class ObservedRepository implements AuthRepository {
   var subscriptions = 0;
   var cancellations = 0;
+  // ignore: close_sinks
   late final controller = StreamController<AuthSession?>(
     onListen: () {
       subscriptions++;

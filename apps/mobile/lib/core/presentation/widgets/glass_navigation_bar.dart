@@ -1,3 +1,4 @@
+import '../../theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'glass_navigation_button.dart';
@@ -10,7 +11,7 @@ class GlassNavigationBar extends StatelessWidget {
     this.tooltip = 'Volver',
     this.enabled = true,
     this.icon = Icons.chevron_left_rounded,
-    this.foregroundColor = const Color(0xFF111111),
+    this.foregroundColor = AppColors.ink,
     this.trailing,
     super.key,
   });

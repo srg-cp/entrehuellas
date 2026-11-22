@@ -1,5 +1,33 @@
 # Estado del proyecto
 
+## Correcciones no críticas de la auditoría móvil —21/11/2026
+
+Por solicitud del usuario («todas las correcciones faltantes»), aplicadas según
+[ADR-173](decisiones/173-correcciones-no-criticas-auditoria-mobile.md):
+- router: política única para `/home/...`, validador UUID común y conversión de
+  slot a ruta en un solo lugar;
+- evento de dominio `CaseChanges`, que sustituye las invalidaciones cruzadas
+  del router;
+- tipos `CaseKind`, `CaseStatus`/`isActive`, `ReportSlot` y
+  `CommunityCaseTarget`;
+- datos: enums tolerantes y firma de fotos en bloque;
+- robustez: sin doble envío durante la sincronización, cola activa en
+  `inactive` y reintento homogéneo de los providers de sesión;
+- plataforma: localización `es` y teselas CARTO por defecto;
+- calidad: 178 colores pasan a tokens, lints estrictos y siete widgets sin
+  uso eliminados.
+
+El ADR detalla lo descartado y su motivo: textos en ViewModels, editores
+duplicados, `directives_ordering`, debounce, fondo y contrato de errores SQL.
+
+Validación local (Windows, Flutter 3.35.3): formato sin cambios, `flutter
+analyze` sin incidencias con los lints nuevos y **719/719 pruebas**. Las
+pruebas con SDK falso de casos perdidos/encontrados se adaptaron al endpoint de
+firma en bloque. Sin prueba física, CI remota ni commit firmado: el commit de
+ADR-172 quedó preparado, pero la firma GPG requiere la frase de paso del
+usuario. Siguiente paso: firmar los commits, revisar visualmente las fechas en
+español y el mapa por defecto, y planificar la unificación de los editores.
+
 ## Correcciones críticas de la auditoría móvil —21/11/2026
 
 Por solicitud del usuario, tras auditar `apps/mobile`, se corrigen los cuatro

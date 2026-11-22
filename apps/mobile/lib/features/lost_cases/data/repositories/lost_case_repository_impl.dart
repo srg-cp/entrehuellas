@@ -21,32 +21,28 @@ class LostCaseRepositoryImpl implements LostCaseRepository {
   Future<PublishedLostCase> publish(String owner, LostCaseDraft draft) =>
       _run(() async => (await _source.publish(owner, draft)).toPublished());
   @override
-  Future<List<PublishedLostCase>> listMine(String owner) => _run(
-    () async => Future.wait(
-      (await _source.listMine(owner)).map(
-        (dto) async => dto.toPublished(
-          coverUri: dto.row['cover_path'] == null
-              ? null
-              : await _source.photoUri(dto.row['cover_path'] as String),
+  Future<List<PublishedLostCase>> listMine(String owner) => _run(() async {
+    final dtos = await _source.listMine(owner);
+    final covers = await _source.photoUris(
+      dtos.map((dto) => dto.coverPath).nonNulls.toList(),
+    );
+    return [
+      for (final dto in dtos)
+        dto.toPublished(
+          coverUri: dto.coverPath == null ? null : covers[dto.coverPath],
         ),
-      ),
-    ),
-  );
+    ];
+  });
   @override
   Future<PublicLostCase?> readPublic(String id) async {
     return _run(() async {
       final dto = await _source.readPublic(id);
       if (dto == null) return null;
-      final photos = <CasePhoto>[];
-      for (final photo in dto.row['photos'] as List) {
-        photos.add(
-          CasePhoto(
-            id: photo['id'] as String,
-            uri: await _source.photoUri(photo['path'] as String),
-          ),
-        );
-      }
-      return dto.toPublic(photos);
+      final refs = dto.photoRefs;
+      final uris = await _source.photoUris([for (final r in refs) r.path]);
+      return dto.toPublic([
+        for (final r in refs) CasePhoto(id: r.id, uri: uris[r.path]),
+      ]);
     });
   }
 

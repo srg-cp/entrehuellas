@@ -1,3 +1,4 @@
+import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/app_typography.dart';
 import 'package:flutter/material.dart';
 import '../../../../core/presentation/widgets/stagger_reveal.dart';
@@ -64,7 +65,7 @@ class EmailCodeConfirmation extends StatelessWidget {
               const TextSpan(text: 'Ingresa el código que llegó a '),
               TextSpan(
                 text: email,
-                style: const TextStyle(color: Color(0xFF111111)),
+                style: const TextStyle(color: AppColors.ink),
               ),
               TextSpan(
                 text:
@@ -76,7 +77,7 @@ class EmailCodeConfirmation extends StatelessWidget {
           style: const TextStyle(
             fontSize: 16,
             height: 1.4,
-            color: Color(0xFF6E6E73),
+            color: AppColors.secondary,
           ),
         ),
       ),
@@ -99,7 +100,7 @@ class EmailCodeConfirmation extends StatelessWidget {
         child: Text(
           '¿No recibiste el código?',
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 16, color: Color(0xFF6E6E73)),
+          style: TextStyle(fontSize: 16, color: AppColors.secondary),
         ),
       ),
       StaggerRevealItem(

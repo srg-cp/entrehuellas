@@ -1,3 +1,4 @@
+import '../../../../core/theme/app_theme.dart';
 import '../../../../core/presentation/widgets/panel_action_button.dart';
 import '../../../../core/presentation/widgets/origin_page_transition.dart';
 import 'package:flutter/material.dart';
@@ -37,11 +38,7 @@ class _CaseShareSheetState extends ConsumerState<CaseShareSheet> {
       bounds: box.localToGlobal(Offset.zero, ancestor: navigator) & box.size,
       color: const Color(0xFFEEEEF0),
       radius: box.size.shortestSide / 2,
-      child: const Icon(
-        Icons.flag_outlined,
-        size: 26,
-        color: Color(0xFF111111),
-      ),
+      child: const Icon(Icons.flag_outlined, size: 26, color: AppColors.ink),
     );
     setState(() => _reporting = true);
     try {
@@ -93,7 +90,7 @@ class _CaseShareSheetState extends ConsumerState<CaseShareSheet> {
             style: const TextStyle(
               fontSize: 14,
               height: 1.25,
-              color: Color(0xFF111111),
+              color: AppColors.ink,
             ),
           ),
         ],

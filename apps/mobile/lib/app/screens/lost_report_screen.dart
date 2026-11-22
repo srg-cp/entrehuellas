@@ -263,12 +263,13 @@ class _LostReportScreenState extends ConsumerState<LostReportScreen> {
                       !_community &&
                       own?.invalidFields.contains(CaseField.pet) == true,
                   options: [
-                    for (final pet in own?.pets ?? [])
-                      AppSelectOption(
-                        value: pet.id,
-                        label: pet.fields.name,
-                        icon: Icons.pets_outlined,
-                      ),
+                    if (own != null)
+                      for (final pet in own.pets)
+                        AppSelectOption(
+                          value: pet.id,
+                          label: pet.fields.name,
+                          icon: Icons.pets_outlined,
+                        ),
                     const AppSelectOption(
                       value: 'unregistered',
                       label: 'No está en mis mascotas',

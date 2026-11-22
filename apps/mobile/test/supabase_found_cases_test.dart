@@ -153,14 +153,18 @@ void main() {
           ];
         } else if (path == '/rest/v1/rpc/finish_found_case_discard') {
           response = null;
-        } else if (path.startsWith(
-          '/storage/v1/object/sign/found-photo-renditions/',
-        )) {
-          expect(jsonDecode(request.body), {'expiresIn': 300});
-          response = {
-            'signedURL':
-                '/object/sign/found-photo-renditions/opaque/photo.jpg?token=fake',
-          };
+        } else if (path == '/storage/v1/object/sign/found-photo-renditions') {
+          // Photos are signed in one batch request per read.
+          final body = jsonDecode(request.body) as Map<String, dynamic>;
+          expect(body['expiresIn'], 300);
+          response = [
+            for (final p in (body['paths'] as List).cast<String>())
+              {
+                'path': p,
+                'signedURL':
+                    '/object/sign/found-photo-renditions/$p?token=fake',
+              },
+          ];
         } else if (path.startsWith('/storage/v1/object/found-photo-')) {
           expect(request.method, 'DELETE');
           expect(jsonDecode(request.body), {

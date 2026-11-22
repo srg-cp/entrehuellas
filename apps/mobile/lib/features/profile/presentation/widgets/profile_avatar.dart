@@ -1,3 +1,4 @@
+import '../../../../core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -26,7 +27,7 @@ class ProfileAvatar extends ConsumerWidget {
           ? Icon(
               Icons.person_outline_rounded,
               size: size * .5,
-              color: const Color(0xFF6E6E73),
+              color: AppColors.secondary,
             )
           : Text(
               initials,
@@ -34,14 +35,14 @@ class ProfileAvatar extends ConsumerWidget {
               style: TextStyle(
                 fontSize: size * .34,
                 fontWeight: FontWeight.w600,
-                color: const Color(0xFF111111),
+                color: AppColors.ink,
               ),
             ),
     );
     return ExcludeSemantics(
       child: ClipOval(
         child: ColoredBox(
-          color: const Color(0xFFF5F5F7),
+          color: AppColors.surface,
           child: SizedBox(
             width: size,
             height: size,

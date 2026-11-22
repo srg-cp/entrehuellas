@@ -19,6 +19,7 @@ final listMyLostCasesProvider = Provider(
 );
 final caseSessionProvider = StreamProvider.autoDispose(
   (ref) => ref.watch(watchAuthSessionProvider)(),
+  retry: (_, _) => null,
 );
 
 final deletePublishedLostCaseProvider = Provider(

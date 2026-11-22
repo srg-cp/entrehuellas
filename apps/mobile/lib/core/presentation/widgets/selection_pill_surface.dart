@@ -1,3 +1,4 @@
+import '../../theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
 /// Shared surface of segmented selectors and floating filter controls.
@@ -7,8 +8,8 @@ class SelectionPillSurface extends StatelessWidget {
     this.padding = const EdgeInsets.all(6),
     super.key,
   });
-  static const background = Color(0xFFE5E5EA);
-  static const selected = Color(0xFF111111);
+  static const background = AppColors.divider;
+  static const selected = AppColors.ink;
   static const optionRadius = 26.0;
   final Widget child;
   final EdgeInsetsGeometry padding;

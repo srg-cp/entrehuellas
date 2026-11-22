@@ -17,6 +17,7 @@ final updateProfileProvider = Provider(
 );
 final profileSessionProvider = StreamProvider.autoDispose(
   (ref) => ref.watch(watchAuthSessionProvider)(),
+  retry: (_, _) => null,
 );
 final profilePhotoRepositoryProvider = Provider<ProfilePhotoRepository>(
   (ref) => throw StateError('ProfilePhotoRepository must be injected.'),

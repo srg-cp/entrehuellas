@@ -1,3 +1,4 @@
+import '../../theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import '../../theme/app_typography.dart';
 import 'app_scaffold.dart';
@@ -97,7 +98,7 @@ class CasePublicScreenShell extends StatelessWidget {
                                 style: const TextStyle(
                                   fontSize: 16,
                                   height: 1.4,
-                                  color: Color(0xFF111111),
+                                  color: AppColors.ink,
                                 ),
                                 child: child,
                               ),

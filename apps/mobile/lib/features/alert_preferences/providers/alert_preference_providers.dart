@@ -8,6 +8,7 @@ final alertPreferenceRepositoryProvider = Provider<AlertPreferenceRepository>(
 );
 final preferenceSessionProvider = StreamProvider.autoDispose(
   (ref) => ref.watch(watchAuthSessionProvider)(),
+  retry: (_, _) => null,
 );
 final readAlertPreferencesProvider = Provider(
   (ref) => ReadAlertPreferences(ref.watch(alertPreferenceRepositoryProvider)),

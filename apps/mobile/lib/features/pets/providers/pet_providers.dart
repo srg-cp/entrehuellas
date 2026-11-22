@@ -29,6 +29,7 @@ final petRepositoryProvider = Provider<PetRepository>(
 );
 final petSessionProvider = StreamProvider.autoDispose(
   (ref) => ref.watch(watchAuthSessionProvider)(),
+  retry: (_, _) => null,
 );
 final listMyPetsProvider = Provider(
   (ref) => ListMyPets(ref.watch(petRepositoryProvider)),

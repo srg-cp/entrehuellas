@@ -13,7 +13,7 @@ class ReadRecoverySearch {
       final value = await _community.readPublic(id);
       if (value == null ||
           value.id != id ||
-          value.status != 'active' ||
+          !value.isActive ||
           value.reportKind != 'possible_loss') {
         throw const FoundFailure(FoundFailureKind.targetClosed);
       }
@@ -28,7 +28,7 @@ class ReadRecoverySearch {
       );
     }
     final value = await _pets.readPublic(id);
-    if (value == null || value.id != id || value.status != 'active') {
+    if (value == null || value.id != id || !value.isActive) {
       throw const FoundFailure(FoundFailureKind.targetClosed);
     }
     if (value.fields.species == null) {

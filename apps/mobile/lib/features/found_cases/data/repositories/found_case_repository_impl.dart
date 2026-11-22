@@ -40,49 +40,43 @@ class FoundCaseRepositoryImpl implements FoundCaseRepository {
   Future<PublicFoundCase?> readPublic(String id) => _run(() async {
     final dto = await _source.readPublic(id);
     if (dto == null) return null;
-    final photos = await Future.wait(
-      (dto.row['photos'] as List).map(
-        (p) async => FoundPhoto(
-          p['id'] as String,
-          await _source.photoUri(p['path'] as String),
-        ),
-      ),
-    );
-    return dto.publicCase(photos);
+    final refs = dto.photoRefs;
+    final uris = await _source.photoUris([for (final r in refs) r.path]);
+    return dto.publicCase([
+      for (final r in refs) FoundPhoto(r.id, uris[r.path]),
+    ]);
   });
   @override
-  Future<List<FoundPublication>> listMine(String owner) => _run(
-    () async => Future.wait(
-      (await _source.listMine(owner)).map(
-        (d) async => d.publication(
-          coverUri: d.row['cover_path'] == null
-              ? null
-              : await _source.photoUri(d.row['cover_path'] as String),
+  Future<List<FoundPublication>> listMine(String owner) => _run(() async {
+    final dtos = await _source.listMine(owner);
+    final covers = await _source.photoUris(
+      dtos.map((d) => d.coverPath).nonNulls.toList(),
+    );
+    return [
+      for (final d in dtos)
+        d.publication(
+          coverUri: d.coverPath == null ? null : covers[d.coverPath],
         ),
-      ),
-    ),
-  );
+    ];
+  });
   @override
   Future<void> discard(String owner, String id) =>
       _run(() => _source.discard(owner, id));
   @override
   Future<List<PublicFoundCase>> listObservations(String id, bool community) =>
-      _run(
-        () async => Future.wait(
-          (await _source.listObservations(id, community)).map(
-            (dto) async => dto.publicCase(
-              await Future.wait(
-                (dto.row['photos'] as List).map(
-                  (photo) async => FoundPhoto(
-                    photo['id'] as String,
-                    await _source.photoUri(photo['path'] as String),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-      );
+      _run(() async {
+        final dtos = await _source.listObservations(id, community);
+        final uris = await _source.photoUris([
+          for (final dto in dtos)
+            for (final r in dto.photoRefs) r.path,
+        ]);
+        return [
+          for (final dto in dtos)
+            dto.publicCase([
+              for (final r in dto.photoRefs) FoundPhoto(r.id, uris[r.path]),
+            ]),
+        ];
+      });
   @override
   Future<List<RecoverySearch>> listOpenSearches(String owner) => _run(
     () async => (await _source.listOpenSearches(owner))

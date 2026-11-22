@@ -1,3 +1,4 @@
+import '../../../../core/theme/app_theme.dart';
 import '../../../../core/presentation/widgets/photo_add_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -93,7 +94,7 @@ class _PetPhotoGalleryState extends ConsumerState<PetPhotoGallery> {
           if (widget.editable) ...[
             const Text(
               'Fotos',
-              style: TextStyle(fontSize: 16, color: Color(0xFF111111)),
+              style: TextStyle(fontSize: 16, color: AppColors.ink),
             ),
             const SizedBox(height: 8),
           ],
@@ -116,7 +117,7 @@ class _PetPhotoGalleryState extends ConsumerState<PetPhotoGallery> {
                           width: widget.tileSize,
                           height: widget.tileSize,
                           decoration: BoxDecoration(
-                            color: const Color(0xFFE5E5EA),
+                            color: AppColors.divider,
                             borderRadius: BorderRadius.circular(22),
                           ),
                         ),
@@ -130,7 +131,7 @@ class _PetPhotoGalleryState extends ConsumerState<PetPhotoGallery> {
                           ? const Center(
                               child: Icon(
                                 Icons.image_not_supported_outlined,
-                                color: Color(0xFF6E6E73),
+                                color: AppColors.secondary,
                               ),
                             )
                           : Image.network(
@@ -147,7 +148,7 @@ class _PetPhotoGalleryState extends ConsumerState<PetPhotoGallery> {
                               errorBuilder: (_, __, ___) => const Center(
                                 child: Icon(
                                   Icons.broken_image_outlined,
-                                  color: Color(0xFF6E6E73),
+                                  color: AppColors.secondary,
                                 ),
                               ),
                             ),
@@ -223,7 +224,7 @@ class _PetPhotoGalleryState extends ConsumerState<PetPhotoGallery> {
               padding: EdgeInsets.only(top: 8),
               child: Text(
                 'Foto recuperada. Guarda para añadirla.',
-                style: TextStyle(fontSize: 14, color: Color(0xFF6E6E73)),
+                style: TextStyle(fontSize: 14, color: AppColors.secondary),
               ),
             ),
         ],

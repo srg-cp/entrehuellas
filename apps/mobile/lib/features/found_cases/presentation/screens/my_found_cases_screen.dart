@@ -74,16 +74,16 @@ class MyFoundCasesScreen extends ConsumerWidget {
                                   : 'Reporte anterior'} · ${foundSpeciesLabel(item.species)}',
                           status: item.status,
                           subtitle: item.reportKind == 'possible_loss'
-                              ? (item.status == 'active'
+                              ? (item.isActive
                                     ? 'Búsqueda abierta'
                                     : 'Búsqueda cerrada')
                               : item.reportKind == 'independent_found'
-                              ? (item.status == 'active'
+                              ? (item.isActive
                                     ? 'Hallazgo sin familia identificada'
                                     : 'Hallazgo retirado')
                               : item.reportKind == 'legacy_found'
                               ? 'Reporte anterior'
-                              : (item.status == 'active'
+                              : (item.isActive
                                     ? 'Aviso vinculado a una búsqueda'
                                     : 'Aviso de una búsqueda cerrada'),
                           coverUri: item.coverUri,

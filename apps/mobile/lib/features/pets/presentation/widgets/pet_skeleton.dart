@@ -1,3 +1,4 @@
+import '../../../../core/theme/app_theme.dart';
 import '../../../../core/presentation/widgets/content_refresh.dart';
 import 'package:flutter/material.dart';
 import '../../../../core/presentation/widgets/skeleton_form_fields.dart';
@@ -83,7 +84,7 @@ class PetSkeleton extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: const Color(0xFFF5F5F7),
+              color: AppColors.surface,
               borderRadius: BorderRadius.circular(22),
             ),
             child: Column(
@@ -119,7 +120,7 @@ class PetSkeleton extends StatelessWidget {
   Widget _card(BuildContext context) => Container(
     padding: const EdgeInsets.all(20),
     decoration: BoxDecoration(
-      color: const Color(0xFFF5F5F7),
+      color: AppColors.surface,
       borderRadius: BorderRadius.circular(22),
     ),
     child: Row(
@@ -163,7 +164,7 @@ class _Shape extends StatelessWidget {
   Widget build(BuildContext context) => Container(
     height: height,
     decoration: BoxDecoration(
-      color: const Color(0xFFE5E5EA),
+      color: AppColors.divider,
       borderRadius: BorderRadius.circular(radius),
     ),
   );

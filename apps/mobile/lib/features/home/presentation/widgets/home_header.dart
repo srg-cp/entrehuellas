@@ -1,3 +1,4 @@
+import '../../../../core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/presentation/widgets/brand_wordmark.dart';
@@ -45,7 +46,7 @@ class HomeHeader extends StatelessWidget {
                               child: const Center(
                                 child: Icon(
                                   Icons.notifications_none_rounded,
-                                  color: Color(0xFF6E6E73),
+                                  color: AppColors.secondary,
                                 ),
                               ),
                             ),
@@ -53,7 +54,7 @@ class HomeHeader extends StatelessWidget {
                   },
             icon: const Icon(
               Icons.notifications_none_rounded,
-              color: Color(0xFF6E6E73),
+              color: AppColors.secondary,
             ),
           ),
         ),

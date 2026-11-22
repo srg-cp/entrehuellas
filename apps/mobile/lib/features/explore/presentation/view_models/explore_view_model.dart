@@ -1,3 +1,4 @@
+import '../../../../core/providers/case_change_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/presentation/state/retained_query.dart';
 import '../../domain/entities/explore_query.dart';
@@ -22,6 +23,11 @@ class ExploreViewModel extends AsyncNotifier<ExploreState> {
   Future<ExploreState> build() async {
     final generation = ++_generation;
     _backgroundLoading = false;
+    final caseChanges = ref
+        .watch(caseChangesProvider)
+        .changes
+        .listen((_) => refresh());
+    ref.onDispose(caseChanges.cancel);
     final retained = _retained = RetainedQuery(
       ref,
       freshFor: const Duration(seconds: 30),

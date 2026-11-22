@@ -1,3 +1,4 @@
+import '../../../../core/domain/entities/case_status.dart';
 import '../../../pets/domain/entities/pet.dart';
 
 enum CaseFailureKind {
@@ -57,6 +58,7 @@ class PublicLostCase {
     required List<CasePhoto> photos,
   }) : photos = List.unmodifiable(photos);
   final String id, status;
+  bool get isActive => status == CaseStatus.active;
   final bool canResolve;
   final DateTime occurredAt;
   final double latitude, longitude;
@@ -75,4 +77,5 @@ class PublishedLostCase {
   });
   final Uri? coverUri;
   final String id, ownerId, petId, status, petName;
+  bool get isActive => status == CaseStatus.active;
 }

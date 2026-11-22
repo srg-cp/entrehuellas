@@ -29,14 +29,14 @@ String _subtitle(RecoveryReport value) => value.pending
           ? 'Envío pendiente sin publicar'
           : 'Limpieza de fotos pendiente')
     : value.fromPet || value.report!.reportKind == 'possible_loss'
-    ? (value.status == 'active' ? 'Búsqueda abierta' : 'Búsqueda resuelta')
+    ? (value.isActive ? 'Búsqueda abierta' : 'Búsqueda resuelta')
     : value.report!.reportKind == 'independent_found'
-    ? (value.status == 'active'
+    ? (value.isActive
           ? 'Hallazgo sin familia identificada'
           : 'Hallazgo retirado')
     : value.report!.reportKind == 'legacy_found'
     ? 'Reporte anterior'
-    : (value.status == 'active'
+    : (value.isActive
           ? 'Aviso en una búsqueda abierta'
           : 'Aviso en una búsqueda cerrada');
 

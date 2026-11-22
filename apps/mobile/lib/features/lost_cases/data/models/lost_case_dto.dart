@@ -1,9 +1,18 @@
+import '../../../../core/data/models/enum_parsing.dart';
 import '../../../pets/domain/entities/pet.dart';
 import '../../domain/entities/lost_case.dart';
 
 class LostCaseDto {
   const LostCaseDto(this.row);
   final Map<String, dynamic> row;
+  String? get coverPath => row['cover_path'] as String?;
+
+  /// Storage paths of the case photos, in display order.
+  List<({String id, String path})> get photoRefs => [
+    for (final photo
+        in (row['photos'] as List? ?? const []).cast<Map<String, dynamic>>())
+      (id: photo['id'] as String, path: photo['path'] as String),
+  ];
   PublishedLostCase toPublished({Uri? coverUri}) => PublishedLostCase(
     id: row['id'] as String,
     ownerId: row['owner_id'] as String,
@@ -21,12 +30,10 @@ class LostCaseDto {
     longitude: (row['longitude'] as num).toDouble(),
     fields: PetFields(
       name: row['pet_name'] as String,
-      species: PetSpecies.values.byName(row['species'] as String),
+      species: enumByNameOrNull(PetSpecies.values, row['species']),
       speciesDetail: row['species_detail'] as String?,
-      size: PetSize.values.byName(row['size'] as String),
-      sex: row['sex'] == null
-          ? null
-          : PetSex.values.byName(row['sex'] as String),
+      size: enumByNameOrNull(PetSize.values, row['size']),
+      sex: enumByNameOrNull(PetSex.values, row['sex']),
       ageMonths: row['age_months'] as int,
       traits: row['traits'] as String,
     ),

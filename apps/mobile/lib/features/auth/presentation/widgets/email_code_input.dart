@@ -1,3 +1,4 @@
+import '../../../../core/theme/app_theme.dart';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -84,14 +85,14 @@ class _EmailCodeInputState extends State<EmailCodeInput> {
                         Expanded(
                           child: DecoratedBox(
                             decoration: BoxDecoration(
-                              color: const Color(0xFFF5F5F7),
+                              color: AppColors.surface,
                               borderRadius: BorderRadius.circular(12),
                               border: Border.all(
                                 color: widget.errorHint != null
-                                    ? const Color(0xFFB53F48)
+                                    ? AppColors.error
                                     : _focus.hasFocus &&
                                           i == _controller.text.length
-                                    ? const Color(0xFF6E6E73)
+                                    ? AppColors.secondary
                                     : const Color(0xFFD2D4DA),
                                 width: widget.errorHint == null ? 1 : 3.5,
                               ),
@@ -105,8 +106,8 @@ class _EmailCodeInputState extends State<EmailCodeInput> {
                                   fontSize: 24,
                                   fontWeight: FontWeight.w600,
                                   color: widget.errorHint == null
-                                      ? const Color(0xFF111111)
-                                      : const Color(0xFFB53F48),
+                                      ? AppColors.ink
+                                      : AppColors.error,
                                 ),
                               ),
                             ),
