@@ -55,12 +55,14 @@ El icono del launcher Android utiliza los originales de `logo`. Regeneración e 
 ```powershell
 dart format --output=none --set-exit-if-changed lib test
 flutter analyze --no-pub
-flutter test --no-pub --dart-define=AMBIENT_BACKGROUND_MOTION=false
+flutter test --no-pub
 ```
 
-Las nubes del fondo tienen movimiento ambiental continuo. Las regresiones y
-capturas lo fijan con `AMBIENT_BACKGROUND_MOTION=false` para esperar solo las
-transiciones de contenido. En la app está activado por defecto y se detiene
+Las nubes del fondo tienen movimiento ambiental continuo. `test/flutter_test_config.dart`
+lo desactiva para toda la suite, de modo que `flutter test` sin argumentos espera
+solo las transiciones de contenido; las pruebas del propio fondo pasan
+`animate: true`. Las capturas de `tool/` siguen usando
+`--dart-define=AMBIENT_BACKGROUND_MOTION=false`. En la app está activado por defecto y se detiene
 con movimiento reducido o al quedar la ruta fuera de TickerMode.
 
 La base implementa navegación, arranque, sesión, ingreso y registro por correo. Perfil y recuperación siguen dentro de HU-01. Consultar [ESTADO.md](../../docs/ESTADO.md) para resultados de pruebas y pendientes de Android/Supabase.

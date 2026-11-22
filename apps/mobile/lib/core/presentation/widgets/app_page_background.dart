@@ -3,17 +3,18 @@ import 'package:flutter/material.dart';
 
 /// Drifting blue clouds on white, fading towards the bottom of the viewport.
 class AppPageBackground extends StatefulWidget {
-  const AppPageBackground({
-    required this.child,
-    this.animate = const bool.fromEnvironment(
-      'AMBIENT_BACKGROUND_MOTION',
-      defaultValue: true,
-    ),
-    super.key,
-  });
+  const AppPageBackground({required this.child, this.animate, super.key});
+
+  /// Default for instances without an explicit [animate]. The build-time
+  /// define keeps visual-capture tools stable; test/flutter_test_config.dart
+  /// disables it for the suite so a plain `flutter test` can settle frames.
+  static bool ambientMotion = const bool.fromEnvironment(
+    'AMBIENT_BACKGROUND_MOTION',
+    defaultValue: true,
+  );
 
   final Widget child;
-  final bool animate;
+  final bool? animate;
 
   @override
   State<AppPageBackground> createState() => _AppPageBackgroundState();
@@ -27,7 +28,7 @@ class _AppPageBackgroundState extends State<AppPageBackground>
   );
 
   void _syncMotion() {
-    if (widget.animate &&
+    if ((widget.animate ?? AppPageBackground.ambientMotion) &&
         !MediaQuery.disableAnimationsOf(context) &&
         TickerMode.of(context)) {
       if (!_motion.isAnimating) _motion.repeat();

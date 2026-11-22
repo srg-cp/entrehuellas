@@ -278,7 +278,7 @@ Con la configuración inicial terminada, el proceso habitual es:
 4. Descargar el APK de mayor build y distribuirlo al grupo de prueba.
 
 **Conserva el mismo JKS, alias e identificador Android**
-(`com.example.flutter_application_entrehuellas`). No generes otra firma por versión.
+(`app.entrehuellas`, ADR-172). No generes otra firma por versión.
 El workflow incrementa `versionCode` como `10000 + github.run_number`;
 no hace falta modificar el JSON para cada build. El nombre visible de versión,
 por ejemplo `0.1.0`, procede de `apps/mobile/pubspec.yaml` y se cambia cuando

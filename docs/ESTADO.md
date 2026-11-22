@@ -1,5 +1,29 @@
 # Estado del proyecto
 
+## Correcciones críticas de la auditoría móvil —21/11/2026
+
+Por solicitud del usuario, tras auditar `apps/mobile`, se corrigen los cuatro
+críticos según [ADR-172](decisiones/172-correcciones-criticas-auditoria-mobile.md):
+(1) `flutter test` sin define ya no falla; `test/flutter_test_config.dart`
+desactiva el fondo ambiental y la CI deja de usar
+`AMBIENT_BACKGROUND_MOTION=false`. (2) El applicationId Android pasa a
+`app.entrehuellas`, igual que 9114c0a de la rama `Bruno`. (3) La sesión y el
+PKCE de Supabase se guardan en Keystore/Keychain, migrando la sesión en claro
+previa. (4) Hay manejo global de errores de framework y asíncronos, con
+registro local sin mensajes y sin bloque gris en release.
+
+Validación local (Windows, Flutter 3.35.3): formato de 745 archivos sin
+cambios, `flutter analyze` sin incidencias y **719/719 pruebas con `flutter test`
+sin argumentos** (incluye 9 nuevas de almacenamiento seguro y errores).
+
+No acreditado: migración de una sesión real en un dispositivo físico, nuevo
+registro Firebase/FCM para `app.entrehuellas` ni CI remota. Las instalaciones
+Android con el identificador provisional deben desinstalarse. iOS conserva su
+bundle provisional. Sin commit/push. Siguiente paso: revisar los cambios,
+registrar el identificador en Firebase si se activa push y abordar los puntos
+no críticos de la auditoría (referencias de caso unificadas, editores
+duplicados, router).
+
 ## README de Coincidencias y publicación autorizada por PR —06/11/2026
 
 El usuario autoriza ahora publicar los cambios y abrir una PR hacia main;

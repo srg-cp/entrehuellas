@@ -165,7 +165,7 @@ class _ZoneMapPickerState extends State<ZoneMapPicker> {
           MapConfig.displayTileUrl.contains('{r}') &&
           RetinaMode.isHighDensity(context),
       tileProvider: _tiles,
-      userAgentPackageName: 'com.example.flutter_application_entrehuellas',
+      userAgentPackageName: 'app.entrehuellas',
       panBuffer: 0,
       errorTileCallback: (_, _, _) => _failure(attempt),
       tileBuilder: (context, child, tile) => LoadingShimmer(

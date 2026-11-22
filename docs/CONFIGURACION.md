@@ -29,7 +29,7 @@ transferencia. [Recorrido, reglas y evidencia](funcionalidades/fichas-sin-conexi
 Desde apps/mobile, validación reproducible:
 
 ```powershell
-flutter test --no-pub --dart-define=AMBIENT_BACKGROUND_MOTION=false test/offline_cases_test.dart
+flutter test --no-pub test/offline_cases_test.dart
 flutter test --no-pub tool/check_case_cache_remote_test.dart --reporter expanded
 ```
 
@@ -282,8 +282,8 @@ o caso y generar un evento nuevo con otra cuenta o desde QR. Instalar no genera
 alertas retroactivas. Leer, reiniciar, paginar y abrir caso con permisos actuales.
 No confundir Guardados con seguimiento ni asumir que una zona existente se sigue.
 
-Para push Android, registrar en Firebase el identificador existente
-`com.example.flutter_application_entrehuellas` (no renombrarlo). Descargar su
+Para push Android, registrar en Firebase el identificador
+`app.entrehuellas` (ADR-172; el anterior `com.example...` ya no es válido). Descargar su
 google-services.json a apps/mobile/android/app/google-services.json, ignorado
 por Git. El plugin Google Services4.4.4 se aplica solo cuando existe ese archivo.
 Su configuración nativa permite recibir con app terminada; conservarla junto
@@ -406,7 +406,7 @@ Actualización posterior: el usuario confirma aplicado el patch020. No equivale 
 
 Casos guardados,16 de octubre: aplicar020 después de001–019 en desarrollo. [Patch020](../database/patchs/020_patch_saved_cases.sql)/migración20261016002000_saved_cases.sql derivados de070–073/plan020 con Build-SavedCasesPatch/Build-RunAll. Activar cliente y RPC juntos: sin contrato el marcador informa error de consulta, sin simular guardado. Sin claves/SDK/variables nuevos. Sin SQL remoto ni pruebas ejecutadas por petición del usuario; validar permisos/concurrencia/repetición antes de desplegar. [Ficha](funcionalidades/casos-guardados.md).
 
-Base del chat 00, 6 de octubre de 2026. Flutter 3.35.3 / Dart 3.9.2. Ejecutar los comandos desde `apps/mobile`. Se mantienen el nombre del paquete y las plataformas existentes. Android conserva el identificador provisional `com.example.flutter_application_entrehuellas`; revisarlo antes de distribuir.
+Base del chat 00, 6 de octubre de 2026. Flutter 3.35.3 / Dart 3.9.2. Ejecutar los comandos desde `apps/mobile`. Se mantienen el nombre del paquete y las plataformas existentes. Android usa el identificador definitivo `app.entrehuellas` desde ADR-172.
 
 ## Arranque
 
@@ -497,7 +497,7 @@ flutter run --dart-define-from-file=config/supabase.local.json
 En otra terminal, con adb disponible, comprobar apertura con la app cerrada y abierta:
 
 ```powershell
-adb shell am start -W -a android.intent.action.VIEW -d 'entrehuellas://login-callback/' com.example.flutter_application_entrehuellas
+adb shell am start -W -a android.intent.action.VIEW -d 'entrehuellas://login-callback/' app.entrehuellas
 ```
 
 Ese enlace sin código comprueba apertura, no autenticación. En S1 iniciar un flujo real de correo/OAuth en el mismo dispositivo, completar el retorno y comprobar sesión restaurada, rechazo de callback inválido y cierre de sesión. PKCE necesita el verificador almacenado al iniciar el flujo; no simular éxito pegando un código arbitrario. No registrar ni compartir la URL de retorno que contiene códigos/tokens.
