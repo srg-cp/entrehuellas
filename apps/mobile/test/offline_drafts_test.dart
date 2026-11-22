@@ -24,6 +24,7 @@ import 'package:flutter_application_entrehuellas/features/pets/providers/pet_pro
 import 'package:flutter_application_entrehuellas/features/onboarding/data/data_sources/onboarding_completion_cache.dart';
 import 'package:flutter_application_entrehuellas/features/onboarding/data/data_sources/onboarding_data_source.dart';
 import 'package:flutter_application_entrehuellas/features/onboarding/data/models/onboarding_record_dto.dart';
+import 'package:flutter_application_entrehuellas/features/offline_drafts/domain/entities/queued_report.dart';
 import 'support/fake_local_drafts.dart';
 import 'support/fake_pets.dart';
 import 'support/fake_pet_photos.dart';
@@ -90,7 +91,91 @@ Future<void> removeTemporaryDatabaseDirectory(Directory directory) async {
   await directory.delete(recursive: true);
 }
 
+/// Marks [command] as being transmitted right now by the background sync.
+void markSending(FakeLocalDrafts local, LocalReportDraft command) {
+  local.submissions[(command.owner, command.id)] = QueuedReport(
+    command: command,
+    status: SubmissionStatus.sending,
+    attempts: 1,
+    createdAt: DateTime.utc(2026),
+    nextAttemptAt: DateTime.utc(2026),
+  );
+  local.changes.add(command.owner);
+}
+
 void main() {
+  test(
+    'Lost editor never publishes while the queue is sending the same command',
+    () async {
+      final local = FakeLocalDrafts();
+      final pet = Pet(id: 'pet', ownerId: 'owner', fields: fields, version: 7);
+      final command = LocalReportDraft(
+        owner: 'owner',
+        slot: 'lost',
+        id: 'sending-lost-command',
+        pet: pet,
+        pets: [pet],
+        instant: DateTime.utc(2026, 1, 1, 10),
+        latitude: -12,
+        longitude: -77,
+        frozen: true,
+      );
+      await local.save(command);
+      final cases = FakeCases();
+      final c = editors(local, cases: cases);
+      addTearDown(c.dispose);
+      c.listen(caseEditorViewModelProvider, (_, _) {});
+      await c.read(caseEditorViewModelProvider.future);
+      markSending(local, command);
+      await pumpEventQueue();
+      final sending = c.read(caseEditorViewModelProvider).requireValue;
+      expect(sending.submissionStatus, SubmissionStatus.sending);
+      await c.read(caseEditorViewModelProvider.notifier).publish();
+      expect(cases.attempts, isEmpty);
+      // Not even a local enqueue: the editor state stays untouched.
+      expect(
+        identical(c.read(caseEditorViewModelProvider).requireValue, sending),
+        isTrue,
+      );
+      expect(await local.read('owner', 'lost'), isNotNull);
+    },
+  );
+  test(
+    'Found editor never publishes while the queue is sending the same command',
+    () async {
+      final local = FakeLocalDrafts();
+      final command = LocalReportDraft(
+        owner: 'owner',
+        slot: 'community-search',
+        id: 'sending-found-command',
+        instant: DateTime.utc(2026, 1, 1, 10),
+        latitude: -12,
+        longitude: -77,
+        species: 'dog',
+        traits: 'Manchas negras',
+        frozen: true,
+        attempted: true,
+      );
+      await local.save(command);
+      final found = FakeFoundCases();
+      final c = editors(local, found: found);
+      addTearDown(c.dispose);
+      c.listen(foundEditorViewModelProvider, (_, _) {});
+      await c.read(foundEditorViewModelProvider.future);
+      markSending(local, command);
+      await pumpEventQueue();
+      final sending = c.read(foundEditorViewModelProvider).requireValue;
+      expect(sending.submissionStatus, SubmissionStatus.sending);
+      await c.read(foundEditorViewModelProvider.notifier).publish();
+      expect(found.attempts, isEmpty);
+      // Not even a local enqueue: the editor state stays untouched.
+      expect(
+        identical(c.read(foundEditorViewModelProvider).requireValue, sending),
+        isTrue,
+      );
+      expect(await local.read('owner', 'community-search'), isNotNull);
+    },
+  );
   setUpAll(() {
     if (Platform.isWindows) {
       open.overrideFor(

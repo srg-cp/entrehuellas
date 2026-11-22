@@ -1,5 +1,27 @@
 # Estado del proyecto
 
+## Coordinador compartido de borradores en editores móviles —21/11/2026
+
+Por la tarea pendiente de ADR-173, según
+[ADR-174](decisiones/174-coordinador-compartido-de-borradores-mobile.md):
+`ReportDraftCoordinator` (`core/presentation/state`) reúne la coordinación con
+el borrador local, la cola y el recibo, antes duplicada en
+`CaseEditorViewModel` y `FoundEditorViewModel`. Incluye generación,
+`keepAlive`, checkpoint, estado de cola, `saveForLater`, `discardLocalDraft`,
+`restoreReportDetails`, `chooseDate` y `chooseTime`. Cada editor aporta
+puertos, transiciones y guardas mediante ganchos. Perdido no descarta un
+comando congelado; encontrado libera antes en servidor un envío intentado.
+`publish` sigue en cada editor, con el bloqueo durante `sending`. Sin cambios
+de persistencia, slot, UI ni fronteras: `core` no importa funcionalidades.
+
+Validación local (Windows, Flutter 3.35.3): `dart format` sin cambios,
+`flutter analyze` sin incidencias y **733/733 pruebas**: 12 nuevas del
+coordinador con un editor de prueba independiente y 2 nuevas de no publicar
+durante `sending` con los editores reales. Las pruebas de mutación locales
+(generación, keepAlive, limpieza confirmada, bloqueo `sending` en cada editor)
+se detectan. Sin prueba física ni CI remota. Commit sin push. Siguiente paso:
+revisión del usuario y firma GPG.
+
 ## Correcciones no críticas de la auditoría móvil —21/11/2026
 
 Por solicitud del usuario («todas las correcciones faltantes»), aplicadas según

@@ -1,12 +1,13 @@
 import '../../../../core/domain/entities/case_status.dart';
 import '../../../offline_drafts/domain/entities/queued_report.dart';
 import '../../../../core/presentation/state/event_date_time_draft.dart';
+import '../../../../core/presentation/state/report_draft_coordinator.dart';
 import '../../../../core/domain/use_cases/approximate_case_location.dart';
 import '../../domain/entities/found_case.dart';
 
 enum FoundStage { form, preview, confirmed }
 
-class FoundEditorState {
+class FoundEditorState implements ReportDraftState<SubmissionStatus> {
   FoundEditorState({
     required this.ownerId,
     this.communitySearch = true,
@@ -40,31 +41,41 @@ class FoundEditorState {
   }) : dateTimeDraft = dateTimeDraft ?? EventDateTimeDraft.from(occurredAt),
        photos = List.unmodifiable(photos),
        invalidFields = Set.unmodifiable(invalidFields);
+  @override
   final SubmissionStatus? submissionStatus;
   final bool communitySearch, communityTarget;
   final String reportKind;
   final String? targetId;
   final RecoverySearch? target;
-  final String ownerId,
-      draftId,
-      species,
+  @override
+  final String ownerId, draftId;
+  final String species,
       speciesDetail,
       size,
       sex,
       traits,
       custody,
       placeReference;
+  @override
   final EventDateTimeDraft dateTimeDraft;
   DateTime? get occurredAt => dateTimeDraft.value;
   final double? latitude, longitude;
   final List<FoundPhotoDraft> photos;
-  final bool busy, dirty, attempted;
+  @override
+  final bool busy, dirty;
+  final bool attempted;
   final FoundFailureKind? issue;
   final int errorId;
   final Set<FoundField> invalidFields;
   final FoundStage stage;
   final FoundCaseDraft? lockedDraft;
   final FoundPublication? published;
+  @override
+  bool get hasLockedDraft => lockedDraft != null;
+  @override
+  bool get isConfirmed => stage == FoundStage.confirmed;
+  @override
+  bool get hasPublication => published != null;
   PublicFoundCase get preview {
     final location = approximateCaseLocation(latitude!, longitude!);
     return PublicFoundCase(

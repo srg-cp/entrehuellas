@@ -56,7 +56,8 @@ Fecha: 21/11/2026, America/Lima. Estado: aceptada por instrucción explícita
   solo aporta si se internacionaliza la app, algo que no está en el MVP.
 - **Editores perdido/encontrado duplicados.** La coordinación de borrador, cola
   y recibo tiene concurrencia delicada y estados distintos. Extraerla requiere
-  un incremento propio con pruebas dedicadas; queda como trabajo pendiente.
+  un incremento propio con pruebas dedicadas; queda como trabajo pendiente
+  (resuelto en [ADR-174](174-coordinador-compartido-de-borradores-mobile.md)).
 - **Unificar los 21 providers de sesión en uno.** Las pruebas sobrescriben cada
   uno por separado; unirlos rompería esas sobrescrituras. Solo se iguala el
   reintento.

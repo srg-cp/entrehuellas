@@ -1,6 +1,7 @@
 import '../../../../core/domain/entities/case_status.dart';
 import '../../../offline_drafts/domain/entities/queued_report.dart';
 import '../../../../core/presentation/state/event_date_time_draft.dart';
+import '../../../../core/presentation/state/report_draft_coordinator.dart';
 import '../../../../core/domain/use_cases/approximate_case_location.dart';
 import '../../../pets/domain/entities/pet.dart';
 import '../../../pets/domain/entities/pet_photo.dart';
@@ -8,7 +9,7 @@ import '../../domain/entities/lost_case.dart';
 
 enum CaseEditorStage { form, preview, confirmed }
 
-class CaseEditorState {
+class CaseEditorState implements ReportDraftState<SubmissionStatus> {
   CaseEditorState({
     required this.ownerId,
     required this.draftId,
@@ -36,23 +37,35 @@ class CaseEditorState {
        photos = List.unmodifiable(photos),
        selectedPhotos = Set.unmodifiable(selectedPhotos),
        invalidFields = Set.unmodifiable(invalidFields);
+  @override
   final SubmissionStatus? submissionStatus;
-  final String ownerId, draftId, placeReference;
+  @override
+  final String ownerId, draftId;
+  final String placeReference;
   final List<Pet> pets;
   final Pet? pet;
   final List<PetPhoto> photos;
   final Set<String> selectedPhotos;
+  @override
   final EventDateTimeDraft dateTimeDraft;
   DateTime? get occurredAt => dateTimeDraft.value;
   final double? latitude, longitude;
   final int errorId;
   final CaseFailureKind? issue;
   final Set<CaseField> invalidFields;
-  final bool busy, loadingPhotos, dirty;
+  @override
+  final bool busy, dirty;
+  final bool loadingPhotos;
   final CaseEditorStage stage;
   final PublishedLostCase? published;
   // Ambiguous response: freeze the exact command until its retry is confirmed.
   final LostCaseDraft? lockedDraft;
+  @override
+  bool get hasLockedDraft => lockedDraft != null;
+  @override
+  bool get isConfirmed => stage == CaseEditorStage.confirmed;
+  @override
+  bool get hasPublication => published != null;
   PublicLostCase get preview {
     final location = approximateCaseLocation(latitude!, longitude!);
     return PublicLostCase(
